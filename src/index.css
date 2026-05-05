@@ -1,0 +1,87 @@
+/* Base reset — design tokens added in Stage 2 */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #FAF6F0;
+  color: #3D2B1F;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Shell skeleton */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px;
+  border-bottom: 0.5px solid rgba(192, 168, 130, 0.5);
+}
+
+.app-wordmark {
+  font-size: 18px;
+  font-weight: 600;
+  color: #3D2B1F;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.step-nav-bar {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.step-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  color: #7A5C40;
+  text-decoration: none;
+  border-radius: 999px;
+  transition: color 0.15s;
+}
+
+.step-nav-item--active {
+  color: #3D2B1F;
+  background: #F0E8DA;
+}
+
+.step-nav-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(192, 168, 130, 0.25);
+  color: inherit;
+}
+
+.step-nav-item--active .step-nav-dot {
+  background: #5A7A5C;
+  color: #FAF6F0;
+}
+
+.app-main {
+  flex: 1;
+  padding: 32px 24px;
+}
