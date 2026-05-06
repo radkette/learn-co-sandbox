@@ -10,16 +10,19 @@ interface QuiltBoardProps {
   rows: number
   draggedPieceId: string | null
   onCellSizeChange: (size: number) => void
+  mode?: 'build' | 'paint'
 }
 
 export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
-  ({ cols, rows, draggedPieceId, onCellSizeChange }, svgRef) => {
+  ({ cols, rows, draggedPieceId, onCellSizeChange, mode = 'build' }, svgRef) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const [cellSize, setCellSize] = useState(40)
     const [hoveredKey, setHoveredKey] = useState<string | null>(null)
 
-    const { boardPieces, selectedTrayPieceId, placePiece, rotatePiece, removePiece } =
-      useQuiltStore()
+    const {
+      boardPieces, selectedTrayPieceId, placePiece, rotatePiece, removePiece,
+      palette, cellColors, selectedPaletteColorId, paintCell,
+    } = useQuiltStore()
 
     // Responsive cell sizing
     useEffect(() => {
@@ -42,15 +45,19 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
 
     function handleCellClick(col: number, row: number) {
       const key = `${col},${row}`
+      if (mode === 'paint') {
+        if (boardPieces[key]) {
+          paintCell(col, row, selectedPaletteColorId)
+        }
+        return
+      }
+      // build mode
       const existing = boardPieces[key]
       const active = selectedTrayPieceId
-
       if (existing) {
         if (active) {
-          // Replace with selected piece
           placePiece(col, row, active)
         } else {
-          // Rotate existing piece
           rotatePiece(col, row)
         }
       } else if (active) {
@@ -83,21 +90,34 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
                 const piece = cell ? getPiece(cell.pieceId) : null
                 const dragPiece = isDragTarget ? getPiece(draggedPieceId) : null
 
+                // Resolve color for this cell
+                const colorId = cellColors[key]
+                const paletteColor = colorId ? palette.find((p) => p.id === colorId) : null
+                const pieceColors = paletteColor
+                  ? { a: paletteColor.hex, b: '#FAF6F0' }
+                  : undefined
+
+                // Cursor logic
+                let cursor = 'default'
+                if (mode === 'paint') {
+                  cursor = cell ? 'crosshair' : 'default'
+                } else {
+                  cursor = cell
+                    ? selectedTrayPieceId ? 'copy' : 'pointer'
+                    : selectedTrayPieceId || draggedPieceId ? 'crosshair' : 'default'
+                }
+
                 return (
                   <g
                     key={key}
                     onClick={() => handleCellClick(col, row)}
                     onPointerEnter={() => setHoveredKey(key)}
                     onPointerLeave={() => setHoveredKey(null)}
-                    style={{
-                      cursor: cell
-                        ? selectedTrayPieceId ? 'copy' : 'pointer'
-                        : selectedTrayPieceId || draggedPieceId ? 'crosshair' : 'default',
-                    }}
+                    style={{ cursor }}
                     role="button"
                     aria-label={
                       cell
-                        ? `Cell ${col + 1},${row + 1}: ${getPiece(cell.pieceId)?.name ?? 'piece'}, ${cell.rotation}°. Click to rotate`
+                        ? `Cell ${col + 1},${row + 1}: ${getPiece(cell.pieceId)?.name ?? 'piece'}, ${cell.rotation}°. Click to ${mode === 'paint' ? 'paint' : 'rotate'}`
                         : `Cell ${col + 1},${row + 1}: empty`
                     }
                   >
@@ -107,7 +127,7 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
                       width={cellSize} height={cellSize}
                       fill={
                         isDragTarget ? '#EBF0EB'
-                        : isHovered && cell ? '#F0E8DA'
+                        : isHovered && cell && mode === 'build' ? '#F0E8DA'
                         : '#FAF6F0'
                       }
                       stroke="rgba(192,168,130,0.45)"
@@ -118,20 +138,33 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
                     {piece && (
                       <g transform={`translate(${x},${y})`}>
                         <g transform={`rotate(${cell!.rotation},${cellSize / 2},${cellSize / 2})`}>
-                          {piece.render(cellSize)}
+                          {piece.render(cellSize, pieceColors)}
                         </g>
                       </g>
                     )}
 
-                    {/* Drag-over ghost */}
+                    {/* Drag-over ghost (build mode only) */}
                     {dragPiece && (
                       <g transform={`translate(${x},${y})`} opacity={0.55}>
                         {dragPiece.render(cellSize)}
                       </g>
                     )}
 
-                    {/* Remove button — shown on hover when cell is filled */}
-                    {cell && isHovered && !draggedPieceId && (
+                    {/* Paint hover highlight */}
+                    {mode === 'paint' && cell && isHovered && selectedPaletteColorId && (
+                      <rect
+                        x={x} y={y}
+                        width={cellSize} height={cellSize}
+                        fill="none"
+                        stroke={palette.find((p) => p.id === selectedPaletteColorId)?.hex ?? 'transparent'}
+                        strokeWidth={2}
+                        opacity={0.7}
+                        pointerEvents="none"
+                      />
+                    )}
+
+                    {/* Remove button — build mode, hover, filled cell */}
+                    {mode === 'build' && cell && isHovered && !draggedPieceId && (
                       <g
                         transform={`translate(${x + cellSize - 10}, ${y + 2})`}
                         onClick={(e) => { e.stopPropagation(); removePiece(col, row) }}
