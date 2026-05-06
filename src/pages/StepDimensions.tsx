@@ -49,6 +49,7 @@ export default function StepDimensions() {
   const [squareSize, setSquareSize] = useState(
     dimensions.approxSquareIn === '' ? '' : String(dimensions.approxSquareIn),
   )
+  const [seamAllowance, setSeamAllowance] = useState<number>(dimensions.seamAllowance ?? 0.25)
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState({ width: false, height: false, squareSize: false })
 
@@ -69,6 +70,7 @@ export default function StepDimensions() {
       widthIn: parsePositiveNumber(width)!,
       heightIn: parsePositiveNumber(height)!,
       approxSquareIn: parsePositiveNumber(squareSize)!,
+      seamAllowance,
     })
     navigate('/step/2')
   }
@@ -157,6 +159,43 @@ export default function StepDimensions() {
               Whole or half-inch values work best — e.g. 3, 4.5, 6
             </p>
           )}
+        </div>
+
+        {/* Seam allowance picker */}
+        <div style={{ marginBottom: 32 }}>
+          <p className="text-label" style={{ marginBottom: 8 }}>Seam allowance</p>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {([
+              { label: '¼"', value: 0.25 },
+              { label: '⅜"', value: 0.375 },
+              { label: '½"', value: 0.5 },
+            ] as const).map(({ label, value }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setSeamAllowance(value)}
+                style={{
+                  padding: '6px 16px',
+                  borderRadius: 999,
+                  border: seamAllowance === value
+                    ? '2px solid var(--color-sage, #7A9A7A)'
+                    : '1.5px solid var(--color-border, #C0A882)',
+                  background: seamAllowance === value
+                    ? 'var(--color-sage-light, #EBF0EB)'
+                    : 'transparent',
+                  color: seamAllowance === value
+                    ? 'var(--color-sage-dark, #3A5A3A)'
+                    : 'var(--color-walnut, #7A5C40)',
+                  fontWeight: seamAllowance === value ? 600 : 400,
+                  fontSize: 14,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <Button type="submit" variant="primary">

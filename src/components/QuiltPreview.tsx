@@ -34,9 +34,12 @@ export function QuiltPreview({ cols, rows, maxWidth = 480, maxHeight = 360 }: Qu
           const x = col * cellSize
           const y = row * cellSize
 
-          const colorId = cellColors[key]
-          const paletteColor = colorId ? palette.find((p) => p.id === colorId) : null
-          const pieceColors = paletteColor ? { a: paletteColor.hex, b: '#FAF6F0' } : undefined
+          const cellColor = cellColors[key]
+          const colorA = cellColor?.a ? palette.find((p) => p.id === cellColor.a) : null
+          const colorB = cellColor?.b ? palette.find((p) => p.id === cellColor.b) : null
+          const pieceColors = (colorA || colorB)
+            ? { a: colorA?.hex ?? '#E8E4DC', b: colorB?.hex ?? '#FAF6F0' }
+            : undefined
           const piece = cell ? getPiece(cell.pieceId) : null
 
           return (

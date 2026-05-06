@@ -4,6 +4,7 @@ export interface QuiltDimensions {
   widthIn: number | ''
   heightIn: number | ''
   approxSquareIn: number | ''
+  seamAllowance: number
 }
 
 export interface CalculatedGrid {
@@ -33,8 +34,9 @@ interface QuiltState {
   boardPieces: Record<string, BoardCell>   // key: "col,row"
   selectedTrayPieceId: string | null
   palette: PaletteColor[]
-  cellColors: Record<string, string>       // key: "col,row" → colorId
+  cellColors: Record<string, { a?: string; b?: string }>  // key: "col,row"
   selectedPaletteColorId: string | null
+  paintTarget: 'a' | 'b'
 
   setDimensions: (d: Partial<QuiltDimensions>) => void
   setCalculatedGrid: (g: CalculatedGrid | null) => void
@@ -46,22 +48,24 @@ interface QuiltState {
   addColor: (hex: string, name: string) => void
   updateColor: (id: string, patch: Partial<Omit<PaletteColor, 'id'>>) => void
   removeColor: (id: string) => void
-  paintCell: (col: number, row: number, colorId: string | null) => void
+  paintCell: (col: number, row: number, colorId: string | null, target: 'a' | 'b') => void
   clearCellColors: () => void
   selectPaletteColor: (id: string | null) => void
+  setPaintTarget: (t: 'a' | 'b') => void
 }
 
 const ROTATION_CYCLE: Rotation[] = [0, 90, 180, 270]
 let colorSeq = 0
 
 export const useQuiltStore = create<QuiltState>((set) => ({
-  dimensions: { widthIn: '', heightIn: '', approxSquareIn: '' },
+  dimensions: { widthIn: '', heightIn: '', approxSquareIn: '', seamAllowance: 0.25 },
   calculatedGrid: null,
   boardPieces: {},
   selectedTrayPieceId: null,
   palette: [],
   cellColors: {},
   selectedPaletteColorId: null,
+  paintTarget: 'a',
 
   setDimensions: (d) =>
     set((s) => ({ dimensions: { ...s.dimensions, ...d } })),
@@ -114,10 +118,15 @@ export const useQuiltStore = create<QuiltState>((set) => ({
 
   removeColor: (id) =>
     set((s) => {
-      const nextColors = { ...s.cellColors }
-      Object.keys(nextColors).forEach((k) => {
-        if (nextColors[k] === id) delete nextColors[k]
-      })
+      const nextColors: Record<string, { a?: string; b?: string }> = {}
+      for (const [k, v] of Object.entries(s.cellColors)) {
+        const updated: { a?: string; b?: string } = {}
+        if (v.a && v.a !== id) updated.a = v.a
+        if (v.b && v.b !== id) updated.b = v.b
+        if (updated.a !== undefined || updated.b !== undefined) {
+          nextColors[k] = updated
+        }
+      }
       return {
         palette: s.palette.filter((c) => c.id !== id),
         cellColors: nextColors,
@@ -126,14 +135,21 @@ export const useQuiltStore = create<QuiltState>((set) => ({
       }
     }),
 
-  paintCell: (col, row, colorId) =>
+  paintCell: (col, row, colorId, target) =>
     set((s) => {
       const key = `${col},${row}`
+      const existing = s.cellColors[key] ?? {}
       const next = { ...s.cellColors }
       if (colorId === null) {
-        delete next[key]
+        const updated = { ...existing }
+        delete updated[target]
+        if (Object.keys(updated).length === 0) {
+          delete next[key]
+        } else {
+          next[key] = updated
+        }
       } else {
-        next[key] = colorId
+        next[key] = { ...existing, [target]: colorId }
       }
       return { cellColors: next }
     }),
@@ -141,4 +157,6 @@ export const useQuiltStore = create<QuiltState>((set) => ({
   clearCellColors: () => set({ cellColors: {} }),
 
   selectPaletteColor: (id) => set({ selectedPaletteColorId: id }),
+
+  setPaintTarget: (t) => set({ paintTarget: t }),
 }))

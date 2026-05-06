@@ -21,11 +21,15 @@ export function PieceTray({ onDragStart, onDragEnd }: PieceTrayProps) {
             <div
               key={piece.id}
               className={['tray-piece', isSelected ? 'tray-piece--selected' : ''].join(' ')}
-              onClick={() => selectTrayPiece(isSelected ? null : piece.id)}
               onPointerDown={(e) => {
                 e.preventDefault()
-                selectTrayPiece(piece.id)
-                onDragStart(piece.id)
+                const current = useQuiltStore.getState().selectedTrayPieceId
+                if (current === piece.id) {
+                  selectTrayPiece(null)
+                } else {
+                  selectTrayPiece(piece.id)
+                  onDragStart(piece.id)
+                }
               }}
               onPointerUp={onDragEnd}
               role="button"

@@ -9,7 +9,7 @@ const MONTH_YEAR = new Date().toLocaleDateString('en-US', { month: 'long', year:
 
 export default function StepExport() {
   const navigate = useNavigate()
-  const { calculatedGrid, boardPieces, cellColors, palette } = useQuiltStore()
+  const { calculatedGrid, boardPieces, cellColors, palette, dimensions } = useQuiltStore()
 
   if (!calculatedGrid) {
     return (
@@ -25,7 +25,7 @@ export default function StepExport() {
   }
 
   const { cols, rows, squareSize, actualWidth, actualHeight } = calculatedGrid
-  const summary = calculateYardage(boardPieces, cellColors, palette, calculatedGrid)
+  const summary = calculateYardage(boardPieces, cellColors, palette, calculatedGrid, dimensions.seamAllowance)
 
   return (
     <div>

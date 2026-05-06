@@ -5,7 +5,7 @@ import { calculateYardage, fmtYards } from '@/lib/yardage'
 
 export default function StepCalculation() {
   const navigate = useNavigate()
-  const { calculatedGrid, boardPieces, cellColors, palette } = useQuiltStore()
+  const { calculatedGrid, boardPieces, cellColors, palette, dimensions } = useQuiltStore()
 
   if (!calculatedGrid) {
     return (
@@ -36,7 +36,7 @@ export default function StepCalculation() {
   }
 
   const { cols, rows, squareSize, actualWidth, actualHeight } = calculatedGrid
-  const summary = calculateYardage(boardPieces, cellColors, palette, calculatedGrid)
+  const summary = calculateYardage(boardPieces, cellColors, palette, calculatedGrid, dimensions.seamAllowance)
 
   return (
     <div>

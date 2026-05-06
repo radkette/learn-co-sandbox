@@ -27,20 +27,27 @@ function cellsToYards(cells: number, cutSize: number): number {
 
 export function calculateYardage(
   boardPieces: Record<string, BoardCell>,
-  cellColors: Record<string, string>,
+  cellColors: Record<string, { a?: string; b?: string }>,
   palette: PaletteColor[],
   grid: CalculatedGrid,
+  seamAllowance: number = 0.25,
 ): YardageSummary {
-  const cutSize = grid.squareSize + 0.5   // 1/4" seam on each side
+  const cutSize = grid.squareSize + seamAllowance * 2
 
-  // Tally cells per colorId
+  // Tally cells per colorId (A and B assignments summed per colorId)
   const tally: Record<string, number> = {}
   let uncolored = 0
   for (const key of Object.keys(boardPieces)) {
-    const id = cellColors[key]
-    if (id) {
-      tally[id] = (tally[id] ?? 0) + 1
-    } else {
+    const cell = cellColors[key]
+    const aId = cell?.a
+    const bId = cell?.b
+    if (aId) {
+      tally[aId] = (tally[aId] ?? 0) + 1
+    }
+    if (bId) {
+      tally[bId] = (tally[bId] ?? 0) + 1
+    }
+    if (!aId && !bId) {
       uncolored++
     }
   }

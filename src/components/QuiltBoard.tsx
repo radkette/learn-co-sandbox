@@ -21,7 +21,7 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
 
     const {
       boardPieces, selectedTrayPieceId, placePiece, rotatePiece, removePiece,
-      palette, cellColors, selectedPaletteColorId, paintCell,
+      palette, cellColors, selectedPaletteColorId, paintCell, paintTarget,
     } = useQuiltStore()
 
     // Responsive cell sizing
@@ -47,7 +47,7 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
       const key = `${col},${row}`
       if (mode === 'paint') {
         if (boardPieces[key]) {
-          paintCell(col, row, selectedPaletteColorId)
+          paintCell(col, row, selectedPaletteColorId, paintTarget)
         }
         return
       }
@@ -91,10 +91,11 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
                 const dragPiece = isDragTarget ? getPiece(draggedPieceId) : null
 
                 // Resolve color for this cell
-                const colorId = cellColors[key]
-                const paletteColor = colorId ? palette.find((p) => p.id === colorId) : null
-                const pieceColors = paletteColor
-                  ? { a: paletteColor.hex, b: '#FAF6F0' }
+                const cellColor = cellColors[key]  // { a?: string; b?: string } | undefined
+                const colorA = cellColor?.a ? palette.find((p) => p.id === cellColor.a) : null
+                const colorB = cellColor?.b ? palette.find((p) => p.id === cellColor.b) : null
+                const pieceColors = (colorA || colorB)
+                  ? { a: colorA?.hex ?? '#E8E4DC', b: colorB?.hex ?? '#FAF6F0' }
                   : undefined
 
                 // Cursor logic
