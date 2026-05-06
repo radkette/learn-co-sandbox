@@ -1,0 +1,42 @@
+:root {
+  /* ── Colors ── */
+  --color-parchment: #FAF6F0;
+  --color-linen:     #F0E8DA;
+  --color-tan:       #C0A882;
+  --color-walnut:    #7A5C40;
+  --color-inkwell:   #3D2B1F;
+  --color-sage:      #5A7A5C;
+  --color-madder:    #C45A3A;
+
+  /* Semantic border token — opacity shifts in dark mode */
+  --color-border: rgba(192, 168, 130, 0.5);
+
+  /* ── Typography ── */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-ui:      'DM Sans', system-ui, sans-serif;
+
+  /* ── Spacing ── */
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 28px;
+
+  /* ── Border radius ── */
+  --radius-pill:       999px;
+  --radius-card-airy:  14px;
+  --radius-card-dense: 10px;
+  --radius-input:      6px;
+  --radius-badge:      4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-parchment: #1C1410;
+    --color-linen:     #2A201A;
+    --color-inkwell:   #FAF6F0;
+    --color-walnut:    #C0A882;
+    --color-border:    #C0A882;
+    /* --color-sage and --color-madder stay full saturation */
+  }
+}

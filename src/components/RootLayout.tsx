@@ -1,37 +1,40 @@
-import { Outlet, NavLink } from 'react-router-dom'
-
-const steps = [
-  { path: '/step/1', label: 'Dimensions' },
-  { path: '/step/2', label: 'Square Size' },
-  { path: '/step/3', label: 'Quilt Builder' },
-  { path: '/step/4', label: 'Add Color' },
-  { path: '/step/5', label: 'Calculation' },
-  { path: '/step/6', label: 'Export' },
-]
+import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { StepNav } from '@/components/StepNav'
 
 export default function RootLayout() {
+  const { pathname } = useLocation()
+  const match = pathname.match(/^\/step\/(\d+)/)
+  const currentStep = match ? parseInt(match[1]) : 1
+  const isSidebarMode = currentStep >= 3
+
   return (
     <div className="app-shell">
       <header className="app-header">
         <NavLink to="/" className="app-wordmark">Patchwork</NavLink>
-        <nav className="step-nav-bar">
-          {steps.map((step, i) => (
-            <NavLink
-              key={step.path}
-              to={step.path}
-              className={({ isActive }) =>
-                ['step-nav-item', isActive ? 'step-nav-item--active' : ''].join(' ').trim()
-              }
-            >
-              <span className="step-nav-dot">{i + 1}</span>
-              <span className="step-nav-label">{step.label}</span>
-            </NavLink>
-          ))}
-        </nav>
       </header>
-      <main className="app-main">
-        <Outlet />
-      </main>
+
+      {!isSidebarMode && (
+        <div className="app-progress-strip">
+          <StepNav variant="progress" currentStep={currentStep} />
+        </div>
+      )}
+
+      {isSidebarMode ? (
+        <div className="app-body--sidebar">
+          <aside className="app-sidebar">
+            <StepNav variant="sidebar" currentStep={currentStep} />
+          </aside>
+          <main className="app-main">
+            <Outlet />
+          </main>
+        </div>
+      ) : (
+        <div className="app-body--centered">
+          <main className="app-main--centered">
+            <Outlet />
+          </main>
+        </div>
+      )}
     </div>
   )
 }
