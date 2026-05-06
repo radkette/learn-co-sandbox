@@ -468,3 +468,109 @@
   .builder-content  { display: none; }
   .viewport-guard   { display: block; }
 }
+
+/* ─────────────────────────────────────────
+   QUILT BUILDER (step 3)
+───────────────────────────────────────── */
+.builder-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100svh - 57px); /* 57px = app header */
+  overflow: hidden;
+}
+
+.builder-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--space-lg);
+  border-bottom: 0.5px solid var(--color-border);
+  flex-shrink: 0;
+  gap: var(--space-md);
+}
+
+.builder-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  overflow: hidden;
+  gap: 0;
+}
+
+/* ── Board ── */
+.board-wrap {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+}
+
+.board-scroll {
+  overflow: auto;
+  flex: 1;
+}
+
+/* ── Piece tray ── */
+.tray-wrap {
+  border-left: 0.5px solid var(--color-border);
+  padding: var(--space-md) var(--space-sm);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.tray-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.tray-piece {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px 4px;
+  border-radius: var(--radius-card-dense);
+  border: 0.5px solid var(--color-border);
+  background: var(--color-parchment);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.tray-piece:hover {
+  background: var(--color-linen);
+}
+.tray-piece--selected {
+  border-color: var(--color-sage);
+  background: rgba(90, 122, 92, 0.07);
+}
+
+.tray-label {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--color-walnut);
+  text-align: center;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.tray-selected-ring {
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius-card-dense) + 1px);
+  border: 1.5px solid var(--color-sage);
+  pointer-events: none;
+}
+
+/* ── Drag ghost ── */
+.drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.75;
+}
