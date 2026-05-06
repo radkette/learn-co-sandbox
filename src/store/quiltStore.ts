@@ -36,7 +36,7 @@ interface QuiltState {
   palette: PaletteColor[]
   cellColors: Record<string, { a?: string; b?: string }>  // key: "col,row"
   selectedPaletteColorId: string | null
-  paintTarget: 'a' | 'b'
+  quiltName: string
 
   setDimensions: (d: Partial<QuiltDimensions>) => void
   setCalculatedGrid: (g: CalculatedGrid | null) => void
@@ -51,7 +51,7 @@ interface QuiltState {
   paintCell: (col: number, row: number, colorId: string | null, target: 'a' | 'b') => void
   clearCellColors: () => void
   selectPaletteColor: (id: string | null) => void
-  setPaintTarget: (t: 'a' | 'b') => void
+  setQuiltName: (name: string) => void
 }
 
 const ROTATION_CYCLE: Rotation[] = [0, 90, 180, 270]
@@ -65,7 +65,7 @@ export const useQuiltStore = create<QuiltState>((set) => ({
   palette: [],
   cellColors: {},
   selectedPaletteColorId: null,
-  paintTarget: 'a',
+  quiltName: '',
 
   setDimensions: (d) =>
     set((s) => ({ dimensions: { ...s.dimensions, ...d } })),
@@ -158,5 +158,5 @@ export const useQuiltStore = create<QuiltState>((set) => ({
 
   selectPaletteColor: (id) => set({ selectedPaletteColorId: id }),
 
-  setPaintTarget: (t) => set({ paintTarget: t }),
+  setQuiltName: (name) => set({ quiltName: name }),
 }))

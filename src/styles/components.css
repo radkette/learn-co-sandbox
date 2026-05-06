@@ -37,6 +37,7 @@
 
 .calc-preview-cell {
   border: 0.5px solid var(--color-border);
+  aspect-ratio: 1 / 1;
 }
 
 /* ─────────────────────────────────────────
@@ -880,14 +881,29 @@
 .print-fabric-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  overflow: hidden;
 }
 
 .print-fabric-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 5px 4px;
+  padding: 6px 8px;
+  border-bottom: 0.5px solid var(--color-border);
+}
+.print-fabric-row:last-child {
+  border-bottom: none;
+}
+.print-fabric-row--header {
+  background: var(--color-linen);
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-walnut);
 }
 
 .print-dot {
@@ -969,6 +985,16 @@
   font-style: italic;
 }
 
+.print-footer {
+  margin-top: var(--space-lg);
+  padding-top: 10px;
+  border-top: 0.5px solid var(--color-border);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--color-walnut);
+  text-align: center;
+}
+
 /* ── Print media ── */
 @media print {
   /* Ensure colors and backgrounds render */
@@ -1012,5 +1038,21 @@
   .print-metric {
     background: #F0E8DA !important;
     border-color: #C0A882 !important;
+  }
+
+  .print-fabric-list {
+    border-color: #C0A882 !important;
+  }
+
+  .print-fabric-row {
+    border-bottom-color: #C0A882 !important;
+  }
+
+  .print-fabric-row--header {
+    background: #F0E8DA !important;
+  }
+
+  .print-footer {
+    border-top-color: #C0A882 !important;
   }
 }

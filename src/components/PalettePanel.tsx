@@ -6,7 +6,6 @@ export function PalettePanel() {
   const {
     palette, cellColors, selectedPaletteColorId,
     selectPaletteColor, addColor, updateColor, removeColor, clearCellColors,
-    paintTarget, setPaintTarget,
   } = useQuiltStore()
 
   const usedCount = (id: string) =>
@@ -16,38 +15,8 @@ export function PalettePanel() {
 
   return (
     <div className="palette-panel">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+      <div style={{ marginBottom: 12 }}>
         <p className="text-eyebrow" style={{ margin: 0 }}>Color Palette</p>
-        <div style={{ display: 'flex', gap: 4 }}>
-          {(['a', 'b'] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setPaintTarget(t)}
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: 6,
-                border: paintTarget === t
-                  ? '2px solid var(--color-sage, #7A9A7A)'
-                  : '1.5px solid var(--color-border, #C0A882)',
-                background: paintTarget === t
-                  ? 'var(--color-sage-light, #EBF0EB)'
-                  : 'transparent',
-                color: paintTarget === t
-                  ? 'var(--color-sage-dark, #3A5A3A)'
-                  : 'var(--color-walnut, #7A5C40)',
-                fontWeight: paintTarget === t ? 700 : 400,
-                fontSize: 13,
-                cursor: 'pointer',
-                lineHeight: 1,
-              }}
-              aria-pressed={paintTarget === t}
-              aria-label={`Paint fabric ${t.toUpperCase()}`}
-            >
-              {t.toUpperCase()}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Eraser */}
@@ -147,7 +116,7 @@ export function PalettePanel() {
       )}
 
       <p className="field-hint" style={{ marginTop: 12 }}>
-        Select a color and fabric (A or B), then click any placed piece. Use the eraser to remove color.
+        Select a color, then click a section of any placed piece to paint it. Use the eraser to remove color.
       </p>
     </div>
   )

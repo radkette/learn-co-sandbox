@@ -9,7 +9,7 @@ import { getPiece } from '@/lib/pieces'
 
 export default function StepBuilder() {
   const navigate = useNavigate()
-  const { calculatedGrid, selectedTrayPieceId, selectTrayPiece, placePiece, clearBoard } =
+  const { calculatedGrid, selectedTrayPieceId, selectTrayPiece, placePiece, clearBoard, clearCellColors } =
     useQuiltStore()
 
   const svgRef = useRef<SVGSVGElement>(null)
@@ -116,7 +116,7 @@ export default function StepBuilder() {
           </span>
           <Button
             variant="ghost"
-            onClick={clearBoard}
+            onClick={() => { clearBoard(); clearCellColors() }}
             title="Clear board"
             style={{ padding: '6px 10px', gap: 6 }}
           >

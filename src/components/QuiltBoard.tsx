@@ -21,7 +21,7 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
 
     const {
       boardPieces, selectedTrayPieceId, placePiece, rotatePiece, removePiece,
-      palette, cellColors, selectedPaletteColorId, paintCell, paintTarget,
+      palette, cellColors, selectedPaletteColorId, paintCell,
     } = useQuiltStore()
 
     // Responsive cell sizing
@@ -44,14 +44,9 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
     }, [cols, rows, onCellSizeChange])
 
     function handleCellClick(col: number, row: number) {
-      const key = `${col},${row}`
-      if (mode === 'paint') {
-        if (boardPieces[key]) {
-          paintCell(col, row, selectedPaletteColorId, paintTarget)
-        }
-        return
-      }
+      if (mode === 'paint') return
       // build mode
+      const key = `${col},${row}`
       const existing = boardPieces[key]
       const active = selectedTrayPieceId
       if (existing) {
@@ -139,7 +134,13 @@ export const QuiltBoard = forwardRef<SVGSVGElement, QuiltBoardProps>(
                     {piece && (
                       <g transform={`translate(${x},${y})`}>
                         <g transform={`rotate(${cell!.rotation},${cellSize / 2},${cellSize / 2})`}>
-                          {piece.render(cellSize, pieceColors)}
+                          {piece.render(
+                            cellSize,
+                            pieceColors,
+                            mode === 'paint' && selectedPaletteColorId !== undefined
+                              ? (section) => paintCell(col, row, selectedPaletteColorId, section)
+                              : undefined,
+                          )}
                         </g>
                       </g>
                     )}
