@@ -751,3 +751,53 @@
   transition: opacity 0.15s;
 }
 .palette-clear-btn:hover { opacity: 1; }
+
+/* ─────────────────────────────────────────
+   YARDAGE STEP (step 5)
+───────────────────────────────────────── */
+.yardage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.yardage-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 6px;
+  border-radius: 6px;
+  transition: background 0.12s;
+}
+.yardage-row:hover { background: var(--color-linen); }
+
+.yardage-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.yardage-name {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--color-inkwell);
+  flex: 1;
+}
+
+.yardage-cells {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-walnut);
+  min-width: 60px;
+  text-align: right;
+}
+
+.yardage-amount {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-inkwell);
+  min-width: 60px;
+  text-align: right;
+}
