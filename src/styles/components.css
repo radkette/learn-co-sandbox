@@ -801,3 +801,216 @@
   min-width: 60px;
   text-align: right;
 }
+
+/* ─────────────────────────────────────────
+   EXPORT / PRINT (step 6)
+───────────────────────────────────────── */
+.export-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.export-hint {
+  margin-bottom: var(--space-lg);
+}
+
+/* Print section — shown in app as a preview card */
+.print-section {
+  background: var(--color-parchment);
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-card-airy);
+  padding: var(--space-xl);
+  max-width: 680px;
+}
+
+.print-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid var(--color-border);
+}
+
+.print-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-inkwell);
+  letter-spacing: -0.01em;
+}
+
+.print-date {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-walnut);
+}
+
+.print-subtitle {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--color-walnut);
+  margin-bottom: var(--space-lg);
+  margin-top: 6px;
+}
+
+.print-quilt {
+  margin-bottom: var(--space-lg);
+  line-height: 0;
+}
+
+.print-block {
+  margin-bottom: var(--space-lg);
+}
+
+.print-section-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-walnut);
+  margin-bottom: 8px;
+}
+
+/* Fabric list */
+.print-fabric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.print-fabric-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 4px;
+}
+
+.print-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.print-fabric-name {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--color-inkwell);
+  flex: 1;
+}
+
+.print-fabric-cells {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-walnut);
+  min-width: 64px;
+  text-align: right;
+}
+
+.print-fabric-yards {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-inkwell);
+  min-width: 56px;
+  text-align: right;
+}
+
+/* Construction metrics */
+.print-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.print-metric {
+  background: var(--color-linen);
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-card-dense);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.print-metric__label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-walnut);
+}
+
+.print-metric__value {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-inkwell);
+  line-height: 1.2;
+}
+
+.print-metric__note {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--color-walnut);
+}
+
+.print-footer-note {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--color-walnut);
+  line-height: 1.55;
+  font-style: italic;
+}
+
+/* ── Print media ── */
+@media print {
+  /* Ensure colors and backgrounds render */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide app chrome */
+  .app-header,
+  .app-sidebar,
+  .app-progress-strip,
+  .export-actions,
+  .export-hint {
+    display: none !important;
+  }
+
+  /* Flatten sidebar grid to block */
+  .app-body--sidebar,
+  .app-body--centered {
+    display: block !important;
+  }
+
+  .app-main {
+    padding: 0 !important;
+  }
+
+  /* Print section fills the page */
+  .print-section {
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    background: white !important;
+  }
+
+  .print-header {
+    border-bottom-color: #C0A882 !important;
+  }
+
+  .print-metric {
+    background: #F0E8DA !important;
+    border-color: #C0A882 !important;
+  }
+}
