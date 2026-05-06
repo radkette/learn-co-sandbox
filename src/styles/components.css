@@ -1,4 +1,45 @@
 /* ─────────────────────────────────────────
+   STEP 2 — CALCULATOR
+───────────────────────────────────────── */
+.calc-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.calc-callout {
+  margin-bottom: var(--space-lg);
+  color: var(--color-walnut);
+  line-height: 1.6;
+}
+.calc-callout strong {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--color-inkwell);
+}
+
+.calc-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calc-preview-grid {
+  display: grid;
+  width: 100%;
+  max-width: 400px;
+  max-height: 300px;
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  overflow: hidden;
+}
+
+.calc-preview-cell {
+  border: 0.5px solid var(--color-border);
+}
+
+/* ─────────────────────────────────────────
    FORM ELEMENTS
 ───────────────────────────────────────── */
 .field {
