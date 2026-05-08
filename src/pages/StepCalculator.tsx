@@ -85,8 +85,6 @@ export default function StepCalculator() {
           className="calc-preview-grid"
           style={{
             gridTemplateColumns: `repeat(${previewCols}, 1fr)`,
-            gridTemplateRows: `repeat(${previewRows}, 1fr)`,
-            aspectRatio: `${grid.cols} / ${grid.rows}`,
           }}
           aria-label={`${grid.cols} by ${grid.rows} quilt grid preview`}
         >
