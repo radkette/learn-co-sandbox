@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open Circle — Design Iterations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─── */
+    :root {
+      --color-navy:       #1A4A6B;
+      --color-navy-mid:   #2E7AB0;
+      --color-navy-dark:  #0D2D42;
+      --color-navy-t10:   #EBF4FA;
+      --color-navy-t25:   #C5DCF0;
+      --color-sky:        #7EB8D8;
+      --color-coral:      #D4734A;
+      --color-coral-dark: #7A2E10;
+      --color-coral-tint: #FAD5C8;
+      --color-peach:      #F2A07A;
+      --color-linen:      #F5EFE8;
+      --color-linen-2:    #EDE5D8;
+      --color-near-black: #2A2A2A;
+      --color-neutral:    #CBD5E0;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono:    'IBM Plex Mono', monospace;
+      --font-ui:      'Space Grotesk', system-ui, sans-serif;
+      --space-3xs:4px; --space-2xs:8px; --space-xs:12px; --space-sm:16px;
+      --space-md:24px; --space-lg:32px; --space-xl:48px; --space-2xl:64px; --space-3xl:96px;
+      --radius-sm:4px; --radius-md:8px; --radius-lg:12px; --radius-xl:16px; --radius-pill:999px;
+      --ease: cubic-bezier(0.4,0,0.2,1);
+      --dur-micro:100ms; --dur-std:220ms; --dur-enter:350ms;
+    }
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-body);font-size:16px;line-height:1.7;color:var(--color-near-black);background:#E8E2DA}
+
+    /* ─── SHARED TYPE ─── */
+    .t-eyebrow{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-coral)}
+    .t-display{font-family:var(--font-display);font-size:48px;font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--color-navy)}
+    .t-h1{font-family:var(--font-display);font-size:36px;font-weight:700;line-height:1.15;letter-spacing:-.02em;color:var(--color-navy)}
+    .t-h2{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1.2;letter-spacing:-.01em;color:var(--color-near-black)}
+    .t-h3{font-family:var(--font-display);font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--color-near-black)}
+    .t-body-lg{font-size:18px;line-height:1.7}
+    .t-body{font-size:16px;line-height:1.7}
+    .t-body-sm{font-size:14px;line-height:1.6}
+    .t-caption{font-size:12px;line-height:1.5;color:#888}
+    .t-mono{font-family:var(--font-mono);font-size:14px;font-weight:500}
+
+    /* ─── SHARED BUTTONS ─── */
+    .btn{display:inline-flex;align-items:center;gap:var(--space-xs);padding:10px 20px;border-radius:var(--radius-pill);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;border:1.5px solid transparent;text-decoration:none;transition:opacity var(--dur-micro) var(--ease),transform var(--dur-micro) var(--ease)}
+    .btn:hover{opacity:.85;transform:translateY(-1px)}
+    .btn-primary{background:var(--color-navy);color:var(--color-linen)}
+    .btn-coral{background:var(--color-coral);color:var(--color-linen)}
+    .btn-outline{background:transparent;color:var(--color-navy);border-color:var(--color-navy)}
+    .btn-outline-light{background:transparent;color:var(--color-linen);border-color:rgba(245,239,232,.5)}
+    .btn-outline-light:hover{border-color:var(--color-linen)}
+    .btn-ghost{background:transparent;color:var(--color-coral);text-decoration:underline;text-underline-offset:3px}
+    .btn-sm{padding:6px 14px;font-size:12px}
+    .btn-lg{padding:14px 28px;font-size:16px}
+
+    /* ─── SHARED BADGES ─── */
+    .badge{display:inline-flex;align-items:center;font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 10px;border-radius:var(--radius-pill)}
+    .badge-coral{background:var(--color-coral-tint);color:var(--color-coral-dark)}
+    .badge-navy{background:var(--color-navy-t25);color:var(--color-navy-dark)}
+    .badge-linen{background:var(--color-linen-2);color:#5A4530}
+    .badge-dark{background:var(--color-navy);color:var(--color-navy-t25)}
+    .badge-sky{background:var(--color-sky);color:var(--color-navy-dark)}
+
+    /* ─── SHARED INPUTS ─── */
+    .input{padding:9px 16px;border-radius:var(--radius-pill);border:1.5px solid var(--color-neutral);background:#fff;font-family:var(--font-body);font-size:14px;color:var(--color-near-black);width:100%;transition:border-color var(--dur-micro) var(--ease),box-shadow var(--dur-micro) var(--ease)}
+    .input:focus{outline:none;border-color:var(--color-navy);box-shadow:0 0 0 3px rgba(26,74,107,.15)}
+    .input::placeholder{color:#aaa}
+    .select-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%231A4A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;cursor:pointer}
+
+    /* ─── SHARED LOGO ─── */
+    .logo-lockup{display:flex;align-items:center;gap:var(--space-xs)}
+    .logo-wordmark{display:flex;flex-direction:column;line-height:1}
+    .logo-wm-primary{font-family:var(--font-ui);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--color-navy)}
+    .logo-wm-sub{font-family:var(--font-ui);font-weight:400;font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--color-navy);margin-top:3px}
+
+    /* ─── DOC CHROME ─── */
+    .doc-masthead{background:var(--color-navy-dark);color:var(--color-linen);padding:var(--space-xl) var(--space-lg);text-align:center}
+    .doc-masthead .t-eyebrow{color:var(--color-sky)}
+    .doc-masthead .t-display{color:var(--color-linen);margin:var(--space-xs) 0}
+    .doc-masthead p{color:rgba(245,239,232,.7);font-size:16px}
+
+    .doc-jump-nav{position:sticky;top:0;z-index:200;background:#fff;border-bottom:0.5px solid var(--color-neutral);display:flex;align-items:center;gap:var(--space-md);padding:0 var(--space-lg);height:52px}
+    .doc-jump-nav a{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#888;text-decoration:none;padding:4px 0;border-bottom:2px solid transparent;transition:color var(--dur-micro) var(--ease),border-color var(--dur-micro) var(--ease)}
+    .doc-jump-nav a:hover{color:var(--color-navy);border-color:var(--color-navy)}
+    .doc-jump-nav .jump-label{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral);margin-right:var(--space-xs)}
+
+    .design-frame{margin:var(--space-2xl) var(--space-lg);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 12px 48px rgba(26,74,107,.14);border:1px solid var(--color-neutral)}
+    .design-frame-label{background:var(--color-linen-2);border-bottom:1px solid var(--color-neutral);padding:10px 20px;display:flex;align-items:center;gap:var(--space-sm)}
+    .design-num{font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--color-coral);background:var(--color-coral-tint);padding:3px 8px;border-radius:var(--radius-sm)}
+    .design-name-label{font-family:var(--font-ui);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-navy)}
+
+    .section-divider{display:flex;align-items:center;gap:var(--space-md);margin:var(--space-xl) 0}
+    .section-divider-line{flex:1;height:.5px;background:var(--color-neutral)}
+    .section-divider-circle{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--color-coral);flex-shrink:0}
+
+    /* ═══════════════════════════════════════════
+       01 EDITORIAL CLASSIC
+    ═══════════════════════════════════════════ */
+    .ec-nav{background:#fff;border-bottom:.5px solid var(--color-neutral);padding:0 var(--space-lg);display:flex;align-items:center;justify-content:space-between;height:68px}
+    .ec-nav-links{display:flex;align-items:center;gap:var(--space-lg);list-style:none}
+    .ec-nav-links a{font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--color-navy);text-decoration:none;transition:color var(--dur-micro) var(--ease)}
+    .ec-nav-links a:hover{color:var(--color-coral)}
+    .ec-nav-actions{display:flex;align-items:center;gap:var(--space-xs)}
+
+    .ec-hero{background:var(--color-navy-dark);color:var(--color-linen);padding:var(--space-3xl) var(--space-lg);position:relative;overflow:hidden;min-height:500px;display:flex;align-items:center}
+    .ec-hero-bg-ring{position:absolute;border-radius:50%;border:1px solid rgba(126,184,216,.12);pointer-events:none}
+    .ec-hero-inner{position:relative;z-index:1;max-width:700px}
+    .ec-hero-eyebrow{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-sky);margin-bottom:var(--space-sm)}
+    .ec-hero-h1{font-family:var(--font-display);font-size:44px;font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--color-linen)}
+    .ec-hero-sub{font-size:18px;line-height:1.7;color:rgba(245,239,232,.8);margin:var(--space-md) 0 var(--space-lg)}
+    .ec-filter-row{display:flex;gap:var(--space-2xs);flex-wrap:wrap;align-items:center;margin-bottom:var(--space-sm)}
+    .filter-pill{font-family:var(--font-ui);font-size:12px;font-weight:700;padding:5px 14px;border-radius:var(--radius-pill);border:1.5px solid rgba(245,239,232,.3);background:transparent;color:rgba(245,239,232,.75);cursor:pointer;transition:all var(--dur-micro) var(--ease)}
+    .filter-pill:hover,.filter-pill.active{background:var(--color-linen);color:var(--color-navy);border-color:var(--color-linen)}
+    .ec-filter-group{display:flex;gap:var(--space-2xs);flex-wrap:wrap;margin-bottom:var(--space-xs)}
+    .ec-filter-group-label{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(126,184,216,.8);margin-bottom:var(--space-2xs)}
+    .ec-finder-actions{display:flex;align-items:center;gap:var(--space-md);margin-top:var(--space-md)}
+    .ec-meeting-count{font-size:13px;color:rgba(245,239,232,.55)}
+
+    .ec-body{background:var(--color-linen);padding:var(--space-2xl) var(--space-lg)}
+    .ec-body-inner{max-width:1200px;margin:0 auto}
+
+    /* Tonight stat bar */
+    .ec-stat-bar{background:#fff;border:0.5px solid var(--color-neutral);border-radius:var(--radius-xl);padding:var(--space-md) var(--space-lg);display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-xl);flex-wrap:wrap;gap:var(--space-md)}
+    .ec-stat{display:flex;align-items:baseline;gap:var(--space-xs)}
+    .ec-stat-num{font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--color-navy)}
+    .ec-stat-label{font-size:14px;color:#888}
+    .ec-stat-divider{width:1px;height:40px;background:var(--color-neutral)}
+
+    /* Audience cards */
+    .ec-audience-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md);margin-bottom:var(--space-2xl)}
+    .ec-audience-card{border-radius:var(--radius-xl);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow var(--dur-std) var(--ease),transform var(--dur-std) var(--ease)}
+    .ec-audience-card:hover{box-shadow:0 12px 40px rgba(26,74,107,.15);transform:translateY(-3px)}
+    .ec-audience-card-top{padding:var(--space-xl) var(--space-lg) var(--space-md);flex:1}
+    .ec-audience-card-bottom{padding:var(--space-md) var(--space-lg)}
+    .ec-audience-num{font-family:var(--font-mono);font-size:11px;font-weight:500;opacity:.5;margin-bottom:var(--space-sm)}
+    .ec-audience-role{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:var(--space-xs)}
+
+    /* About section */
+    .ec-about{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2xl);margin-bottom:var(--space-2xl)}
+    .ec-about-list{list-style:none;display:flex;flex-direction:column;gap:var(--space-xs)}
+    .ec-about-list li{display:flex;gap:var(--space-xs);align-items:flex-start;font-size:16px;line-height:1.6}
+    .ec-about-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--color-coral);flex-shrink:0;margin-top:8px}
+    .ec-about-paras p{margin-bottom:var(--space-md);font-size:16px;line-height:1.7;color:var(--color-near-black)}
+    .ec-about-paras p:last-child{margin-bottom:0}
+
+    /* How it works */
+    .ec-hiw{background:var(--color-navy-dark);color:var(--color-linen);padding:var(--space-2xl) var(--space-lg)}
+    .ec-hiw-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:var(--space-2xl)}
+    .ec-hiw-label{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-sky);margin-bottom:var(--space-md)}
+    .ec-hiw h2{font-family:var(--font-display);font-size:32px;font-weight:700;line-height:1.2;color:var(--color-linen)}
+    .ec-hiw-paras p{font-size:16px;line-height:1.75;color:rgba(245,239,232,.85);margin-bottom:var(--space-md)}
+    .ec-hiw-paras p:last-child{margin-bottom:0}
+
+    /* EC Footer */
+    .ec-footer{background:var(--color-navy-dark);color:var(--color-linen);padding:var(--space-2xl) var(--space-lg) var(--space-lg)}
+    .ec-footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--space-2xl);margin-bottom:var(--space-xl)}
+    .ec-footer-brand p{color:rgba(245,239,232,.6);font-size:14px;margin-top:var(--space-sm);line-height:1.6}
+    .ec-footer-col h4{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-sky);margin-bottom:var(--space-sm)}
+    .ec-footer-col ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-2xs)}
+    .ec-footer-col a{color:rgba(245,239,232,.65);font-size:14px;text-decoration:none;transition:color var(--dur-micro) var(--ease)}
+    .ec-footer-col a:hover{color:var(--color-linen)}
+    .ec-footer-bottom{max-width:1200px;margin:0 auto;border-top:.5px solid rgba(245,239,232,.1);padding-top:var(--space-md);display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--space-sm)}
+    .ec-footer-bottom p{font-size:12px;color:rgba(245,239,232,.4)}
+
+    /* ═══════════════════════════════════════════
+       02 TRIPTYCH PANELS
+    ═══════════════════════════════════════════ */
+    .tri-nav{background:var(--color-navy);padding:0 var(--space-lg);display:flex;align-items:center;justify-content:space-between;height:60px}
+    .tri-nav-links{display:flex;gap:var(--space-lg);list-style:none}
+    .tri-nav-links a{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,239,232,.65);text-decoration:none;transition:color var(--dur-micro) var(--ease)}
+    .tri-nav-links a:hover{color:var(--color-linen)}
+
+    .tri-hero{background:var(--color-linen);padding:var(--space-2xl) var(--space-lg) var(--space-xl);position:relative;overflow:hidden;text-align:center}
+    .tri-hero-ring{position:absolute;border-radius:50%;border:1px solid rgba(26,74,107,.06);pointer-events:none}
+    .tri-hero-inner{position:relative;z-index:1;max-width:680px;margin:0 auto}
+    .tri-hero-h1{font-family:var(--font-display);font-size:42px;font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--color-navy);margin:var(--space-sm) 0}
+    .tri-hero-sub{font-size:17px;line-height:1.65;color:#666;margin-bottom:var(--space-lg)}
+    .tri-hero-stat{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-navy-mid);margin-top:var(--space-sm)}
+
+    .tri-panels{display:grid;grid-template-columns:repeat(3,1fr)}
+    .tri-panel{padding:var(--space-2xl) var(--space-xl);display:flex;flex-direction:column;min-height:460px;position:relative}
+    .tri-panel-num{font-family:var(--font-mono);font-size:64px;font-weight:500;line-height:1;margin-bottom:var(--space-lg);opacity:.12}
+    .tri-panel-eyebrow{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:var(--space-xs)}
+    .tri-panel-h2{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1.2;margin-bottom:var(--space-md)}
+    .tri-panel-body{font-size:15px;line-height:1.7;flex:1;margin-bottom:var(--space-lg)}
+    .tri-panel-divider{width:40px;height:2px;border-radius:2px;margin:var(--space-md) 0}
+
+    /* Panel color variants */
+    .tri-panel-navy{background:var(--color-navy);color:var(--color-linen)}
+    .tri-panel-navy .tri-panel-num{color:var(--color-linen)}
+    .tri-panel-navy .tri-panel-eyebrow{color:var(--color-sky)}
+    .tri-panel-navy .tri-panel-h2{color:var(--color-linen)}
+    .tri-panel-navy .tri-panel-body{color:rgba(245,239,232,.8)}
+    .tri-panel-navy .tri-panel-divider{background:var(--color-sky)}
+
+    .tri-panel-linen{background:var(--color-linen);color:var(--color-near-black);border-left:1px solid var(--color-neutral);border-right:1px solid var(--color-neutral)}
+    .tri-panel-linen .tri-panel-num{color:var(--color-navy)}
+    .tri-panel-linen .tri-panel-eyebrow{color:var(--color-coral)}
+    .tri-panel-linen .tri-panel-h2{color:var(--color-navy)}
+    .tri-panel-linen .tri-panel-body{color:#555}
+    .tri-panel-linen .tri-panel-divider{background:var(--color-coral)}
+
+    .tri-panel-coral{background:var(--color-coral);color:var(--color-linen)}
+    .tri-panel-coral .tri-panel-num{color:var(--color-linen)}
+    .tri-panel-coral .tri-panel-eyebrow{color:rgba(245,239,232,.7)}
+    .tri-panel-coral .tri-panel-h2{color:var(--color-linen)}
+    .tri-panel-coral .tri-panel-body{color:rgba(245,239,232,.85)}
+    .tri-panel-coral .tri-panel-divider{background:var(--color-linen)}
+
+    .tri-finder{background:var(--color-linen-2);padding:var(--space-xl) var(--space-lg)}
+    .tri-finder-inner{max-width:900px;margin:0 auto}
+    .tri-finder h3{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--color-navy);margin-bottom:var(--space-md)}
+    .tri-finder-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:var(--space-sm);align-items:end}
+    .tri-finder label{display:block;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-navy);margin-bottom:var(--space-2xs)}
+
+    .tri-events{background:#fff;padding:var(--space-xl) var(--space-lg)}
+    .tri-events-inner{max-width:900px;margin:0 auto}
+    .tri-events-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-md)}
+    .tri-events-header h3{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--color-navy)}
+    .tri-event-row{display:flex;align-items:center;gap:var(--space-lg);padding:var(--space-sm) 0;border-bottom:.5px solid var(--color-neutral)}
+    .tri-event-row:last-child{border-bottom:none}
+    .tri-event-date{font-family:var(--font-ui);font-size:11px;font-weight:700;text-align:center;color:var(--color-navy-mid);min-width:40px}
+    .tri-event-date-day{font-family:var(--font-display);font-size:24px;font-weight:700;line-height:1;color:var(--color-navy);display:block}
+    .tri-event-body{flex:1}
+    .tri-event-title{font-weight:500;font-size:15px;color:var(--color-navy)}
+    .tri-event-meta{font-size:13px;color:#888;margin-top:2px}
+
+    /* ═══════════════════════════════════════════
+       04 MEETING-FIRST
+    ═══════════════════════════════════════════ */
+    .mf-nav{background:#fff;border-bottom:.5px solid var(--color-neutral);padding:0 var(--space-lg);display:flex;align-items:center;justify-content:space-between;height:64px}
+    .mf-nav-links{display:flex;gap:var(--space-lg);list-style:none}
+    .mf-nav-links a{font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--color-navy);text-decoration:none;transition:color var(--dur-micro) var(--ease)}
+    .mf-nav-links a:hover{color:var(--color-coral)}
+
+    .mf-header{background:var(--color-navy);padding:var(--space-2xl) var(--space-lg);position:relative;overflow:hidden}
+    .mf-header-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+    .mf-header-ring{position:absolute;border-radius:50%;border:1px solid rgba(126,184,216,.1);pointer-events:none}
+    .mf-header-top{margin-bottom:var(--space-xl)}
+    .mf-chips{display:flex;gap:var(--space-2xs);margin-bottom:var(--space-md);flex-wrap:wrap}
+    .mf-chip{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-sky);border:1px solid rgba(126,184,216,.4);padding:4px 12px;border-radius:var(--radius-pill)}
+    .mf-h1{font-family:var(--font-display);font-size:40px;font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--color-linen);margin-bottom:var(--space-sm)}
+    .mf-sub{font-size:16px;line-height:1.6;color:rgba(245,239,232,.75)}
+
+    .mf-finder-card{background:#fff;border-radius:var(--radius-xl);padding:var(--space-lg);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+    .mf-finder-when{display:flex;gap:var(--space-2xs);flex-wrap:wrap;margin-bottom:var(--space-md)}
+    .when-pill{font-family:var(--font-ui);font-size:12px;font-weight:700;padding:6px 14px;border-radius:var(--radius-pill);border:1.5px solid var(--color-neutral);background:#fff;color:#888;cursor:pointer;transition:all var(--dur-micro) var(--ease)}
+    .when-pill:hover,.when-pill.active{background:var(--color-navy);color:var(--color-linen);border-color:var(--color-navy)}
+    .when-pill.tonight{background:var(--color-coral);color:var(--color-linen);border-color:var(--color-coral)}
+    .mf-finder-row{display:grid;grid-template-columns:1fr 1fr auto;gap:var(--space-sm);align-items:end}
+    .form-label{display:block;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#555;margin-bottom:var(--space-2xs)}
+    .mf-helpline{margin-top:var(--space-md);text-align:center;font-size:13px;color:#888}
+    .mf-helpline a{color:var(--color-navy-mid);font-weight:500}
+
+    .mf-results{background:var(--color-linen);padding:var(--space-xl) var(--space-lg)}
+    .mf-results-inner{max-width:900px;margin:0 auto}
+    .mf-results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-md);flex-wrap:wrap;gap:var(--space-sm)}
+    .mf-live-badge{display:inline-flex;align-items:center;gap:var(--space-2xs);font-family:var(--font-ui);font-size:12px;font-weight:700;color:#2E7D32;letter-spacing:.06em}
+    .mf-live-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;box-shadow:0 0 0 3px rgba(46,125,50,.2)}
+
+    .mf-meeting-row{display:flex;align-items:center;justify-content:space-between;padding:var(--space-sm) var(--space-md);border-radius:var(--radius-lg);background:#fff;border:.5px solid var(--color-neutral);margin-bottom:var(--space-xs);transition:border-color var(--dur-std) var(--ease),box-shadow var(--dur-std) var(--ease);cursor:pointer}
+    .mf-meeting-row:hover{border-color:var(--color-navy-mid);box-shadow:0 2px 8px rgba(26,74,107,.1)}
+    .mf-meeting-row.alateen{border-left:3px solid var(--color-coral)}
+    .mf-meeting-day{font-family:var(--font-ui);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-navy-mid);min-width:36px}
+    .mf-meeting-time{font-family:var(--font-ui);font-size:14px;font-weight:700;color:var(--color-navy);min-width:70px}
+    .mf-meeting-info{flex:1;padding:0 var(--space-md)}
+    .mf-meeting-name{font-size:15px;font-weight:500;color:var(--color-navy)}
+    .mf-meeting-loc{font-size:13px;color:#888;margin-top:2px}
+    .mf-meeting-badges{display:flex;gap:var(--space-2xs);align-items:center;flex-wrap:wrap}
+    .mf-meeting-actions{display:flex;align-items:center;gap:var(--space-xs)}
+
+    .mf-audience{background:#fff;padding:var(--space-2xl) var(--space-lg)}
+    .mf-audience-inner{max-width:900px;margin:0 auto}
+    .mf-audience h3{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--color-navy);margin-bottom:var(--space-md)}
+    .mf-audience-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md)}
+    .mf-audience-card{border-radius:var(--radius-xl);padding:var(--space-lg);display:flex;flex-direction:column;transition:box-shadow var(--dur-std) var(--ease),transform var(--dur-std) var(--ease)}
+    .mf-audience-card:hover{box-shadow:0 8px 32px rgba(26,74,107,.12);transform:translateY(-2px)}
+    .mf-audience-card-a{background:var(--color-navy-t10);border:1px solid var(--color-navy-t25)}
+    .mf-audience-card-b{background:var(--color-linen-2);border:1px solid #C8B89A}
+    .mf-audience-card-c{background:var(--color-coral-tint);border:1px solid #F0B89A}
+    .mf-audience-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-sm)}
+    .mf-audience-card-a .mf-audience-icon{background:var(--color-navy-t25)}
+    .mf-audience-card-b .mf-audience-icon{background:var(--color-linen)}
+    .mf-audience-card-c .mf-audience-icon{background:var(--color-coral-tint);border:1px solid #F0B89A}
+    .mf-audience-card h4{font-family:var(--font-display);font-size:18px;font-weight:700;line-height:1.25;margin-bottom:var(--space-xs)}
+    .mf-audience-card-a h4{color:var(--color-navy)}
+    .mf-audience-card-b h4{color:var(--color-navy)}
+    .mf-audience-card-c h4{color:var(--color-coral-dark)}
+    .mf-audience-card p{font-size:14px;line-height:1.6;flex:1;margin-bottom:var(--space-md)}
+    .mf-audience-card-a p{color:#444}
+    .mf-audience-card-b p{color:#555}
+    .mf-audience-card-c p{color:var(--color-coral-dark)}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:900px){
+      .ec-audience-grid,.tri-panels,.mf-audience-grid{grid-template-columns:1fr}
+      .tri-finder-grid,.mf-finder-row{grid-template-columns:1fr 1fr}
+      .ec-about,.ec-hiw-inner,.ec-footer-grid{grid-template-columns:1fr}
+      .ec-stat-divider{display:none}
+      .tri-panel{min-height:auto}
+    }
+    @media(max-width:600px){
+      .ec-hero-h1,.mf-h1{font-size:30px}
+      .tri-hero-h1{font-size:28px}
+      .ec-nav-links,.tri-nav-links,.mf-nav-links{display:none}
+      .tri-finder-grid,.mf-finder-row{grid-template-columns:1fr}
+      .mf-meeting-day{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ DOC MASTHEAD ═══ -->
+<div class="doc-masthead">
+  <p class="t-eyebrow">Open Circle — Design System</p>
+  <h1 class="t-display">Design Iterations</h1>
+  <p>Al-Anon &amp; Alateen Family Groups of San Diego · Three layout directions</p>
+</div>
+
+<!-- ═══ JUMP NAV ═══ -->
+<nav class="doc-jump-nav" aria-label="Jump to design">
+  <span class="jump-label">Jump to:</span>
+  <a href="#design-01">01 — Editorial</a>
+  <a href="#design-02">02 — Triptych</a>
+  <a href="#design-04">04 — Meeting-First</a>
+</nav>
+
+
+<!-- ████████████████████████████████████████████
+     01  EDITORIAL CLASSIC
+████████████████████████████████████████████ -->
+<div id="design-01" class="design-frame" style="margin-top:var(--space-2xl)">
+  <div class="design-frame-label">
+    <span class="design-num">01</span>
+    <span class="design-name-label">Editorial Classic</span>
+  </div>
+
+  <!-- NAV -->
+  <nav class="ec-nav">
+    <div class="logo-lockup">
+      <svg width="34" height="31" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+        <circle cx="55" cy="63" r="20" fill="#ffffff"/>
+      </svg>
+      <div class="logo-wordmark">
+        <span class="logo-wm-primary">Al‑Anon &amp; Alateen</span>
+        <span class="logo-wm-sub">Family Groups of San Diego</span>
+      </div>
+    </div>
+    <ul class="ec-nav-links">
+      <li><a href="#">Find a Meeting</a></li>
+      <li><a href="#">New to Al-Anon</a></li>
+      <li><a href="#">Alateen</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <div class="ec-nav-actions">
+      <a href="#" class="btn btn-coral btn-sm">Get help now</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="ec-hero">
+    <div class="ec-hero-bg-ring" style="width:600px;height:600px;right:-160px;top:-200px;"></div>
+    <div class="ec-hero-bg-ring" style="width:320px;height:320px;right:120px;top:40px;"></div>
+    <div class="ec-hero-bg-ring" style="width:140px;height:140px;right:280px;top:180px;"></div>
+    <div class="ec-hero-inner">
+      <p class="ec-hero-eyebrow">Al‑Anon &amp; Alateen · San Diego</p>
+      <h1 class="ec-hero-h1">Help and hope for families and friends of alcoholics.</h1>
+      <p class="ec-hero-sub">Al‑Anon members are people just like you who are worried about someone with a drinking problem.</p>
+
+      <div class="ec-filter-group">
+        <p class="ec-filter-group-label">When</p>
+        <div class="ec-filter-row">
+          <button class="filter-pill tonight active">Tonight</button>
+          <button class="filter-pill">Mon</button>
+          <button class="filter-pill">Tue</button>
+          <button class="filter-pill">Wed</button>
+          <button class="filter-pill">Thu</button>
+          <button class="filter-pill">Fri</button>
+          <button class="filter-pill">Sat</button>
+          <button class="filter-pill">Sun</button>
+        </div>
+      </div>
+      <div class="ec-filter-group">
+        <p class="ec-filter-group-label">Format</p>
+        <div class="ec-filter-row">
+          <button class="filter-pill active">Any format</button>
+          <button class="filter-pill">In person</button>
+          <button class="filter-pill">Online</button>
+          <button class="filter-pill">Hybrid</button>
+        </div>
+      </div>
+      <div class="ec-finder-actions">
+        <a href="#" class="btn btn-coral btn-lg">Find a meeting</a>
+        <p class="ec-meeting-count">120+ weekly meetings across San Diego County · in person, online &amp; hybrid</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BODY -->
+  <div class="ec-body">
+    <div class="ec-body-inner">
+
+      <!-- Stat bar -->
+      <div class="ec-stat-bar">
+        <div class="ec-stat">
+          <span class="ec-stat-num">120+</span>
+          <span class="ec-stat-label">weekly meetings in San Diego</span>
+        </div>
+        <div class="ec-stat-divider"></div>
+        <div class="ec-stat">
+          <span class="ec-stat-num">115</span>
+          <span class="ec-stat-label">countries with Al‑Anon meetings</span>
+        </div>
+        <div class="ec-stat-divider"></div>
+        <div class="ec-stat">
+          <span class="ec-stat-num">24,000+</span>
+          <span class="ec-stat-label">Al‑Anon groups worldwide</span>
+        </div>
+        <div class="ec-stat-divider"></div>
+        <div class="ec-stat">
+          <span class="ec-stat-num">2,300+</span>
+          <span class="ec-stat-label">Alateen groups worldwide</span>
+        </div>
+      </div>
+
+      <!-- Audience cards -->
+      <p class="t-eyebrow" style="margin-bottom:var(--space-sm);">Where would you like to begin?</p>
+      <div class="ec-audience-grid">
+
+        <!-- New -->
+        <div class="ec-audience-card" style="background:var(--color-navy);">
+          <div class="ec-audience-card-top">
+            <p class="ec-audience-num" style="color:var(--color-linen);">01</p>
+            <p class="ec-audience-role" style="color:var(--color-sky);">Start here</p>
+            <h2 style="font-family:var(--font-display);font-size:26px;font-weight:700;line-height:1.2;color:var(--color-linen);margin-bottom:var(--space-md);">I'm new to Al‑Anon</h2>
+            <p style="font-size:15px;line-height:1.7;color:rgba(245,239,232,.8);">Al‑Anon helps families and friends of alcoholics recover from the effects of living with the problem drinking of a relative or friend. The only requirement for membership is that there be a problem of alcoholism in a relative or friend.</p>
+          </div>
+          <div class="ec-audience-card-bottom">
+            <a href="#" class="btn btn-outline-light btn-sm">What to expect ↗</a>
+          </div>
+        </div>
+
+        <!-- Member -->
+        <div class="ec-audience-card" style="background:var(--color-linen);border:.5px solid var(--color-neutral);">
+          <div class="ec-audience-card-top">
+            <p class="ec-audience-num" style="color:var(--color-navy);">02</p>
+            <p class="ec-audience-role" style="color:var(--color-coral);">Welcome back</p>
+            <h2 style="font-family:var(--font-display);font-size:26px;font-weight:700;line-height:1.2;color:var(--color-navy);margin-bottom:var(--space-md);">I'm a member</h2>
+            <p style="font-size:15px;line-height:1.7;color:#555;">Find meetings and upcoming events, download the Intercom, explore service opportunities, and reach member resources. In Al‑Anon, members share their personal experiences and invite others to "take what they like and leave the rest."</p>
+          </div>
+          <div class="ec-audience-card-bottom">
+            <a href="#" class="btn btn-primary btn-sm">Member resources ↗</a>
+          </div>
+        </div>
+
+        <!-- Alateen -->
+        <div class="ec-audience-card" style="background:var(--color-coral);">
+          <div class="ec-audience-card-top">
+            <p class="ec-audience-num" style="color:var(--color-linen);">03</p>
+            <p class="ec-audience-role" style="color:rgba(245,239,232,.7);">Ages 9–19</p>
+            <h2 style="font-family:var(--font-display);font-size:26px;font-weight:700;line-height:1.2;color:var(--color-linen);margin-bottom:var(--space-md);">I'm a teen or preteen</h2>
+            <p style="font-size:15px;line-height:1.7;color:rgba(245,239,232,.85);">Alateen is our recovery program for young people. Alateen groups are sponsored by Al‑Anon members. A safe, judgment-free community — you belong here too.</p>
+          </div>
+          <div class="ec-audience-card-bottom">
+            <a href="#" class="btn" style="background:var(--color-linen);color:var(--color-coral-dark);border-color:transparent;font-size:12px;padding:6px 14px;">Explore Alateen ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Al-Anon -->
+      <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-circle"></div><div class="section-divider-line"></div></div>
+      <p class="t-eyebrow" style="margin-bottom:var(--space-xs);">About</p>
+      <h2 class="t-h2" style="color:var(--color-navy);margin-bottom:var(--space-xl);">What is Al‑Anon?</h2>
+      <div class="ec-about">
+        <div>
+          <p style="font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-coral);margin-bottom:var(--space-sm);">Al-Anon is…</p>
+          <ul class="ec-about-list">
+            <li>For families and friends of alcoholics.</li>
+            <li>A separate fellowship from Alcoholics Anonymous (AA).</li>
+            <li>Based on the Twelve Steps and Twelve Traditions adapted from AA.</li>
+            <li>Compatible with professional treatment.</li>
+          </ul>
+          <div style="margin-top:var(--space-xl);padding:var(--space-md);background:var(--color-navy-t10);border-radius:var(--radius-lg);border:.5px solid var(--color-navy-t25);">
+            <p style="font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-navy);margin-bottom:var(--space-xs);">Local Organization</p>
+            <p style="font-size:14px;line-height:1.6;color:var(--color-navy-dark);">San Diego Al‑Anon Information Service (AIS or Intergroup) is a regional service arm established and maintained by several districts.</p>
+          </div>
+        </div>
+        <div class="ec-about-paras">
+          <p>Al‑Anon helps families and friends of alcoholics recover from the effects of living with the problem drinking of a relative or friend. Similarly, Alateen is our recovery program for young people. Alateen groups are sponsored by Al‑Anon members.</p>
+          <p>Our program of recovery is adapted from Alcoholics Anonymous and is based upon the Twelve Steps, Twelve Traditions, and Twelve Concepts of Service.</p>
+          <p>The only requirement for membership is that there be a problem of alcoholism in a relative or friend. Whether the alcoholic is still drinking or not, Al‑Anon/Alateen offers hope and recovery to all people affected by the alcoholism of a loved one or friend.</p>
+          <p style="color:#888;font-size:14px;">Al‑Anon/Alateen is not affiliated with any other organization or outside entity.</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ec-body -->
+
+  <!-- HOW IT WORKS -->
+  <div class="ec-hiw">
+    <div class="ec-hiw-inner">
+      <div>
+        <p class="ec-hiw-label">How it works</p>
+        <h2 class="ec-hiw h2">One day at a time.</h2>
+      </div>
+      <div class="ec-hiw-paras">
+        <p>There is no magic formula that enables you to help someone stop—or cut back—on their drinking. But Al‑Anon can help you learn how to cope with the challenges of someone else's drinking.</p>
+        <p>Al‑Anon simplifies a complex problem by suggesting a "One Day at a Time" approach. At every meeting, you can hear people explain how Al‑Anon worked for them.</p>
+        <p>Al‑Anon members come to understand problem drinking as a family illness that affects everyone in the family. Research shows that problem drinkers' chances for recovery improve when supported by family members in a program like Al‑Anon.</p>
+        <p>In Al‑Anon/Alateen, members do not give direction or advice. Instead, they share their personal experiences and invite others to "take what they like and leave the rest." The best place to learn how Al‑Anon/Alateen works is at a meeting in your local community. Personal contact is an important element in the healing process.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="ec-footer">
+    <div class="ec-footer-grid">
+      <div class="ec-footer-brand">
+        <div class="logo-lockup">
+          <svg width="34" height="31" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#7EB8D8"/>
+            <circle cx="55" cy="63" r="20" fill="#0D2D42"/>
+          </svg>
+          <div class="logo-wordmark">
+            <span class="logo-wm-primary" style="color:#7EB8D8;">Al‑Anon &amp; Alateen</span>
+            <span class="logo-wm-sub" style="color:rgba(126,184,216,.7);">Family Groups of San Diego</span>
+          </div>
+        </div>
+        <p>Free, confidential, and open to all. You are not alone.</p>
+        <p style="margin-top:var(--space-xs);">24/7 Helpline · (619) 555‑0142</p>
+      </div>
+      <div class="ec-footer-col">
+        <h4>Meetings</h4>
+        <ul>
+          <li><a href="#">Find a meeting</a></li>
+          <li><a href="#">Online meetings</a></li>
+          <li><a href="#">Alateen meetings</a></li>
+          <li><a href="#">Meeting formats</a></li>
+        </ul>
+      </div>
+      <div class="ec-footer-col">
+        <h4>Get started</h4>
+        <ul>
+          <li><a href="#">New to Al-Anon</a></li>
+          <li><a href="#">What to expect</a></li>
+          <li><a href="#">Newcomer packet</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="ec-footer-col">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Service</a></li>
+          <li><a href="#">The Intercom</a></li>
+          <li><a href="#">Literature</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ec-footer-bottom">
+      <p>© 2026 Al‑Anon &amp; Alateen Family Groups of San Diego</p>
+      <p>One day at a time. · Al‑Anon/Alateen is not affiliated with any other organization or outside entity.</p>
+    </div>
+  </footer>
+</div><!-- /design-01 -->
+
+
+<!-- ████████████████████████████████████████████
+     02  TRIPTYCH PANELS
+████████████████████████████████████████████ -->
+<div id="design-02" class="design-frame">
+  <div class="design-frame-label">
+    <span class="design-num">02</span>
+    <span class="design-name-label">Triptych Panels</span>
+  </div>
+
+  <!-- NAV -->
+  <nav class="tri-nav">
+    <div class="logo-lockup">
+      <svg width="30" height="27" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#F5EFE8"/>
+        <circle cx="55" cy="63" r="20" fill="#1A4A6B"/>
+      </svg>
+      <div class="logo-wordmark">
+        <span class="logo-wm-primary" style="color:var(--color-linen);">Al‑Anon &amp; Alateen</span>
+        <span class="logo-wm-sub" style="color:rgba(245,239,232,.6);">Family Groups of San Diego</span>
+      </div>
+    </div>
+    <ul class="tri-nav-links">
+      <li><a href="#">Meetings</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Service</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <a href="#" class="btn btn-coral btn-sm">Get help now</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="tri-hero">
+    <div class="tri-hero-ring" style="width:500px;height:500px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+    <div class="tri-hero-ring" style="width:320px;height:320px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+    <div class="tri-hero-inner">
+      <p class="t-eyebrow">Everyone belongs here</p>
+      <h1 class="tri-hero-h1">Help and hope for families and friends of alcoholics.</h1>
+      <p class="tri-hero-sub">Al‑Anon members are people just like you who are worried about someone with a drinking problem. Three ways in — pick the one that sounds like you.</p>
+      <p class="tri-hero-stat">Al‑Anon meetings are held in 115 countries · 24,000+ groups worldwide</p>
+    </div>
+  </div>
+
+  <!-- TRIPTYCH -->
+  <div class="tri-panels">
+    <!-- Panel 01 — New -->
+    <div class="tri-panel tri-panel-navy">
+      <div class="tri-panel-num">01</div>
+      <p class="tri-panel-eyebrow">Start here</p>
+      <div class="tri-panel-divider"></div>
+      <h2 class="tri-panel-h2">I'm new to Al‑Anon</h2>
+      <p class="tri-panel-body">Someone you love has a drinking problem and you're not sure where to turn. Al‑Anon helps families and friends of alcoholics recover from the effects of living with the problem drinking of a relative or friend. The only requirement for membership is that there be a problem of alcoholism in a relative or friend — whether the alcoholic is still drinking or not.</p>
+      <a href="#" class="btn btn-outline-light btn-sm" style="align-self:flex-start;">Begin ↗</a>
+    </div>
+
+    <!-- Panel 02 — Member -->
+    <div class="tri-panel tri-panel-linen">
+      <div class="tri-panel-num">02</div>
+      <p class="tri-panel-eyebrow">Welcome back</p>
+      <div class="tri-panel-divider"></div>
+      <h2 class="tri-panel-h2">I'm a member</h2>
+      <p class="tri-panel-body">Find meetings and upcoming events, download the Intercom, explore service opportunities, and reach member resources. In Al‑Anon, members share their personal experiences and invite others to "take what they like and leave the rest." Personal contact is an important element in the healing process.</p>
+      <a href="#" class="btn btn-primary btn-sm" style="align-self:flex-start;">Member home ↗</a>
+    </div>
+
+    <!-- Panel 03 — Alateen -->
+    <div class="tri-panel tri-panel-coral">
+      <div class="tri-panel-num">03</div>
+      <p class="tri-panel-eyebrow">Ages 9–19</p>
+      <div class="tri-panel-divider"></div>
+      <h2 class="tri-panel-h2">I'm a teen or preteen</h2>
+      <p class="tri-panel-body">Alateen is our recovery program for young people affected by someone else's drinking. Alateen groups are sponsored by Al‑Anon members. A safe, judgment-free community where you can hear from others who understand — you belong here too.</p>
+      <a href="#" class="btn btn-sm" style="align-self:flex-start;background:var(--color-linen);color:var(--color-coral-dark);border-color:transparent;">Explore Alateen ↗</a>
+    </div>
+  </div>
+
+  <!-- MEETING FINDER -->
+  <div class="tri-finder">
+    <div class="tri-finder-inner">
+      <h3>Find a meeting</h3>
+      <div class="tri-finder-grid">
+        <div>
+          <label class="tri-finder label" for="tri-day">Day</label>
+          <select class="input select-input" id="tri-day">
+            <option>Tonight</option>
+            <option>Any day</option>
+            <option>Mon</option><option>Tue</option><option>Wed</option>
+            <option>Thu</option><option>Fri</option><option>Sat</option><option>Sun</option>
+          </select>
+        </div>
+        <div>
+          <label class="tri-finder label" for="tri-format">Format</label>
+          <select class="input select-input" id="tri-format">
+            <option>Any format</option>
+            <option>In person</option>
+            <option>Online</option>
+            <option>Hybrid</option>
+          </select>
+        </div>
+        <div>
+          <label class="tri-finder label" for="tri-lang">Language</label>
+          <select class="input select-input" id="tri-lang">
+            <option>Any language</option>
+            <option>English</option>
+            <option>Español</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="align-self:flex-end;">Search 120+ meetings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="tri-events">
+    <div class="tri-events-inner">
+      <div class="tri-events-header">
+        <h3>Upcoming in San Diego</h3>
+        <a href="#" class="t-mono" style="color:var(--color-navy-mid);text-decoration:none;font-size:13px;">Full calendar ↗</a>
+      </div>
+      <div class="tri-event-row">
+        <div class="tri-event-date">
+          <span style="font-family:var(--font-ui);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-coral);display:block">Jun</span>
+          <span class="tri-event-date-day">14</span>
+          <span style="font-family:var(--font-ui);font-size:10px;color:#888;display:block">Sat</span>
+        </div>
+        <div class="tri-event-body">
+          <p class="tri-event-title">Newcomer Welcome Coffee</p>
+          <p class="tri-event-meta">Balboa Park · 10:00 AM · Free &amp; open to all</p>
+        </div>
+        <span class="badge badge-navy">Newcomer</span>
+      </div>
+      <div class="tri-event-row">
+        <div class="tri-event-date">
+          <span style="font-family:var(--font-ui);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-coral);display:block">Jun</span>
+          <span class="tri-event-date-day">21</span>
+          <span style="font-family:var(--font-ui);font-size:10px;color:#888;display:block">Sat</span>
+        </div>
+        <div class="tri-event-body">
+          <p class="tri-event-title">District Service Workshop</p>
+          <p class="tri-event-meta">Mission Valley · 1:00 PM</p>
+        </div>
+        <span class="badge badge-linen">Service</span>
+      </div>
+      <div class="tri-event-row">
+        <div class="tri-event-date">
+          <span style="font-family:var(--font-ui);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-coral);display:block">Jun</span>
+          <span class="tri-event-date-day">28</span>
+          <span style="font-family:var(--font-ui);font-size:10px;color:#888;display:block">Sat</span>
+        </div>
+        <div class="tri-event-body">
+          <p class="tri-event-title">Alateen Beach Day</p>
+          <p class="tri-event-meta">Mission Beach · 11:00 AM</p>
+        </div>
+        <span class="badge badge-coral">Alateen</span>
+      </div>
+    </div>
+  </div>
+</div><!-- /design-02 -->
+
+
+<!-- ████████████████████████████████████████████
+     04  MEETING-FIRST
+████████████████████████████████████████████ -->
+<div id="design-04" class="design-frame" style="margin-bottom:var(--space-2xl)">
+  <div class="design-frame-label">
+    <span class="design-num">04</span>
+    <span class="design-name-label">Meeting-First</span>
+  </div>
+
+  <!-- NAV -->
+  <nav class="mf-nav">
+    <div class="logo-lockup">
+      <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+        <circle cx="55" cy="63" r="20" fill="#ffffff"/>
+      </svg>
+      <div class="logo-wordmark">
+        <span class="logo-wm-primary">Al‑Anon &amp; Alateen</span>
+        <span class="logo-wm-sub">Family Groups of San Diego</span>
+      </div>
+    </div>
+    <ul class="mf-nav-links">
+      <li><a href="#">Meetings</a></li>
+      <li><a href="#">New to Al-Anon</a></li>
+      <li><a href="#">Alateen</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <a href="#" class="btn btn-coral btn-sm">Get help now</a>
+  </nav>
+
+  <!-- HEADER + FINDER -->
+  <div class="mf-header">
+    <div class="mf-header-ring" style="width:500px;height:500px;right:-180px;top:-180px;"></div>
+    <div class="mf-header-ring" style="width:240px;height:240px;right:80px;top:60px;"></div>
+    <div class="mf-header-inner">
+      <div class="mf-header-top">
+        <div class="mf-chips">
+          <span class="mf-chip">Free</span>
+          <span class="mf-chip">Confidential</span>
+          <span class="mf-chip">Open to all</span>
+        </div>
+        <h1 class="mf-h1">Help and hope for families and friends of alcoholics.</h1>
+        <p class="mf-sub">Al‑Anon members are people just like you who are worried about someone with a drinking problem. 120+ weekly meetings in San Diego — in person, online, and hybrid. No sign-up needed.</p>
+      </div>
+
+      <!-- Finder card -->
+      <div class="mf-finder-card">
+        <p style="font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#555;margin-bottom:var(--space-sm);">When can you go?</p>
+        <div class="mf-finder-when">
+          <button class="when-pill tonight">Tonight</button>
+          <button class="when-pill">Mon</button>
+          <button class="when-pill">Tue</button>
+          <button class="when-pill">Wed</button>
+          <button class="when-pill active">Thu</button>
+          <button class="when-pill">Fri</button>
+          <button class="when-pill">Sat</button>
+          <button class="when-pill">Sun</button>
+        </div>
+        <div class="mf-finder-row">
+          <div>
+            <label class="form-label" for="mf-format">Format</label>
+            <select class="input select-input" id="mf-format">
+              <option>In person</option>
+              <option>Online</option>
+              <option>Hybrid</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" for="mf-area">Area or zip code</label>
+            <input class="input" id="mf-area" type="text" placeholder="e.g. 92103 or North Park" />
+          </div>
+          <button class="btn btn-primary" style="align-self:flex-end;">Show meetings</button>
+        </div>
+        <p class="mf-helpline">Or call the 24/7 helpline · <a href="tel:16195550142">(619) 555‑0142</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="mf-results">
+    <div class="mf-results-inner">
+      <div class="mf-results-header">
+        <div style="display:flex;align-items:center;gap:var(--space-md);">
+          <span class="mf-live-badge"><span class="mf-live-dot"></span>Live</span>
+          <span style="font-size:14px;color:#888;">6 meetings this week</span>
+        </div>
+        <a href="#" class="t-mono" style="color:var(--color-navy-mid);text-decoration:none;font-size:13px;">Map view ↗</a>
+      </div>
+
+      <!-- Rows -->
+      <div class="mf-meeting-row">
+        <span class="mf-meeting-day">Mon</span>
+        <span class="mf-meeting-time">7:00 PM</span>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Serenity Seekers</p>
+          <p class="mf-meeting-loc">Pacific Beach</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="badge badge-navy">In person</span></div>
+        <div class="mf-meeting-actions"><a href="#" class="btn btn-outline btn-sm">Details ↗</a></div>
+      </div>
+
+      <div class="mf-meeting-row">
+        <span class="mf-meeting-day">Tue</span>
+        <span class="mf-meeting-time">12:15 PM</span>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Living Today</p>
+          <p class="mf-meeting-loc">Zoom</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="badge badge-sky">Online</span></div>
+        <div class="mf-meeting-actions"><a href="#" class="btn btn-outline btn-sm">Details ↗</a></div>
+      </div>
+
+      <div class="mf-meeting-row">
+        <span class="mf-meeting-day">Wed</span>
+        <span class="mf-meeting-time">6:30 PM</span>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Courage to Change</p>
+          <p class="mf-meeting-loc">Hillcrest</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="badge badge-linen">Hybrid</span><span class="badge badge-navy" style="margin-left:4px;">Newcomer</span></div>
+        <div class="mf-meeting-actions"><a href="#" class="btn btn-outline btn-sm">Details ↗</a></div>
+      </div>
+
+      <div class="mf-meeting-row">
+        <span class="mf-meeting-day">Thu</span>
+        <span class="mf-meeting-time">10:00 AM</span>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">One Day at a Time</p>
+          <p class="mf-meeting-loc">La Jolla</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="badge badge-navy">In person</span></div>
+        <div class="mf-meeting-actions"><a href="#" class="btn btn-outline btn-sm">Details ↗</a></div>
+      </div>
+
+      <div class="mf-meeting-row">
+        <span class="mf-meeting-day">Sat</span>
+        <span class="mf-meeting-time">9:00 AM</span>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">North Park Hope</p>
+          <p class="mf-meeting-loc">North Park</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="badge badge-navy">In person</span></div>
+        <div class="mf-meeting-actions"><a href="#" class="btn btn-outline btn-sm">Details ↗</a></div>
+      </div>
+
+      <div class="mf-meeting-row alateen">
+        <span class="mf-meeting-day">Sun</span>
+        <span class="mf-meeting-time">4:00 PM</span>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Alateen — Find Your People</p>
+          <p class="mf-meeting-loc">Clairemont</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="badge badge-coral">Alateen</span><span class="badge badge-navy" style="margin-left:4px;">In person</span></div>
+        <div class="mf-meeting-actions"><a href="#" class="btn btn-coral btn-sm">Details ↗</a></div>
+      </div>
+
+      <div style="margin-top:var(--space-md);text-align:center;">
+        <a href="#" class="btn btn-outline">See all 120+ meetings ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIENCE CARDS -->
+  <div class="mf-audience">
+    <div class="mf-audience-inner">
+      <h3>Not sure where to start? Pick the one that sounds like you.</h3>
+      <div class="mf-audience-grid" style="margin-top:var(--space-md)">
+
+        <!-- New -->
+        <div class="mf-audience-card mf-audience-card-a">
+          <div class="mf-audience-icon">
+            <svg width="20" height="18" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+              <circle cx="55" cy="63" r="20" fill="#EBF4FA"/>
+            </svg>
+          </div>
+          <h4>I'm new to Al‑Anon</h4>
+          <p>Start here — Al‑Anon helps families and friends of alcoholics recover from the effects of living with the problem drinking of a relative or friend. Get a free newcomer packet.</p>
+          <a href="#" class="btn btn-primary btn-sm" style="align-self:flex-start;">Begin ↗</a>
+        </div>
+
+        <!-- Member -->
+        <div class="mf-audience-card mf-audience-card-b">
+          <div class="mf-audience-icon">
+            <svg width="20" height="18" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+              <circle cx="55" cy="63" r="20" fill="#EDE5D8"/>
+            </svg>
+          </div>
+          <h4>I'm a member</h4>
+          <p>Events, the Intercom, service opportunities, and member resources. In Al‑Anon, members share their experiences and invite others to "take what they like and leave the rest."</p>
+          <a href="#" class="btn btn-primary btn-sm" style="align-self:flex-start;">Member home ↗</a>
+        </div>
+
+        <!-- Alateen -->
+        <div class="mf-audience-card mf-audience-card-c">
+          <div class="mf-audience-icon">
+            <svg width="20" height="18" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="55,5 105,95 5,95" fill="#D4734A"/>
+              <circle cx="55" cy="63" r="20" fill="#FAD5C8"/>
+            </svg>
+          </div>
+          <h4>I'm a teen or preteen</h4>
+          <p>Alateen — a safe, judgment-free community for young people affected by someone else's drinking. Alateen groups are sponsored by Al‑Anon members. You belong here too.</p>
+          <a href="#" class="btn btn-coral btn-sm" style="align-self:flex-start;">Explore Alateen ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /design-04 -->
+
+<script>
+  /* Filter pill toggle — Editorial */
+  document.querySelectorAll('.filter-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      const group = pill.closest('.ec-filter-row');
+      group.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('active') });
+      pill.classList.add('active');
+    });
+  });
+
+  /* When pill toggle — Meeting-first */
+  document.querySelectorAll('.when-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      const group = pill.closest('.mf-finder-when');
+      group.querySelectorAll('.when-pill').forEach(function(p){ p.classList.remove('active','tonight') });
+      pill.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
