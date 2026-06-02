@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open Circle — Design Iterations v3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─── */
+    :root {
+      --color-navy:         #1A4A6B;
+      --color-navy-mid:     #2E7AB0;
+      --color-navy-dark:    #0D2D42;
+      --color-navy-t10:     #EBF4FA;
+      --color-navy-t25:     #C5DCF0;
+      --color-sky:          #7EB8D8;
+      --color-coral:        #D4734A;
+      --color-coral-dark:   #7A2E10;
+      --color-coral-tint:   #FAD5C8;
+      --color-linen:        #F5EFE8;
+      --color-linen-2:      #EDE5D8;
+      --color-near-black:   #2A2A2A;
+      --color-neutral:      #CBD5E0;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono:    'IBM Plex Mono', monospace;
+      --font-ui:      'Space Grotesk', system-ui, sans-serif;
+      --radius-sm:4px; --radius-md:8px; --radius-lg:12px;
+      --radius-xl:16px; --radius-pill:999px;
+      --ease: cubic-bezier(0.4,0,0.2,1);
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-body);font-size:16px;line-height:1.7;color:var(--color-near-black);background:#DEDAD3}
+
+    /* ─── DOC CHROME ─── */
+    .doc-masthead{background:var(--color-navy-dark);color:var(--color-linen);padding:48px 40px;text-align:center}
+    .doc-masthead-eyebrow{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-sky);margin-bottom:8px}
+    .doc-masthead h1{font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--color-linen);margin-bottom:6px}
+    .doc-masthead p{font-size:15px;color:rgba(245,239,232,.65)}
+
+    .doc-jump-nav{position:sticky;top:0;z-index:200;background:#fff;border-bottom:0.5px solid var(--color-neutral);display:flex;align-items:center;gap:24px;padding:0 32px;height:50px}
+    .doc-jump-nav a{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#aaa;text-decoration:none;padding:4px 0;border-bottom:2px solid transparent;transition:all 100ms var(--ease)}
+    .doc-jump-nav a:hover{color:var(--color-navy);border-color:var(--color-navy)}
+    .doc-jump-label{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral)}
+
+    .design-frame{margin:40px 32px;border-radius:20px;overflow:hidden;box-shadow:0 16px 60px rgba(13,45,66,.18);border:1px solid rgba(0,0,0,.08)}
+    .design-frame-label{background:var(--color-linen-2);border-bottom:1px solid var(--color-neutral);padding:10px 20px;display:flex;align-items:center;gap:12px}
+    .design-num{font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--color-coral);background:var(--color-coral-tint);padding:3px 8px;border-radius:4px}
+    .design-name{font-family:var(--font-ui);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-navy)}
+
+
+    /* ══════════════════════════════════════════════════
+       01  EDITORIAL CLASSIC
+    ══════════════════════════════════════════════════ */
+
+    /* Nav */
+    .ec-nav{background:#fff;border-bottom:.5px solid var(--color-neutral);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:66px}
+    .ec-logo{display:flex;align-items:center;gap:10px}
+    .ec-logo-text{display:flex;flex-direction:column;line-height:1}
+    .ec-logo-name{font-family:var(--font-ui);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--color-navy)}
+    .ec-logo-sub{font-family:var(--font-ui);font-weight:400;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--color-navy);margin-top:3px}
+    .ec-nav-links{display:flex;gap:32px;list-style:none}
+    .ec-nav-links a{font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--color-navy);text-decoration:none;transition:color 100ms var(--ease)}
+    .ec-nav-links a:hover{color:var(--color-coral)}
+    .ec-btn-cta{background:var(--color-coral);color:#fff;border:none;border-radius:var(--radius-pill);padding:10px 20px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:opacity 100ms var(--ease)}
+    .ec-btn-cta:hover{opacity:.87}
+
+    /* Hero */
+    .ec-hero{background:var(--color-linen);padding:72px 40px 80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;overflow:hidden}
+    .ec-hero-ring{position:absolute;border-radius:50%;border:1px solid rgba(26,74,107,.06);pointer-events:none}
+
+    /* Split headline */
+    .ec-headline{margin-bottom:20px}
+    .ec-headline-strong{font-family:var(--font-display);font-size:66px;font-weight:700;line-height:1.0;letter-spacing:-.03em;color:var(--color-navy);display:block}
+    .ec-headline-italic{font-family:var(--font-display);font-size:40px;font-weight:700;font-style:italic;line-height:1.2;letter-spacing:-.01em;color:var(--color-coral);display:block}
+    .ec-hero-body{font-size:17px;line-height:1.7;color:#4a4a4a;margin-bottom:28px}
+
+    /* Inline finder */
+    .ec-finder{display:inline-flex;align-items:center;background:#fff;border-radius:var(--radius-pill);padding:6px;border:.5px solid var(--color-neutral);gap:2px;box-shadow:0 2px 12px rgba(26,74,107,.08)}
+    .ec-finder select{padding:8px 36px 8px 16px;border:none;background:transparent;font-family:var(--font-body);font-size:14px;color:var(--color-near-black);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231A4A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+    .ec-finder select:focus{outline:none}
+    .ec-finder-divider{width:1px;height:24px;background:var(--color-neutral);flex-shrink:0}
+    .ec-finder-btn{background:var(--color-navy);color:var(--color-linen);border:none;border-radius:var(--radius-pill);padding:10px 22px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity 100ms var(--ease)}
+    .ec-finder-btn:hover{opacity:.88}
+    .ec-finder-caption{font-size:13px;color:#999;margin-top:12px}
+
+    /* Right side circle */
+    .ec-circle-wrap{position:relative;display:flex;justify-content:center;align-items:center}
+    .ec-circle{width:100%;max-width:420px;aspect-ratio:1;border-radius:50%;overflow:hidden;background:var(--color-navy);background:repeating-linear-gradient(-45deg,#1A4A6B 0px,#1A4A6B 12px,#2E7AB0 12px,#2E7AB0 24px);position:relative}
+    .ec-circle-label{position:absolute;bottom:50%;left:50%;transform:translate(-50%,50%);color:rgba(245,239,232,.45);font-family:var(--font-mono);font-size:13px;white-space:nowrap}
+    .ec-tonight-badge{position:absolute;bottom:22%;left:-16px;background:#fff;border-radius:var(--radius-pill);padding:8px 16px 8px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);white-space:nowrap}
+    .ec-tonight-chip{background:var(--color-coral-tint);color:var(--color-coral-dark);font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:var(--radius-pill)}
+    .ec-tonight-text{font-size:14px;font-weight:500;color:var(--color-near-black)}
+
+    /* Audience cards section */
+    .ec-cards-section{background:var(--color-linen);padding:0 40px 64px}
+    .ec-cards-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
+    .ec-cards-header h2{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--color-navy)}
+    .ec-cards-header a{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--color-coral);text-decoration:none}
+    .ec-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+
+    .ec-card{background:#fff;border:.5px solid var(--color-neutral);border-top:3px solid var(--color-coral);border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:28px;display:flex;flex-direction:column;transition:box-shadow 220ms var(--ease),transform 220ms var(--ease)}
+    .ec-card:hover{box-shadow:0 8px 32px rgba(26,74,107,.1);transform:translateY(-2px)}
+    .ec-card-icon{margin-bottom:12px}
+    .ec-card-eyebrow{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-coral);margin-bottom:8px}
+    .ec-card h3{font-family:var(--font-display);font-size:24px;font-weight:700;line-height:1.2;color:var(--color-navy);margin-bottom:12px}
+    .ec-card p{font-size:15px;line-height:1.65;color:#555;flex:1;margin-bottom:20px}
+    .ec-card-link{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--color-coral);text-decoration:none;margin-top:auto}
+    .ec-card-link-navy{color:var(--color-navy-mid)}
+
+    /* Footer */
+    .ec-footer{background:var(--color-navy-dark);color:var(--color-linen);padding:56px 40px 32px}
+    .ec-footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+    .ec-footer-brand p{color:rgba(245,239,232,.6);font-size:14px;margin-top:12px;line-height:1.6}
+    .ec-footer-helpline{display:inline-flex;align-items:center;gap:8px;background:var(--color-coral);color:#fff;border:none;border-radius:var(--radius-pill);padding:10px 20px;font-family:var(--font-body);font-size:14px;font-weight:500;margin-top:16px;text-decoration:none;cursor:pointer}
+    .ec-footer-col h4{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-sky);margin-bottom:14px}
+    .ec-footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .ec-footer-col a{color:rgba(245,239,232,.65);font-size:14px;text-decoration:none;transition:color 100ms var(--ease)}
+    .ec-footer-col a:hover{color:var(--color-linen)}
+    .ec-footer-bottom{border-top:.5px solid rgba(245,239,232,.1);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+    .ec-footer-bottom p{font-size:12px;color:rgba(245,239,232,.4)}
+
+
+    /* ══════════════════════════════════════════════════
+       02  TRIPTYCH PANELS
+    ══════════════════════════════════════════════════ */
+
+    /* Nav */
+    .tri-nav{background:var(--color-navy-dark);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px}
+    .tri-logo-name{font-family:var(--font-ui);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--color-linen)}
+    .tri-logo-sub{font-family:var(--font-ui);font-weight:400;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:rgba(245,239,232,.55);margin-top:3px}
+    .tri-nav-links{display:flex;gap:28px;list-style:none}
+    .tri-nav-links a{font-family:var(--font-body);font-size:14px;font-weight:500;color:rgba(245,239,232,.7);text-decoration:none;transition:color 100ms var(--ease)}
+    .tri-nav-links a:hover{color:var(--color-linen)}
+    .tri-btn-outline{background:transparent;color:var(--color-linen);border:1.5px solid rgba(245,239,232,.5);border-radius:var(--radius-pill);padding:8px 18px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:border-color 100ms var(--ease)}
+    .tri-btn-outline:hover{border-color:var(--color-linen)}
+
+    /* Hero */
+    .tri-hero{background:var(--color-navy-dark);padding:56px 40px 52px;text-align:center}
+    .tri-hero-eyebrow{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-sky);margin-bottom:16px}
+    .tri-hero h1{font-family:var(--font-display);font-size:52px;font-weight:700;line-height:1.1;letter-spacing:-.025em;color:var(--color-linen);margin-bottom:16px}
+    .tri-hero p{font-size:17px;line-height:1.65;color:rgba(245,239,232,.75);max-width:560px;margin:0 auto}
+
+    /* Panels */
+    .tri-panels{display:grid;grid-template-columns:repeat(3,1fr)}
+    .tri-panel{padding:40px 36px 64px;display:flex;flex-direction:column;min-height:480px;position:relative;overflow:hidden}
+    .tri-panel-num{font-family:var(--font-mono);font-size:13px;font-weight:500;margin-bottom:auto;padding-bottom:80px}
+    .tri-panel-icon{margin-bottom:16px}
+    .tri-panel-eyebrow{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+    .tri-panel h2{font-family:var(--font-display);font-size:36px;font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
+    .tri-panel p{font-size:15px;line-height:1.65;margin-bottom:28px;flex:1}
+    .tri-panel-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:var(--radius-pill);font-family:var(--font-body);font-size:15px;font-weight:500;cursor:pointer;border:1.5px solid transparent;text-decoration:none;transition:opacity 100ms var(--ease);align-self:flex-start}
+    .tri-panel-btn:hover{opacity:.85}
+    /* Triangle watermark */
+    .tri-watermark{position:absolute;bottom:-16px;right:-24px;opacity:.09;pointer-events:none}
+
+    /* Navy panel */
+    .tri-p-navy{background:var(--color-navy)}
+    .tri-p-navy .tri-panel-num{color:rgba(245,239,232,.35)}
+    .tri-p-navy .tri-panel-eyebrow{color:var(--color-sky)}
+    .tri-p-navy h2{color:var(--color-linen)}
+    .tri-p-navy p{color:rgba(245,239,232,.78)}
+    .tri-p-navy .tri-panel-btn{background:transparent;color:var(--color-linen);border-color:rgba(245,239,232,.55)}
+    .tri-p-navy .tri-watermark polygon{fill:var(--color-sky)}
+
+    /* Linen panel */
+    .tri-p-linen{background:var(--color-linen);border-left:1px solid var(--color-neutral);border-right:1px solid var(--color-neutral)}
+    .tri-p-linen .tri-panel-num{color:rgba(26,74,107,.25)}
+    .tri-p-linen .tri-panel-eyebrow{color:var(--color-coral)}
+    .tri-p-linen h2{color:var(--color-navy)}
+    .tri-p-linen p{color:#555}
+    .tri-p-linen .tri-panel-btn{background:var(--color-navy);color:var(--color-linen);border-color:var(--color-navy)}
+    .tri-p-linen .tri-watermark polygon{fill:var(--color-navy)}
+
+    /* Coral panel */
+    .tri-p-coral{background:var(--color-coral)}
+    .tri-p-coral .tri-panel-num{color:rgba(245,239,232,.3)}
+    .tri-p-coral .tri-panel-eyebrow{color:rgba(245,239,232,.65)}
+    .tri-p-coral h2{color:var(--color-linen)}
+    .tri-p-coral p{color:rgba(245,239,232,.82)}
+    .tri-p-coral .tri-panel-btn{background:transparent;color:var(--color-linen);border-color:rgba(245,239,232,.55)}
+    .tri-p-coral .tri-watermark polygon{fill:var(--color-linen)}
+
+    /* Inline finder bar */
+    .tri-finder-bar{background:var(--color-navy-dark);border-top:1px solid rgba(255,255,255,.06);padding:16px 40px;display:flex;align-items:center;gap:12px}
+    .tri-finder-label{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-sky);white-space:nowrap;margin-right:8px}
+    .tri-finder-select{padding:9px 36px 9px 16px;border-radius:var(--radius-pill);border:1.5px solid rgba(245,239,232,.2);background:rgba(255,255,255,.07);font-family:var(--font-body);font-size:14px;color:var(--color-linen);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%237EB8D8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;transition:border-color 100ms var(--ease)}
+    .tri-finder-select:focus{outline:none;border-color:rgba(126,184,216,.6)}
+    .tri-finder-input{flex:1;padding:9px 16px;border-radius:var(--radius-pill);border:1.5px solid rgba(245,239,232,.2);background:rgba(255,255,255,.07);font-family:var(--font-body);font-size:14px;color:var(--color-linen)}
+    .tri-finder-input::placeholder{color:rgba(245,239,232,.4)}
+    .tri-finder-input:focus{outline:none;border-color:rgba(126,184,216,.6)}
+    .tri-finder-btn{background:var(--color-coral);color:#fff;border:none;border-radius:var(--radius-pill);padding:10px 22px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity 100ms var(--ease);margin-left:auto}
+    .tri-finder-btn:hover{opacity:.88}
+
+    /* Events */
+    .tri-events{background:#fff;padding:48px 40px}
+    .tri-events-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
+    .tri-events-header h3{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--color-navy)}
+    .tri-events-header a{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--color-coral);text-decoration:none}
+    .tri-events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .tri-event-card{background:var(--color-linen-2);border-radius:var(--radius-lg);padding:24px;display:flex;gap:20px;align-items:flex-start;border:.5px solid #C8B89A;transition:box-shadow 220ms var(--ease)}
+    .tri-event-card:hover{box-shadow:0 4px 16px rgba(26,74,107,.1)}
+    .tri-event-date{text-align:center;flex-shrink:0;min-width:48px}
+    .tri-event-month{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-coral);display:block}
+    .tri-event-day-num{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1;color:var(--color-navy);display:block}
+    .tri-event-weekday{font-family:var(--font-ui);font-size:11px;color:#888;display:block;margin-top:2px}
+    .tri-event-body{flex:1}
+    .tri-event-title{font-size:15px;font-weight:500;color:var(--color-navy);line-height:1.3;margin-bottom:4px}
+    .tri-event-meta{font-size:13px;color:#888}
+
+
+    /* ══════════════════════════════════════════════════
+       04  MEETING-FIRST
+    ══════════════════════════════════════════════════ */
+
+    /* Nav (same as 01) */
+    .mf-nav{background:#fff;border-bottom:.5px solid var(--color-neutral);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:66px}
+
+    /* Header */
+    .mf-header{background:var(--color-linen);padding:64px 40px 56px;text-align:center;position:relative;overflow:hidden}
+    .mf-header-ring{position:absolute;border-radius:50%;border:1px solid rgba(26,74,107,.05);pointer-events:none}
+    .mf-header-eyebrow{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-coral);margin-bottom:16px}
+    .mf-header h1{font-family:var(--font-display);font-size:52px;font-weight:700;line-height:1.1;letter-spacing:-.025em;color:var(--color-navy);margin-bottom:14px}
+    .mf-header p{font-size:17px;line-height:1.65;color:#555;max-width:640px;margin:0 auto}
+
+    /* Two-column layout */
+    .mf-cols{background:var(--color-linen);padding:32px 40px 56px;display:grid;grid-template-columns:1fr 1.3fr;gap:20px;align-items:start}
+
+    /* Filter card */
+    .mf-filter-card{background:#fff;border-radius:var(--radius-xl);border:.5px solid var(--color-neutral);padding:28px;box-shadow:0 2px 12px rgba(26,74,107,.06)}
+    .mf-filter-label{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:12px;display:block}
+    .mf-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+    .mf-pill{font-family:var(--font-body);font-size:14px;font-weight:500;padding:7px 16px;border-radius:var(--radius-pill);border:1.5px solid var(--color-neutral);background:#fff;color:var(--color-near-black);cursor:pointer;transition:all 100ms var(--ease)}
+    .mf-pill:hover{border-color:var(--color-navy);color:var(--color-navy)}
+    .mf-pill.active{background:var(--color-navy);color:var(--color-linen);border-color:var(--color-navy)}
+    .mf-pill.tonight{background:var(--color-navy);color:var(--color-linen);border-color:var(--color-navy)}
+    .mf-filter-input{width:100%;padding:10px 18px;border-radius:var(--radius-pill);border:1.5px solid var(--color-neutral);background:#fff;font-family:var(--font-body);font-size:14px;color:var(--color-near-black);margin-bottom:20px;transition:border-color 100ms var(--ease),box-shadow 100ms var(--ease)}
+    .mf-filter-input:focus{outline:none;border-color:var(--color-navy);box-shadow:0 0 0 3px rgba(26,74,107,.12)}
+    .mf-filter-input::placeholder{color:#bbb}
+    .mf-show-btn{width:100%;padding:14px;background:var(--color-navy);color:var(--color-linen);border:none;border-radius:var(--radius-pill);font-family:var(--font-body);font-size:16px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 100ms var(--ease)}
+    .mf-show-btn:hover{opacity:.88}
+    .mf-helpline-note{text-align:center;font-size:13px;color:#aaa;margin-top:14px}
+    .mf-helpline-note a{color:var(--color-navy-mid);text-decoration:none}
+
+    /* Results card */
+    .mf-results-card{background:#fff;border-radius:var(--radius-xl);border:.5px solid var(--color-neutral);overflow:hidden;box-shadow:0 2px 12px rgba(26,74,107,.06)}
+    .mf-results-head{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:.5px solid var(--color-neutral)}
+    .mf-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E7D32}
+    .mf-live-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;box-shadow:0 0 0 3px rgba(46,125,50,.2);flex-shrink:0}
+    .mf-results-count{font-size:14px;font-weight:500;color:#555;margin-left:8px}
+    .mf-map-link{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--color-coral);text-decoration:none}
+
+    /* Meeting rows */
+    .mf-meeting-row{display:flex;align-items:center;gap:0;padding:14px 24px;border-bottom:.5px solid rgba(203,213,224,.5);transition:background 100ms var(--ease);cursor:pointer}
+    .mf-meeting-row:hover{background:#fafafa}
+    .mf-meeting-row:last-child{border-bottom:none}
+    .mf-meeting-row.alateen-row{border-left:3px solid var(--color-coral);padding-left:21px}
+    .mf-meeting-day-col{min-width:48px;text-align:center;margin-right:4px}
+    .mf-meeting-day-label{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-navy-mid);display:block}
+    .mf-meeting-time{font-family:var(--font-body);font-size:15px;font-weight:500;color:var(--color-navy);display:block;line-height:1.2}
+    .mf-meeting-info{flex:1;padding:0 16px}
+    .mf-meeting-name{font-size:15px;font-weight:500;color:var(--color-navy);line-height:1.2}
+    .mf-meeting-loc{font-size:13px;color:#888;margin-top:2px}
+    .mf-meeting-badges{display:flex;gap:6px;align-items:center;margin-right:16px;flex-wrap:wrap}
+    .mf-badge{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 10px;border-radius:var(--radius-pill)}
+    .mf-badge-inperson{background:var(--color-navy-t25);color:var(--color-navy-dark)}
+    .mf-badge-online{background:var(--color-sky);color:var(--color-navy-dark)}
+    .mf-badge-hybrid{background:var(--color-linen-2);color:#5A4530}
+    .mf-badge-newcomer{background:var(--color-linen-2);color:#5A4530}
+    .mf-badge-alateen{background:var(--color-coral-tint);color:var(--color-coral-dark)}
+    .mf-details-link{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--color-coral);text-decoration:none;white-space:nowrap;flex-shrink:0}
+    .mf-see-all{display:block;text-align:center;padding:16px;font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--color-navy-mid);text-decoration:none;border-top:.5px solid var(--color-neutral);transition:background 100ms var(--ease)}
+    .mf-see-all:hover{background:#fafafa}
+
+    /* Audience cards section */
+    .mf-audience-section{background:var(--color-linen);padding:0 40px 64px}
+    .mf-audience-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px}
+    .mf-audience-head h2{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--color-navy)}
+    .mf-audience-head span{font-size:14px;color:#888}
+    .mf-audience-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .mf-acard{background:#fff;border-radius:var(--radius-lg);border:.5px solid var(--color-neutral);border-left:3px solid var(--color-coral);padding:24px 24px 24px 22px;display:flex;flex-direction:column;transition:box-shadow 220ms var(--ease)}
+    .mf-acard:hover{box-shadow:0 4px 20px rgba(26,74,107,.1)}
+    .mf-acard-navy{border-left-color:var(--color-navy)}
+    .mf-acard-coral{border-left-color:var(--color-coral)}
+    .mf-acard-icon{margin-bottom:12px}
+    .mf-acard h3{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--color-navy);line-height:1.2;margin-bottom:8px}
+    .mf-acard p{font-size:14px;line-height:1.6;color:#555;flex:1;margin-bottom:16px}
+    .mf-acard-link{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--color-coral);text-decoration:none}
+    .mf-acard-link-navy{color:var(--color-navy-mid)}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:960px){
+      .ec-hero,.mf-cols{grid-template-columns:1fr}
+      .ec-cards-grid,.tri-panels,.mf-audience-grid,.tri-events-grid{grid-template-columns:1fr}
+      .ec-footer-grid{grid-template-columns:1fr 1fr}
+      .tri-finder-bar{flex-wrap:wrap}
+      .ec-hero{padding:48px 24px}
+    }
+    @media(max-width:640px){
+      .ec-headline-strong{font-size:44px}
+      .ec-headline-italic{font-size:28px}
+      .tri-hero h1,.mf-header h1{font-size:34px}
+      .ec-nav-links,.tri-nav-links,.mf-nav-links{display:none}
+      .design-frame{margin:24px 12px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ DOC MASTHEAD ═══ -->
+<div class="doc-masthead">
+  <p class="doc-masthead-eyebrow">Open Circle — Design System</p>
+  <h1>Design Iterations — v3</h1>
+  <p>Al-Anon &amp; Alateen Family Groups of San Diego</p>
+</div>
+
+<nav class="doc-jump-nav" aria-label="Jump to design">
+  <span class="doc-jump-label">Jump to:</span>
+  <a href="#d01">01 — Editorial</a>
+  <a href="#d02">02 — Triptych</a>
+  <a href="#d04">04 — Meeting-First</a>
+</nav>
+
+
+<!-- ████████████████████████████████████████████████████
+     01  EDITORIAL CLASSIC
+████████████████████████████████████████████████████ -->
+<div id="d01" class="design-frame" style="margin-top:40px">
+  <div class="design-frame-label">
+    <span class="design-num">01</span>
+    <span class="design-name">Editorial Classic</span>
+  </div>
+
+  <!-- NAV -->
+  <nav class="ec-nav">
+    <div class="ec-logo">
+      <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+        <circle cx="55" cy="63" r="20" fill="#ffffff"/>
+      </svg>
+      <div class="ec-logo-text">
+        <span class="ec-logo-name">Al-Anon</span>
+        <span class="ec-logo-sub">Family Groups of San Diego</span>
+      </div>
+    </div>
+    <ul class="ec-nav-links">
+      <li><a href="#">Find a Meeting</a></li>
+      <li><a href="#">New to Al-Anon</a></li>
+      <li><a href="#">Alateen</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <button class="ec-btn-cta">Get help now</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="ec-hero">
+    <!-- Background rings -->
+    <div class="ec-hero-ring" style="width:480px;height:480px;right:-80px;top:-120px;"></div>
+    <div class="ec-hero-ring" style="width:280px;height:280px;right:120px;top:60px;"></div>
+    <div class="ec-hero-ring" style="width:120px;height:120px;right:260px;top:160px;"></div>
+
+    <!-- Left: content -->
+    <div>
+      <p style="font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-coral);margin-bottom:16px;">Al-Anon &amp; Alateen · San Diego</p>
+      <h1 class="ec-headline">
+        <span class="ec-headline-strong">Help &amp; hope</span>
+        <span class="ec-headline-italic">for families and friends of alcoholics.</span>
+      </h1>
+      <p class="ec-hero-body">Al-Anon members are people just like you who are worried about someone with a drinking problem. You don't have to be in crisis to come — there's a seat for you at a meeting this week.</p>
+
+      <!-- Inline finder -->
+      <div class="ec-finder" role="search">
+        <select aria-label="Day">
+          <option>Any day</option>
+          <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+          <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+        </select>
+        <div class="ec-finder-divider"></div>
+        <select aria-label="Format">
+          <option>Any format</option>
+          <option>In person</option>
+          <option>Online</option>
+          <option>Hybrid</option>
+        </select>
+        <button class="ec-finder-btn">Find a meeting →</button>
+      </div>
+      <p class="ec-finder-caption">120+ weekly meetings across San Diego County · in person, online &amp; hybrid</p>
+    </div>
+
+    <!-- Right: circle placeholder -->
+    <div class="ec-circle-wrap">
+      <div class="ec-circle">
+        <span class="ec-circle-label">community photo · circular crop</span>
+      </div>
+      <div class="ec-tonight-badge">
+        <span class="ec-tonight-chip">Tonight</span>
+        <span class="ec-tonight-text">3 meetings near you</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE CARDS -->
+  <div class="ec-cards-section">
+    <div class="ec-cards-header">
+      <h2>Where would you like to begin?</h2>
+      <a href="#">See all resources ↗</a>
+    </div>
+    <div class="ec-cards-grid">
+
+      <!-- New -->
+      <div class="ec-card">
+        <div class="ec-card-icon">
+          <svg width="28" height="25" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#D4734A"/>
+            <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+          </svg>
+        </div>
+        <p class="ec-card-eyebrow">Start here</p>
+        <h3>I'm new to Al-Anon</h3>
+        <p>There's only one requirement: concern about a relative or friend's drinking. Learn what to expect at your first meeting and get a free newcomer packet.</p>
+        <a href="#" class="ec-card-link">What to expect ↗</a>
+      </div>
+
+      <!-- Member -->
+      <div class="ec-card">
+        <div class="ec-card-icon">
+          <svg width="28" height="25" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+            <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+          </svg>
+        </div>
+        <p class="ec-card-eyebrow">Welcome back</p>
+        <h3>I'm a member</h3>
+        <p>Find meetings and upcoming events, download the Intercom, explore service opportunities, and reach other member resources.</p>
+        <a href="#" class="ec-card-link ec-card-link-navy">Member resources ↗</a>
+      </div>
+
+      <!-- Alateen -->
+      <div class="ec-card">
+        <div class="ec-card-icon">
+          <svg width="28" height="25" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+            <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+          </svg>
+        </div>
+        <p class="ec-card-eyebrow">Ages 9–19</p>
+        <h3>I'm a teen or preteen</h3>
+        <p>Alateen is a safe, judgment-free community for young people affected by someone else's drinking — sponsored by Al-Anon members.</p>
+        <a href="#" class="ec-card-link ec-card-link-navy">Explore Alateen ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="ec-footer">
+    <div class="ec-footer-grid">
+      <div>
+        <div class="ec-logo">
+          <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#7EB8D8"/>
+            <circle cx="55" cy="63" r="20" fill="#0D2D42"/>
+          </svg>
+          <div class="ec-logo-text">
+            <span class="ec-logo-name" style="color:var(--color-sky);">Al-Anon</span>
+            <span class="ec-logo-sub" style="color:rgba(126,184,216,.6);">Family Groups of San Diego</span>
+          </div>
+        </div>
+        <p class="ec-footer-brand p" style="margin-top:12px;color:rgba(245,239,232,.6);font-size:14px;line-height:1.6;">Free, confidential, and open to all. You are not alone.</p>
+        <a href="tel:16195550142" class="ec-footer-helpline">24/7 Helpline · (619) 555‑0142</a>
+      </div>
+      <div class="ec-footer-col">
+        <h4>Meetings</h4>
+        <ul>
+          <li><a href="#">Find a meeting</a></li>
+          <li><a href="#">Online meetings</a></li>
+          <li><a href="#">Alateen meetings</a></li>
+          <li><a href="#">Meeting formats</a></li>
+        </ul>
+      </div>
+      <div class="ec-footer-col">
+        <h4>Get started</h4>
+        <ul>
+          <li><a href="#">New to Al-Anon</a></li>
+          <li><a href="#">What to expect</a></li>
+          <li><a href="#">Newcomer packet</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="ec-footer-col">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Service</a></li>
+          <li><a href="#">The Intercom</a></li>
+          <li><a href="#">Literature</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ec-footer-bottom">
+      <p>© 2026 Al-Anon &amp; Alateen Family Groups of San Diego</p>
+      <p>One day at a time.</p>
+    </div>
+  </footer>
+</div><!-- /d01 -->
+
+
+<!-- ████████████████████████████████████████████████████
+     02  TRIPTYCH PANELS
+████████████████████████████████████████████████████ -->
+<div id="d02" class="design-frame">
+  <div class="design-frame-label">
+    <span class="design-num">02</span>
+    <span class="design-name">Triptych Panels</span>
+  </div>
+
+  <!-- NAV -->
+  <nav class="tri-nav">
+    <div class="ec-logo">
+      <svg width="30" height="27" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#F5EFE8"/>
+        <circle cx="55" cy="63" r="20" fill="#0D2D42"/>
+      </svg>
+      <div class="ec-logo-text">
+        <span class="tri-logo-name">Al-Anon</span>
+        <span class="tri-logo-sub">Family Groups of San Diego</span>
+      </div>
+    </div>
+    <ul class="tri-nav-links">
+      <li><a href="#">Meetings</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Service</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <button class="tri-btn-outline">Get help now</button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="tri-hero">
+    <p class="tri-hero-eyebrow">Help &amp; hope · San Diego</p>
+    <h1>Find your people in San Diego.</h1>
+    <p>Al-Anon members are people just like you who are worried about someone's drinking. Pick the way in that sounds like you.</p>
+  </div>
+
+  <!-- TRIPTYCH PANELS -->
+  <div class="tri-panels">
+
+    <!-- Panel 01 — Navy -->
+    <div class="tri-panel tri-p-navy">
+      <span class="tri-panel-num">01</span>
+      <div class="tri-panel-icon">
+        <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <polygon points="55,5 105,95 5,95" fill="#F5EFE8"/>
+          <circle cx="55" cy="63" r="20" fill="#1A4A6B"/>
+        </svg>
+      </div>
+      <p class="tri-panel-eyebrow">Start here</p>
+      <h2>I'm new to Al-Anon</h2>
+      <p>There's no magic formula that makes someone stop drinking. But Al-Anon can help you learn to cope with the challenges of someone else's drinking. Start with a free newcomer packet.</p>
+      <a href="#" class="tri-panel-btn">Begin →</a>
+      <!-- Watermark triangle -->
+      <svg class="tri-watermark" width="180" height="160" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#F5EFE8"/>
+      </svg>
+    </div>
+
+    <!-- Panel 02 — Linen -->
+    <div class="tri-panel tri-p-linen">
+      <span class="tri-panel-num">02</span>
+      <div class="tri-panel-icon">
+        <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+          <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+        </svg>
+      </div>
+      <p class="tri-panel-eyebrow">Welcome back</p>
+      <h2>I'm a member</h2>
+      <p>Find meetings and upcoming events, download the Intercom, explore service opportunities, and reach member resources. Take what you like and leave the rest.</p>
+      <a href="#" class="tri-panel-btn">Member home →</a>
+      <svg class="tri-watermark" width="180" height="160" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+      </svg>
+    </div>
+
+    <!-- Panel 03 — Coral -->
+    <div class="tri-panel tri-p-coral">
+      <span class="tri-panel-num">03</span>
+      <div class="tri-panel-icon">
+        <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <polygon points="55,5 105,95 5,95" fill="#F5EFE8"/>
+          <circle cx="55" cy="63" r="20" fill="#D4734A"/>
+        </svg>
+      </div>
+      <p class="tri-panel-eyebrow">Ages 9–19</p>
+      <h2>I'm a teen or preteen</h2>
+      <p>Alateen is our recovery program for young people affected by someone else's drinking, sponsored by Al-Anon members. A safe, judgment-free place to belong.</p>
+      <a href="#" class="tri-panel-btn">Explore Alateen →</a>
+      <svg class="tri-watermark" width="180" height="160" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#F5EFE8"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- INLINE FINDER BAR -->
+  <div class="tri-finder-bar">
+    <span class="tri-finder-label">Find a meeting</span>
+    <select class="tri-finder-select" aria-label="When">
+      <option>Tonight</option>
+      <option>Any day</option>
+      <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+      <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+    </select>
+    <select class="tri-finder-select" aria-label="Format">
+      <option>Any format</option>
+      <option>In person</option>
+      <option>Online</option>
+      <option>Hybrid</option>
+    </select>
+    <input class="tri-finder-input" type="text" placeholder="ZIP or neighborhood" aria-label="Location" />
+    <button class="tri-finder-btn">Search 120+ meetings</button>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="tri-events">
+    <div class="tri-events-header">
+      <h3>Upcoming in San Diego</h3>
+      <a href="#">Full calendar ↗</a>
+    </div>
+    <div class="tri-events-grid">
+      <div class="tri-event-card">
+        <div class="tri-event-date">
+          <span class="tri-event-month">Jun 14</span>
+          <span class="tri-event-day-num">Sat</span>
+        </div>
+        <div class="tri-event-body">
+          <p class="tri-event-title">Newcomer Welcome Coffee</p>
+          <p class="tri-event-meta">Balboa Park · 10:00 AM</p>
+        </div>
+      </div>
+      <div class="tri-event-card">
+        <div class="tri-event-date">
+          <span class="tri-event-month">Jun 21</span>
+          <span class="tri-event-day-num">Sat</span>
+        </div>
+        <div class="tri-event-body">
+          <p class="tri-event-title">District Service Workshop</p>
+          <p class="tri-event-meta">Mission Valley · 1:00 PM</p>
+        </div>
+      </div>
+      <div class="tri-event-card">
+        <div class="tri-event-date">
+          <span class="tri-event-month">Jun 28</span>
+          <span class="tri-event-day-num">Sat</span>
+        </div>
+        <div class="tri-event-body">
+          <p class="tri-event-title">Alateen Beach Day</p>
+          <p class="tri-event-meta">Mission Beach · 11:00 AM</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /d02 -->
+
+
+<!-- ████████████████████████████████████████████████████
+     04  MEETING-FIRST
+████████████████████████████████████████████████████ -->
+<div id="d04" class="design-frame" style="margin-bottom:48px">
+  <div class="design-frame-label">
+    <span class="design-num">04</span>
+    <span class="design-name">Meeting-First</span>
+  </div>
+
+  <!-- NAV -->
+  <nav class="ec-nav mf-nav">
+    <div class="ec-logo">
+      <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+        <circle cx="55" cy="63" r="20" fill="#ffffff"/>
+      </svg>
+      <div class="ec-logo-text">
+        <span class="ec-logo-name">Al-Anon</span>
+        <span class="ec-logo-sub">Family Groups of San Diego</span>
+      </div>
+    </div>
+    <ul class="ec-nav-links">
+      <li><a href="#" style="color:var(--color-coral);">Meetings</a></li>
+      <li><a href="#">New to Al-Anon</a></li>
+      <li><a href="#">Alateen</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <button class="ec-btn-cta">Get help now</button>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="mf-header">
+    <div class="mf-header-ring" style="width:560px;height:560px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+    <div class="mf-header-ring" style="width:320px;height:320px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+    <p class="mf-header-eyebrow">Free · Confidential · Open to all</p>
+    <h1>Find a meeting in San Diego.</h1>
+    <p>The best place to learn how Al-Anon works is at a meeting in your community. 120+ weekly — in person, online, and hybrid.</p>
+  </div>
+
+  <!-- TWO-COLUMN LAYOUT -->
+  <div class="mf-cols">
+
+    <!-- LEFT: Filter card -->
+    <div class="mf-filter-card">
+      <span class="mf-filter-label">When can you go?</span>
+      <div class="mf-pills" role="group" aria-label="Select day">
+        <button class="mf-pill tonight">Tonight</button>
+        <button class="mf-pill">Mon</button>
+        <button class="mf-pill">Tue</button>
+        <button class="mf-pill">Wed</button>
+        <button class="mf-pill">Thu</button>
+        <button class="mf-pill">Fri</button>
+        <button class="mf-pill">Sat</button>
+        <button class="mf-pill">Sun</button>
+      </div>
+      <span class="mf-filter-label">Format</span>
+      <div class="mf-pills" role="group" aria-label="Select format">
+        <button class="mf-pill active">In person</button>
+        <button class="mf-pill">Online</button>
+        <button class="mf-pill">Hybrid</button>
+      </div>
+      <span class="mf-filter-label">Where</span>
+      <input class="mf-filter-input" type="text" placeholder="ZIP code or neighborhood" aria-label="Location" />
+      <button class="mf-show-btn">Show meetings →</button>
+      <p class="mf-helpline-note">Or call the 24/7 helpline · <a href="tel:16195550142">(619) 555-0142</a></p>
+    </div>
+
+    <!-- RIGHT: Results card -->
+    <div class="mf-results-card">
+      <div class="mf-results-head">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="mf-live"><span class="mf-live-dot"></span>Live</span>
+          <span class="mf-results-count">6 meetings this week</span>
+        </div>
+        <a href="#" class="mf-map-link">Map view ↗</a>
+      </div>
+
+      <!-- Rows -->
+      <div class="mf-meeting-row">
+        <div class="mf-meeting-day-col">
+          <span class="mf-meeting-day-label">Mon</span>
+          <span class="mf-meeting-time">7:00 PM</span>
+        </div>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Serenity Seekers</p>
+          <p class="mf-meeting-loc">Pacific Beach</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="mf-badge mf-badge-inperson">In person</span></div>
+        <a href="#" class="mf-details-link">Details ↗</a>
+      </div>
+
+      <div class="mf-meeting-row">
+        <div class="mf-meeting-day-col">
+          <span class="mf-meeting-day-label">Tue</span>
+          <span class="mf-meeting-time">12:15 PM</span>
+        </div>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Living Today</p>
+          <p class="mf-meeting-loc">Zoom</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="mf-badge mf-badge-online">Online</span></div>
+        <a href="#" class="mf-details-link">Details ↗</a>
+      </div>
+
+      <div class="mf-meeting-row">
+        <div class="mf-meeting-day-col">
+          <span class="mf-meeting-day-label">Wed</span>
+          <span class="mf-meeting-time">6:30 PM</span>
+        </div>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Courage to Change</p>
+          <p class="mf-meeting-loc">Hillcrest</p>
+        </div>
+        <div class="mf-meeting-badges">
+          <span class="mf-badge mf-badge-hybrid">Hybrid</span>
+          <span class="mf-badge mf-badge-newcomer">Newcomer</span>
+        </div>
+        <a href="#" class="mf-details-link">Details ↗</a>
+      </div>
+
+      <div class="mf-meeting-row">
+        <div class="mf-meeting-day-col">
+          <span class="mf-meeting-day-label">Thu</span>
+          <span class="mf-meeting-time">10:00 AM</span>
+        </div>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">One Day at a Time</p>
+          <p class="mf-meeting-loc">La Jolla</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="mf-badge mf-badge-inperson">In person</span></div>
+        <a href="#" class="mf-details-link">Details ↗</a>
+      </div>
+
+      <div class="mf-meeting-row">
+        <div class="mf-meeting-day-col">
+          <span class="mf-meeting-day-label">Sat</span>
+          <span class="mf-meeting-time">9:00 AM</span>
+        </div>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">North Park Hope</p>
+          <p class="mf-meeting-loc">North Park</p>
+        </div>
+        <div class="mf-meeting-badges"><span class="mf-badge mf-badge-inperson">In person</span></div>
+        <a href="#" class="mf-details-link">Details ↗</a>
+      </div>
+
+      <div class="mf-meeting-row alateen-row">
+        <div class="mf-meeting-day-col">
+          <span class="mf-meeting-day-label">Sun</span>
+          <span class="mf-meeting-time">4:00 PM</span>
+        </div>
+        <div class="mf-meeting-info">
+          <p class="mf-meeting-name">Alateen — Find Your People</p>
+          <p class="mf-meeting-loc">Clairemont</p>
+        </div>
+        <div class="mf-meeting-badges">
+          <span class="mf-badge mf-badge-inperson">In person</span>
+          <span class="mf-badge mf-badge-alateen">Alateen</span>
+        </div>
+        <a href="#" class="mf-details-link">Details ↗</a>
+      </div>
+
+      <a href="#" class="mf-see-all">See all 120+ meetings ↗</a>
+    </div>
+  </div>
+
+  <!-- AUDIENCE CARDS -->
+  <div class="mf-audience-section">
+    <div class="mf-audience-head">
+      <h2>Not sure where to start?</h2>
+      <span>Pick the one that sounds like you</span>
+    </div>
+    <div class="mf-audience-grid">
+
+      <!-- New -->
+      <div class="mf-acard mf-acard-coral">
+        <div class="mf-acard-icon">
+          <svg width="28" height="25" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#D4734A"/>
+            <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+          </svg>
+        </div>
+        <h3>I'm new to Al-Anon</h3>
+        <p>One requirement: concern about someone's drinking. Get a free newcomer packet.</p>
+        <a href="#" class="mf-acard-link">Begin ↗</a>
+      </div>
+
+      <!-- Member -->
+      <div class="mf-acard mf-acard-navy">
+        <div class="mf-acard-icon">
+          <svg width="28" height="25" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+            <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+          </svg>
+        </div>
+        <h3>I'm a member</h3>
+        <p>Events, the Intercom, service &amp; member resources.</p>
+        <a href="#" class="mf-acard-link mf-acard-link-navy">Member home ↗</a>
+      </div>
+
+      <!-- Alateen -->
+      <div class="mf-acard mf-acard-coral">
+        <div class="mf-acard-icon">
+          <svg width="28" height="25" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="55,5 105,95 5,95" fill="#D4734A"/>
+            <circle cx="55" cy="63" r="20" fill="#FAD5C8"/>
+          </svg>
+        </div>
+        <h3>I'm a teen or preteen</h3>
+        <p>Alateen — a safe space for young people, sponsored by members.</p>
+        <a href="#" class="mf-acard-link">Explore Alateen ↗</a>
+      </div>
+    </div>
+  </div>
+</div><!-- /d04 -->
+
+<script>
+  /* Day pill toggle */
+  document.querySelectorAll('.mf-pills').forEach(function(group) {
+    group.querySelectorAll('.mf-pill').forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        group.querySelectorAll('.mf-pill').forEach(function(p){ p.classList.remove('active','tonight') });
+        pill.classList.add('active');
+      });
+    });
+  });
+</script>
+</body>
+</html>
