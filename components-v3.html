@@ -65,6 +65,11 @@
     .ec-nav-links{display:flex;gap:32px;list-style:none}
     .ec-nav-links a{font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--color-navy);text-decoration:none;transition:color 100ms var(--ease)}
     .ec-nav-links a:hover{color:var(--color-coral)}
+    .ec-nav-links a.has-dropdown{display:inline-flex;align-items:center;gap:5px}
+    .ec-nav-links a.has-dropdown::after{content:'';width:10px;height:6px;display:inline-block;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231A4A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;flex-shrink:0;transition:transform 100ms var(--ease)}
+    .ec-nav-links a.has-dropdown:hover::after{background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23D4734A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+    .tri-nav-links a.has-dropdown{display:inline-flex;align-items:center;gap:5px}
+    .tri-nav-links a.has-dropdown::after{content:'';width:10px;height:6px;display:inline-block;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='rgba(245,239,232,0.7)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;flex-shrink:0}
     .ec-btn-cta{background:var(--color-coral);color:#fff;border:none;border-radius:var(--radius-pill);padding:10px 20px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:opacity 100ms var(--ease)}
     .ec-btn-cta:hover{opacity:.87}
 
@@ -352,11 +357,11 @@
       </div>
     </div>
     <ul class="ec-nav-links">
+      <li><a href="#" class="has-dropdown">District &amp; DRs</a></li>
+      <li><a href="#" class="has-dropdown">Area &amp; ISR</a></li>
+      <li><a href="#" class="has-dropdown">Intercom &amp; Events</a></li>
+      <li><a href="#">Bookstore</a></li>
       <li><a href="#">Find a Meeting</a></li>
-      <li><a href="#">New to Al-Anon</a></li>
-      <li><a href="#">Alateen</a></li>
-      <li><a href="#">Events</a></li>
-      <li><a href="#">About</a></li>
     </ul>
     <button class="ec-btn-cta">Get help now</button>
   </nav>
@@ -581,10 +586,11 @@
       </div>
     </div>
     <ul class="tri-nav-links">
-      <li><a href="#">Meetings</a></li>
-      <li><a href="#">Events</a></li>
-      <li><a href="#">Service</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="#" class="has-dropdown">District &amp; DRs</a></li>
+      <li><a href="#" class="has-dropdown">Area &amp; ISR</a></li>
+      <li><a href="#" class="has-dropdown">Intercom &amp; Events</a></li>
+      <li><a href="#">Bookstore</a></li>
+      <li><a href="#">Find a Meeting</a></li>
     </ul>
     <button class="tri-btn-outline">Get help now</button>
   </nav>
@@ -738,11 +744,11 @@
       </div>
     </div>
     <ul class="ec-nav-links">
-      <li><a href="#" style="color:var(--color-coral);">Meetings</a></li>
-      <li><a href="#">New to Al-Anon</a></li>
-      <li><a href="#">Alateen</a></li>
-      <li><a href="#">Events</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="#" class="has-dropdown">District &amp; DRs</a></li>
+      <li><a href="#" class="has-dropdown">Area &amp; ISR</a></li>
+      <li><a href="#" class="has-dropdown">Intercom &amp; Events</a></li>
+      <li><a href="#">Bookstore</a></li>
+      <li><a href="#" style="color:var(--color-coral);">Find a Meeting</a></li>
     </ul>
     <button class="ec-btn-cta">Get help now</button>
   </nav>
