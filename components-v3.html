@@ -100,6 +100,68 @@
     .ec-tonight-chip{background:var(--color-coral-tint);color:var(--color-coral-dark);font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:var(--radius-pill)}
     .ec-tonight-text{font-size:14px;font-weight:500;color:var(--color-near-black)}
 
+    /* ─── DROPDOWN SYSTEM ─── */
+    .ec-nav,.tri-nav{position:relative}
+    .nav-has-dd{position:relative;list-style:none}
+    .nav-has-dd::before{content:'';position:absolute;top:100%;left:-24px;right:-24px;height:18px;z-index:499}
+    .nav-dropdown{
+      position:absolute;
+      top:calc(100% + 14px);
+      left:50%;
+      transform:translateX(-50%) translateY(-6px);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity 180ms var(--ease),transform 180ms var(--ease),visibility 180ms;
+      z-index:500;
+      min-width:460px;
+    }
+    .nav-has-dd:hover .nav-dropdown,
+    .nav-has-dd:focus-within .nav-dropdown{
+      opacity:1;
+      visibility:visible;
+      transform:translateX(-50%) translateY(0);
+      pointer-events:auto;
+    }
+    .nav-has-dd.dd-end .nav-dropdown{left:auto;right:0;transform:translateY(-6px)}
+    .nav-has-dd.dd-end:hover .nav-dropdown,
+    .nav-has-dd.dd-end:focus-within .nav-dropdown{transform:translateY(0)}
+    .nav-has-dd.dd-end .nav-dropdown-card::before{left:auto;right:28px}
+    .nav-dropdown-card{
+      background:#fff;
+      border-radius:var(--radius-xl);
+      border:.5px solid var(--color-neutral);
+      box-shadow:0 20px 56px rgba(13,45,66,.15),0 2px 8px rgba(0,0,0,.06);
+      padding:24px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:0;
+      position:relative;
+    }
+    .nav-dropdown-card::before{
+      content:'';
+      position:absolute;
+      top:-6px;
+      left:50%;
+      transform:translateX(-50%) rotate(45deg);
+      width:12px;
+      height:12px;
+      background:#fff;
+      border-left:.5px solid var(--color-neutral);
+      border-top:.5px solid var(--color-neutral);
+    }
+    .dd-col{padding:8px 20px 8px 4px}
+    .dd-col+.dd-col{padding-left:20px;border-left:.5px solid var(--color-neutral)}
+    .dd-col-label{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-coral);margin-bottom:12px;display:block}
+    .dd-links{list-style:none;display:flex;flex-direction:column;gap:2px}
+    .dd-links li a{display:block;font-family:var(--font-body);font-size:14px;color:var(--color-near-black);text-decoration:none;padding:5px 8px;border-radius:var(--radius-md);transition:background 100ms var(--ease),color 100ms var(--ease);line-height:1.4}
+    .dd-links li a:hover{background:var(--color-navy-t10);color:var(--color-navy)}
+    .dd-links li a span{display:block;font-size:12px;color:#999;margin-top:1px}
+    .dd-footer{grid-column:1/-1;border-top:.5px solid var(--color-neutral);margin-top:16px;padding-top:16px;display:flex;align-items:center;justify-content:space-between}
+    .dd-footer a{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-navy-mid);text-decoration:none;transition:color 100ms var(--ease)}
+    .dd-footer a:hover{color:var(--color-coral)}
+    .dd-cta{background:var(--color-coral);color:#fff!important;padding:6px 14px;border-radius:var(--radius-pill);font-size:13px!important;font-weight:500!important}
+
     /* Audience cards section */
     .ec-cards-section{background:var(--color-linen);padding:0 40px 64px}
     .ec-cards-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
@@ -357,9 +419,95 @@
       </div>
     </div>
     <ul class="ec-nav-links">
-      <li><a href="#" class="has-dropdown">District &amp; DRs</a></li>
-      <li><a href="#" class="has-dropdown">Area &amp; ISR</a></li>
-      <li><a href="#" class="has-dropdown">Intercom &amp; Events</a></li>
+
+      <!-- District & DRs -->
+      <li class="nav-has-dd">
+        <a href="#" class="has-dropdown">District &amp; DRs</a>
+        <div class="nav-dropdown" role="region" aria-label="District & DRs menu">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Meetings</span>
+              <ul class="dd-links">
+                <li><a href="#">Meeting List</a></li>
+                <li><a href="#">Meeting Map</a></li>
+                <li><a href="#">Request an Update</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">Member Service</span>
+              <ul class="dd-links">
+                <li><a href="#">Group Rep (GR)<span>Represent your group</span></a></li>
+                <li><a href="#">District Rep (DR)<span>District-level service</span></a></li>
+                <li><a href="#">Service Opportunities</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">View all meetings ↗</a>
+              <a href="#" class="dd-cta">Find a meeting tonight</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Area & ISR -->
+      <li class="nav-has-dd">
+        <a href="#" class="has-dropdown">Area &amp; ISR</a>
+        <div class="nav-dropdown" role="region" aria-label="Area & ISR menu">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Area Service</span>
+              <ul class="dd-links">
+                <li><a href="#">Intergroup Service Rep (ISR)<span>Area-level service role</span></a></li>
+                <li><a href="#">Area Assembly</a></li>
+                <li><a href="#">Southern California Area</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">San Diego AIS</span>
+              <ul class="dd-links">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Office &amp; Bookstore</a></li>
+                <li><a href="#">About AIS</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">About intergroup service ↗</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Intercom & Events -->
+      <li class="nav-has-dd dd-end">
+        <a href="#" class="has-dropdown">Intercom &amp; Events</a>
+        <div class="nav-dropdown" role="region" aria-label="Intercom & Events menu">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Intercom</span>
+              <ul class="dd-links">
+                <li><a href="#">Print the Latest</a></li>
+                <li><a href="#">Subscribe</a></li>
+                <li><a href="#">Archives</a></li>
+                <li><a href="#">Submit an Event</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">Events</span>
+              <ul class="dd-links">
+                <li><a href="#">Upcoming Events</a></li>
+                <li><a href="#">Event Calendar</a></li>
+                <li><a href="#">Submit an Event</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">Full calendar ↗</a>
+              <a href="#" class="dd-cta">Submit an event</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
       <li><a href="#">Bookstore</a></li>
       <li><a href="#">Find a Meeting</a></li>
     </ul>
@@ -586,9 +734,92 @@
       </div>
     </div>
     <ul class="tri-nav-links">
-      <li><a href="#" class="has-dropdown">District &amp; DRs</a></li>
-      <li><a href="#" class="has-dropdown">Area &amp; ISR</a></li>
-      <li><a href="#" class="has-dropdown">Intercom &amp; Events</a></li>
+
+      <li class="nav-has-dd">
+        <a href="#" class="has-dropdown">District &amp; DRs</a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Meetings</span>
+              <ul class="dd-links">
+                <li><a href="#">Meeting List</a></li>
+                <li><a href="#">Meeting Map</a></li>
+                <li><a href="#">Request an Update</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">Member Service</span>
+              <ul class="dd-links">
+                <li><a href="#">Group Rep (GR)<span>Represent your group</span></a></li>
+                <li><a href="#">District Rep (DR)<span>District-level service</span></a></li>
+                <li><a href="#">Service Opportunities</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">View all meetings ↗</a>
+              <a href="#" class="dd-cta">Find a meeting tonight</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-has-dd">
+        <a href="#" class="has-dropdown">Area &amp; ISR</a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Area Service</span>
+              <ul class="dd-links">
+                <li><a href="#">Intergroup Service Rep (ISR)<span>Area-level service role</span></a></li>
+                <li><a href="#">Area Assembly</a></li>
+                <li><a href="#">Southern California Area</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">San Diego AIS</span>
+              <ul class="dd-links">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Office &amp; Bookstore</a></li>
+                <li><a href="#">About AIS</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">About intergroup service ↗</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-has-dd dd-end">
+        <a href="#" class="has-dropdown">Intercom &amp; Events</a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Intercom</span>
+              <ul class="dd-links">
+                <li><a href="#">Print the Latest</a></li>
+                <li><a href="#">Subscribe</a></li>
+                <li><a href="#">Archives</a></li>
+                <li><a href="#">Submit an Event</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">Events</span>
+              <ul class="dd-links">
+                <li><a href="#">Upcoming Events</a></li>
+                <li><a href="#">Event Calendar</a></li>
+                <li><a href="#">Submit an Event</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">Full calendar ↗</a>
+              <a href="#" class="dd-cta">Submit an event</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
       <li><a href="#">Bookstore</a></li>
       <li><a href="#">Find a Meeting</a></li>
     </ul>
@@ -744,9 +975,92 @@
       </div>
     </div>
     <ul class="ec-nav-links">
-      <li><a href="#" class="has-dropdown">District &amp; DRs</a></li>
-      <li><a href="#" class="has-dropdown">Area &amp; ISR</a></li>
-      <li><a href="#" class="has-dropdown">Intercom &amp; Events</a></li>
+
+      <li class="nav-has-dd">
+        <a href="#" class="has-dropdown">District &amp; DRs</a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Meetings</span>
+              <ul class="dd-links">
+                <li><a href="#">Meeting List</a></li>
+                <li><a href="#">Meeting Map</a></li>
+                <li><a href="#">Request an Update</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">Member Service</span>
+              <ul class="dd-links">
+                <li><a href="#">Group Rep (GR)<span>Represent your group</span></a></li>
+                <li><a href="#">District Rep (DR)<span>District-level service</span></a></li>
+                <li><a href="#">Service Opportunities</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">View all meetings ↗</a>
+              <a href="#" class="dd-cta">Find a meeting tonight</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-has-dd">
+        <a href="#" class="has-dropdown">Area &amp; ISR</a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Area Service</span>
+              <ul class="dd-links">
+                <li><a href="#">Intergroup Service Rep (ISR)<span>Area-level service role</span></a></li>
+                <li><a href="#">Area Assembly</a></li>
+                <li><a href="#">Southern California Area</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">San Diego AIS</span>
+              <ul class="dd-links">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Office &amp; Bookstore</a></li>
+                <li><a href="#">About AIS</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">About intergroup service ↗</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-has-dd dd-end">
+        <a href="#" class="has-dropdown">Intercom &amp; Events</a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <div class="dd-col">
+              <span class="dd-col-label">Intercom</span>
+              <ul class="dd-links">
+                <li><a href="#">Print the Latest</a></li>
+                <li><a href="#">Subscribe</a></li>
+                <li><a href="#">Archives</a></li>
+                <li><a href="#">Submit an Event</a></li>
+              </ul>
+            </div>
+            <div class="dd-col">
+              <span class="dd-col-label">Events</span>
+              <ul class="dd-links">
+                <li><a href="#">Upcoming Events</a></li>
+                <li><a href="#">Event Calendar</a></li>
+                <li><a href="#">Submit an Event</a></li>
+              </ul>
+            </div>
+            <div class="dd-footer">
+              <a href="#">Full calendar ↗</a>
+              <a href="#" class="dd-cta">Submit an event</a>
+            </div>
+          </div>
+        </div>
+      </li>
+
       <li><a href="#">Bookstore</a></li>
       <li><a href="#" style="color:var(--color-coral);">Find a Meeting</a></li>
     </ul>
