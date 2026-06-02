@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open Circle — Component Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────── */
+    :root {
+      --color-navy:         #1A4A6B;
+      --color-navy-mid:     #2E7AB0;
+      --color-navy-dark:    #0D2D42;
+      --color-navy-t10:     #EBF4FA;
+      --color-navy-t25:     #C5DCF0;
+      --color-sky:          #7EB8D8;
+      --color-coral:        #D4734A;
+      --color-coral-dark:   #7A2E10;
+      --color-coral-tint:   #FAD5C8;
+      --color-peach:        #F2A07A;
+      --color-linen:        #F5EFE8;
+      --color-linen-2:      #EDE5D8;
+      --color-near-black:   #2A2A2A;
+      --color-neutral:      #CBD5E0;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono:    'IBM Plex Mono', monospace;
+      --font-ui:      'Space Grotesk', system-ui, sans-serif;
+
+      --space-3xs: 4px;
+      --space-2xs: 8px;
+      --space-xs:  12px;
+      --space-sm:  16px;
+      --space-md:  24px;
+      --space-lg:  32px;
+      --space-xl:  48px;
+      --space-2xl: 64px;
+      --space-3xl: 96px;
+
+      --radius-sm:   4px;
+      --radius-md:   8px;
+      --radius-lg:   12px;
+      --radius-xl:   16px;
+      --radius-pill: 999px;
+
+      --ease:              cubic-bezier(0.4, 0, 0.2, 1);
+      --duration-micro:    100ms;
+      --duration-standard: 220ms;
+      --duration-enter:    350ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ─────────────────────────────────────────
+       BASE RESET & BODY
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-near-black);
+      background: var(--color-linen);
+    }
+
+    /* ─────────────────────────────────────────
+       TYPOGRAPHY
+    ───────────────────────────────────────── */
+    .t-display {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--color-navy);
+    }
+    .t-h1 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--color-navy);
+    }
+    .t-h2 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--color-near-black);
+    }
+    .t-h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--color-near-black);
+    }
+    .t-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-coral);
+    }
+    .t-body-lg  { font-size: 18px; line-height: 1.7; }
+    .t-body     { font-size: 16px; line-height: 1.7; }
+    .t-body-sm  { font-size: 14px; line-height: 1.6; }
+    .t-caption  { font-size: 12px; line-height: 1.5; color: #888; }
+    .t-label    { font-size: 13px; line-height: 1.4; color: #555; }
+    .t-mono     { font-family: var(--font-mono); font-size: 14px; font-weight: 500; }
+    .t-ui       { font-family: var(--font-ui); }
+
+    /* ─────────────────────────────────────────
+       BUTTONS
+    ───────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      text-decoration: none;
+      transition: opacity var(--duration-micro) var(--ease),
+                  transform var(--duration-micro) var(--ease);
+    }
+    .btn:hover  { opacity: 0.85; transform: translateY(-1px); }
+    .btn:active { opacity: 1;    transform: translateY(0); }
+    .btn-primary { background: var(--color-navy);  color: var(--color-linen); }
+    .btn-coral   { background: var(--color-coral); color: var(--color-linen); }
+    .btn-outline { background: transparent; color: var(--color-navy); border-color: var(--color-navy); }
+    .btn-ghost   { background: transparent; color: var(--color-coral); text-decoration: underline; text-underline-offset: 3px; border-color: transparent; }
+    .btn-sm      { padding: 6px 14px; font-size: 12px; }
+    .btn-lg      { padding: 14px 28px; font-size: 16px; }
+
+    /* ─────────────────────────────────────────
+       CARDS
+    ───────────────────────────────────────── */
+    .card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 0.5px solid var(--color-neutral);
+      padding: var(--space-md);
+    }
+    .card-dark {
+      background: var(--color-navy);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      color: var(--color-linen);
+    }
+    .card-linen {
+      background: var(--color-linen-2);
+      border-radius: var(--radius-lg);
+      border: 0.5px solid #C8B89A;
+      padding: var(--space-md);
+    }
+    .card-accented {
+      border-top: 3px solid var(--color-coral);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      padding-top: var(--space-md);
+    }
+
+    /* ─────────────────────────────────────────
+       BADGES
+    ───────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .badge-coral { background: var(--color-coral-tint); color: var(--color-coral-dark); }
+    .badge-navy  { background: var(--color-navy-t25);   color: var(--color-navy-dark); }
+    .badge-linen { background: var(--color-linen-2);    color: #5A4530; }
+    .badge-dark  { background: var(--color-navy);       color: var(--color-navy-t25); }
+    .badge-sky   { background: var(--color-sky);        color: var(--color-navy-dark); }
+
+    /* ─────────────────────────────────────────
+       FORM INPUTS
+    ───────────────────────────────────────── */
+    .input {
+      padding: 9px 16px;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--color-neutral);
+      background: #fff;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-near-black);
+      width: 100%;
+      transition: border-color var(--duration-micro) var(--ease),
+                  box-shadow var(--duration-micro) var(--ease);
+    }
+    .input:focus {
+      outline: none;
+      border-color: var(--color-navy);
+      box-shadow: 0 0 0 3px rgba(26, 74, 107, 0.15);
+    }
+    .input::placeholder { color: #aaa; }
+    .input-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%231A4A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    label.form-label {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-near-black);
+      margin-bottom: var(--space-2xs);
+    }
+    .form-group { display: flex; flex-direction: column; gap: var(--space-2xs); }
+
+    /* ─────────────────────────────────────────
+       ALERTS / CALLOUTS
+    ───────────────────────────────────────── */
+    .alert {
+      display: flex;
+      gap: var(--space-xs);
+      align-items: flex-start;
+      padding: 12px 16px;
+      border-left: 3px solid;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: 14px;
+    }
+    .alert-info { background: var(--color-navy-t10); border-color: var(--color-navy-mid); color: var(--color-navy-dark); }
+    .alert-warm { background: #FBF0EB; border-color: var(--color-coral); color: var(--color-coral-dark); }
+    .alert-icon { flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px; }
+
+    /* ─────────────────────────────────────────
+       LOGO MARK
+    ───────────────────────────────────────── */
+    .logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .logo-wordmark {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .logo-wordmark-primary {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-navy);
+    }
+    .logo-wordmark-sub {
+      font-family: var(--font-ui);
+      font-weight: 400;
+      font-size: 9px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--color-navy);
+      margin-top: 3px;
+    }
+
+    /* ─────────────────────────────────────────
+       NAVIGATION
+    ───────────────────────────────────────── */
+    .nav {
+      background: #fff;
+      border-bottom: 0.5px solid var(--color-neutral);
+      padding: 0 var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-navy);
+      text-decoration: none;
+      transition: color var(--duration-micro) var(--ease);
+    }
+    .nav-links a:hover { color: var(--color-coral); }
+    .nav-links a.active {
+      color: var(--color-coral);
+      border-bottom: 2px solid var(--color-coral);
+      padding-bottom: 2px;
+    }
+    .nav-actions { display: flex; align-items: center; gap: var(--space-xs); }
+
+    /* ─────────────────────────────────────────
+       HERO SECTION
+    ───────────────────────────────────────── */
+    .hero {
+      background: var(--color-navy-dark);
+      color: var(--color-linen);
+      padding: var(--space-3xl) var(--space-lg);
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+    }
+    .hero-bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(126, 184, 216, 0.15);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      max-width: 640px;
+      z-index: 1;
+    }
+    .hero .t-display { color: var(--color-linen); }
+    .hero .t-eyebrow { color: var(--color-sky); }
+    .hero-body {
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(245, 239, 232, 0.85);
+      margin: var(--space-md) 0 var(--space-lg);
+    }
+    .hero-actions { display: flex; gap: var(--space-sm); flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--color-coral);
+      color: var(--color-linen);
+      font-size: 16px;
+      padding: 14px 28px;
+    }
+    .btn-hero-outline {
+      background: transparent;
+      color: var(--color-linen);
+      border: 1.5px solid rgba(245, 239, 232, 0.5);
+      font-size: 16px;
+      padding: 14px 28px;
+    }
+    .btn-hero-outline:hover { border-color: var(--color-linen); }
+
+    /* ─────────────────────────────────────────
+       MEETING FINDER
+    ───────────────────────────────────────── */
+    .meeting-finder {
+      background: #fff;
+      border-radius: var(--radius-xl);
+      border: 0.5px solid var(--color-neutral);
+      padding: var(--space-lg);
+      box-shadow: 0 4px 24px rgba(26, 74, 107, 0.08);
+    }
+    .meeting-finder-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-md);
+    }
+    .finder-filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: var(--space-sm);
+      align-items: end;
+    }
+    .meeting-list { margin-top: var(--space-md); display: flex; flex-direction: column; gap: var(--space-xs); }
+    .meeting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-lg);
+      border: 0.5px solid var(--color-neutral);
+      background: #fff;
+      transition: border-color var(--duration-standard) var(--ease),
+                  box-shadow var(--duration-standard) var(--ease);
+      cursor: pointer;
+    }
+    .meeting-row:hover {
+      border-color: var(--color-navy-mid);
+      box-shadow: 0 2px 8px rgba(26, 74, 107, 0.1);
+    }
+    .meeting-row-main { display: flex; flex-direction: column; gap: 2px; }
+    .meeting-row-meta { display: flex; gap: var(--space-xs); align-items: center; margin-top: 4px; }
+    .meeting-row-time {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-navy);
+      white-space: nowrap;
+    }
+    .meeting-row-actions { display: flex; gap: var(--space-xs); align-items: center; }
+
+    /* ─────────────────────────────────────────
+       OFFICE STATUS WIDGET
+    ───────────────────────────────────────── */
+    .office-widget {
+      border-radius: var(--radius-xl);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    .office-widget.open  { background: #E8F5E9; border: 0.5px solid #81C784; }
+    .office-widget.closed { background: var(--color-linen-2); border: 0.5px solid #C8B89A; }
+    .office-status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .open  .office-status-dot { background: #2E7D32; box-shadow: 0 0 0 3px rgba(46,125,50,0.2); }
+    .closed .office-status-dot { background: #888; }
+    .office-widget-body { flex: 1; }
+    .office-status-label {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .open  .office-status-label { color: #2E7D32; }
+    .closed .office-status-label { color: #555; }
+    .office-status-detail { font-size: 13px; color: #555; margin-top: 2px; }
+
+    /* ─────────────────────────────────────────
+       EVENT CARD
+    ───────────────────────────────────────── */
+    .event-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 0.5px solid var(--color-neutral);
+      overflow: hidden;
+      transition: box-shadow var(--duration-standard) var(--ease),
+                  transform var(--duration-standard) var(--ease);
+    }
+    .event-card:hover {
+      box-shadow: 0 8px 32px rgba(26, 74, 107, 0.12);
+      transform: translateY(-2px);
+    }
+    .event-card-date {
+      background: var(--color-navy);
+      color: var(--color-linen);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-xs);
+    }
+    .event-date-month {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-sky);
+    }
+    .event-date-day {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-linen);
+      line-height: 1;
+    }
+    .event-card-body { padding: var(--space-md); }
+    .event-meta { display: flex; gap: var(--space-xs); margin-bottom: var(--space-xs); flex-wrap: wrap; }
+
+    /* ─────────────────────────────────────────
+       QUOTE / CALLOUT CARD
+    ───────────────────────────────────────── */
+    .quote-card {
+      background: var(--color-navy-dark);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-text {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--color-linen);
+      position: relative;
+      z-index: 1;
+    }
+    .quote-attribution {
+      margin-top: var(--space-md);
+      font-size: 13px;
+      color: var(--color-sky);
+      font-family: var(--font-mono);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+    .quote-circle-bg {
+      position: absolute;
+      right: -60px;
+      bottom: -60px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 1px solid rgba(126, 184, 216, 0.12);
+      pointer-events: none;
+    }
+    .quote-circle-bg-2 {
+      position: absolute;
+      right: -20px;
+      bottom: -20px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 1px solid rgba(126, 184, 216, 0.2);
+      pointer-events: none;
+    }
+
+    /* ─────────────────────────────────────────
+       NEWCOMER WELCOME STRIP
+    ───────────────────────────────────────── */
+    .welcome-strip {
+      background: var(--color-coral);
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg) var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+    }
+    .welcome-strip-text { flex: 1; min-width: 240px; }
+    .welcome-strip .t-h2 { color: var(--color-linen); }
+    .welcome-strip-sub { color: rgba(245, 239, 232, 0.85); font-size: 16px; margin-top: var(--space-2xs); }
+    .btn-welcome {
+      background: var(--color-linen);
+      color: var(--color-coral-dark);
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+    .btn-welcome:hover { opacity: 0.9; }
+
+    /* ─────────────────────────────────────────
+       LANGUAGE TOGGLE
+    ───────────────────────────────────────── */
+    .lang-toggle {
+      display: inline-flex;
+      background: var(--color-linen-2);
+      border-radius: var(--radius-pill);
+      padding: 3px;
+      gap: 2px;
+    }
+    .lang-toggle button {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: #888;
+      transition: background var(--duration-micro) var(--ease),
+                  color var(--duration-micro) var(--ease);
+    }
+    .lang-toggle button.active {
+      background: var(--color-navy);
+      color: var(--color-linen);
+    }
+
+    /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+    .footer {
+      background: var(--color-navy-dark);
+      color: var(--color-linen);
+      padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-2xl);
+      max-width: 1280px;
+      margin: 0 auto var(--space-xl);
+    }
+    .footer-brand p { color: rgba(245, 239, 232, 0.7); font-size: 14px; margin-top: var(--space-sm); line-height: 1.6; }
+    .footer-col h4 {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-sky);
+      margin-bottom: var(--space-sm);
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-2xs); }
+    .footer-col a { color: rgba(245,239,232,0.75); font-size: 14px; text-decoration: none; transition: color var(--duration-micro) var(--ease); }
+    .footer-col a:hover { color: var(--color-linen); }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      border-top: 0.5px solid rgba(245,239,232,0.1);
+      padding-top: var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .footer-bottom p { font-size: 12px; color: rgba(245,239,232,0.45); }
+
+    /* ─────────────────────────────────────────
+       LITERATURE CARD (e-commerce)
+    ───────────────────────────────────────── */
+    .lit-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 0.5px solid var(--color-neutral);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow var(--duration-standard) var(--ease),
+                  transform var(--duration-standard) var(--ease);
+    }
+    .lit-card:hover {
+      box-shadow: 0 8px 32px rgba(26, 74, 107, 0.1);
+      transform: translateY(-2px);
+    }
+    .lit-card-thumb {
+      background: var(--color-navy-t10);
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lit-card-body { padding: var(--space-sm) var(--space-md); flex: 1; display: flex; flex-direction: column; }
+    .lit-card-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--color-navy); line-height: 1.3; }
+    .lit-card-meta { color: #888; font-size: 12px; margin-top: 4px; }
+    .lit-card-price { font-family: var(--font-ui); font-weight: 700; font-size: 18px; color: var(--color-navy); margin-top: var(--space-xs); }
+    .lit-card-footer { padding: var(--space-xs) var(--space-md) var(--space-md); }
+
+    /* ─────────────────────────────────────────
+       INTERCOM / NEWSLETTER ARCHIVE
+    ───────────────────────────────────────── */
+    .intercom-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-lg);
+      background: #fff;
+      border: 0.5px solid var(--color-neutral);
+      transition: border-color var(--duration-standard) var(--ease);
+    }
+    .intercom-row:hover { border-color: var(--color-navy-mid); }
+    .intercom-date-chip {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-navy);
+      background: var(--color-navy-t10);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+    }
+    .intercom-row-body { flex: 1; }
+    .intercom-title { font-size: 14px; font-weight: 500; color: var(--color-navy); }
+    .intercom-sub   { font-size: 12px; color: #888; margin-top: 2px; }
+
+    /* ─────────────────────────────────────────
+       SECTION DIVIDER
+    ───────────────────────────────────────── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin: var(--space-xl) 0;
+    }
+    .section-divider-line { flex: 1; height: 0.5px; background: var(--color-neutral); }
+    .section-divider-circle {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: 1.5px solid var(--color-coral);
+      flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       SHOWCASE LAYOUT (not the website — just the doc)
+    ───────────────────────────────────────── */
+    .showcase-page { max-width: 1280px; margin: 0 auto; padding: var(--space-xl) var(--space-lg); }
+    .showcase-section { margin-bottom: var(--space-3xl); }
+    .showcase-label {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: var(--space-xs);
+    }
+    .showcase-row { display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: flex-start; }
+    .showcase-col { flex: 1; min-width: 280px; }
+    .doc-header {
+      background: var(--color-navy-dark);
+      color: var(--color-linen);
+      padding: var(--space-xl) var(--space-lg);
+      text-align: center;
+    }
+    .doc-header .t-eyebrow { color: var(--color-sky); }
+    .doc-header .t-display { color: var(--color-linen); margin: var(--space-xs) 0; }
+    .doc-header p { color: rgba(245,239,232,0.7); font-size: 16px; }
+
+    /* ─────────────────────────────────────────
+       COLOR SWATCHES (doc only)
+    ───────────────────────────────────────── */
+    .swatch-grid { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+    .swatch {
+      width: 96px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 0.5px solid rgba(0,0,0,0.08);
+    }
+    .swatch-color { height: 56px; }
+    .swatch-info { padding: 6px 8px; background: #fff; }
+    .swatch-name { font-family: var(--font-ui); font-size: 11px; font-weight: 700; color: #333; }
+    .swatch-hex  { font-family: var(--font-mono); font-size: 10px; color: #888; }
+
+    /* ─────────────────────────────────────────
+       UTILITY
+    ───────────────────────────────────────── */
+    .gap-xs { gap: var(--space-xs); }
+    .gap-sm { gap: var(--space-sm); }
+    .gap-md { gap: var(--space-md); }
+    .d-flex { display: flex; }
+    .flex-wrap { flex-wrap: wrap; }
+    .align-center { align-items: center; }
+    .flex-col { flex-direction: column; }
+    .mt-xs { margin-top: var(--space-xs); }
+    .mt-sm { margin-top: var(--space-sm); }
+    .mt-md { margin-top: var(--space-md); }
+    .mt-lg { margin-top: var(--space-lg); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); }
+    @media (max-width: 900px) {
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .finder-filters  { grid-template-columns: 1fr 1fr; }
+      .footer-grid     { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .finder-filters  { grid-template-columns: 1fr; }
+      .footer-grid     { grid-template-columns: 1fr; }
+      .nav-links       { display: none; }
+      .t-display       { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     DOC HEADER
+════════════════════════════════════════════ -->
+<div class="doc-header">
+  <p class="t-eyebrow">Open Circle — Brand Design System</p>
+  <h1 class="t-display" style="margin-top:8px;">Component Library</h1>
+  <p>Al-Anon &amp; Alateen Family Groups of San Diego</p>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION COMPONENT
+════════════════════════════════════════════ -->
+<nav class="nav" aria-label="Site navigation">
+  <div class="logo-lockup">
+    <!-- Logo mark: triangle with circle knockout -->
+    <svg width="36" height="33" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+      <circle cx="55" cy="63" r="20" fill="#ffffff"/>
+    </svg>
+    <div class="logo-wordmark">
+      <span class="logo-wordmark-primary">Al‑Anon &amp; Alateen</span>
+      <span class="logo-wordmark-sub">Family Groups of San Diego</span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Find a Meeting</a></li>
+    <li><a href="#">Newcomers</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Literature</a></li>
+    <li><a href="#">Resources</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <div class="lang-toggle">
+      <button class="active">EN</button>
+      <button>ES</button>
+    </div>
+    <a href="#" class="btn btn-primary btn-sm">Find a Meeting</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     SHOWCASE PAGE
+════════════════════════════════════════════ -->
+<main class="showcase-page">
+
+  <!-- ─── HERO ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Hero Section</p>
+    <div class="hero" style="border-radius: var(--radius-xl);">
+      <!-- decorative circles -->
+      <div class="hero-bg-circle" style="width:500px;height:500px;right:-150px;top:-150px;"></div>
+      <div class="hero-bg-circle" style="width:280px;height:280px;right:40px;top:30px;"></div>
+      <div class="hero-bg-circle" style="width:120px;height:120px;right:200px;top:180px;"></div>
+      <div class="hero-content">
+        <p class="t-eyebrow">Everyone belongs here</p>
+        <h1 class="t-display" style="margin-top:8px;">You don't have to face this alone.</h1>
+        <p class="hero-body">Free, confidential meetings for families and friends of alcoholics — across San Diego, every day of the week.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-hero-primary btn">Find a Meeting Near You</a>
+          <a href="#" class="btn btn-hero-outline btn">I'm New Here</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LOGO MARKS ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Logo Marks</p>
+    <div class="showcase-row">
+      <!-- Primary (linen bg) -->
+      <div style="background:var(--color-linen);padding:var(--space-lg);border-radius:var(--radius-lg);border:0.5px solid var(--color-neutral);display:flex;align-items:center;gap:var(--space-md);">
+        <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+          <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+        </svg>
+        <div class="logo-wordmark">
+          <span class="logo-wordmark-primary" style="font-size:18px;">Al‑Anon &amp; Alateen</span>
+          <span class="logo-wordmark-sub" style="font-size:11px;">Family Groups of San Diego</span>
+        </div>
+      </div>
+      <!-- Reversed (navy bg) -->
+      <div style="background:var(--color-navy);padding:var(--space-lg);border-radius:var(--radius-lg);display:flex;align-items:center;gap:var(--space-md);">
+        <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="55,5 105,95 5,95" fill="#F5EFE8"/>
+          <circle cx="55" cy="63" r="20" fill="#1A4A6B"/>
+        </svg>
+        <div class="logo-wordmark">
+          <span class="logo-wordmark-primary" style="color:#F5EFE8;font-size:18px;">Al‑Anon &amp; Alateen</span>
+          <span class="logo-wordmark-sub" style="color:rgba(245,239,232,0.75);font-size:11px;">Family Groups of San Diego</span>
+        </div>
+      </div>
+      <!-- Coral -->
+      <div style="background:var(--color-linen);padding:var(--space-lg);border-radius:var(--radius-lg);border:0.5px solid var(--color-neutral);display:flex;align-items:center;gap:var(--space-md);">
+        <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="55,5 105,95 5,95" fill="#D4734A"/>
+          <circle cx="55" cy="63" r="20" fill="#F5EFE8"/>
+        </svg>
+        <div class="logo-wordmark">
+          <span class="logo-wordmark-primary" style="color:#D4734A;font-size:18px;">Alateen</span>
+          <span class="logo-wordmark-sub" style="color:var(--color-coral-dark);font-size:11px;">San Diego</span>
+        </div>
+      </div>
+      <!-- Dark navy / sky -->
+      <div style="background:var(--color-navy-dark);padding:var(--space-lg);border-radius:var(--radius-lg);display:flex;align-items:center;gap:var(--space-md);">
+        <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="55,5 105,95 5,95" fill="#7EB8D8"/>
+          <circle cx="55" cy="63" r="20" fill="#0D2D42"/>
+        </svg>
+        <div class="logo-wordmark">
+          <span class="logo-wordmark-primary" style="color:#7EB8D8;font-size:18px;">Al‑Anon &amp; Alateen</span>
+          <span class="logo-wordmark-sub" style="color:rgba(126,184,216,0.7);font-size:11px;">Family Groups of San Diego</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── COLOR PALETTE ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Foundation — Color Palette</p>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-color" style="background:#1A4A6B;"></div><div class="swatch-info"><p class="swatch-name">Navy</p><p class="swatch-hex">#1A4A6B</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#2E7AB0;"></div><div class="swatch-info"><p class="swatch-name">Navy Mid</p><p class="swatch-hex">#2E7AB0</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#0D2D42;"></div><div class="swatch-info"><p class="swatch-name">Navy Dark</p><p class="swatch-hex">#0D2D42</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#7EB8D8;"></div><div class="swatch-info"><p class="swatch-name">Sky</p><p class="swatch-hex">#7EB8D8</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#EBF4FA;border-bottom:1px solid #e0e0e0;"></div><div class="swatch-info"><p class="swatch-name">Navy T-10</p><p class="swatch-hex">#EBF4FA</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#C5DCF0;"></div><div class="swatch-info"><p class="swatch-name">Navy T-25</p><p class="swatch-hex">#C5DCF0</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#D4734A;"></div><div class="swatch-info"><p class="swatch-name">Coral</p><p class="swatch-hex">#D4734A</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#F2A07A;"></div><div class="swatch-info"><p class="swatch-name">Peach</p><p class="swatch-hex">#F2A07A</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#FAD5C8;"></div><div class="swatch-info"><p class="swatch-name">Coral Tint</p><p class="swatch-hex">#FAD5C8</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#7A2E10;"></div><div class="swatch-info"><p class="swatch-name">Coral Dark</p><p class="swatch-hex">#7A2E10</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#F5EFE8;border-bottom:1px solid #e0e0e0;"></div><div class="swatch-info"><p class="swatch-name">Linen</p><p class="swatch-hex">#F5EFE8</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#EDE5D8;"></div><div class="swatch-info"><p class="swatch-name">Linen 2</p><p class="swatch-hex">#EDE5D8</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#2A2A2A;"></div><div class="swatch-info"><p class="swatch-name">Near Black</p><p class="swatch-hex">#2A2A2A</p></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#CBD5E0;"></div><div class="swatch-info"><p class="swatch-name">Neutral</p><p class="swatch-hex">#CBD5E0</p></div></div>
+    </div>
+  </section>
+
+  <!-- ─── TYPOGRAPHY ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Foundation — Typography Scale</p>
+    <div class="card">
+      <p class="t-eyebrow" style="margin-bottom:16px;">Eyebrow — Space Grotesk Bold 12px / 0.12em tracking</p>
+      <h1 class="t-display" style="margin-bottom:8px;">Display — Playfair 48px</h1>
+      <h1 class="t-h1" style="margin-bottom:8px;">Heading 1 — Playfair 36px</h1>
+      <h2 class="t-h2" style="margin-bottom:8px;">Heading 2 — Playfair 28px</h2>
+      <h3 class="t-h3" style="margin-bottom:16px;">Heading 3 — Playfair 22px</h3>
+      <p class="t-body-lg" style="margin-bottom:8px;">Body Large — IBM Plex Sans 18px — "You don't have to be in crisis to attend a meeting. Everyone belongs here."</p>
+      <p class="t-body" style="margin-bottom:8px;">Body — IBM Plex Sans 16px — Al-Anon is a mutual support program for people whose lives have been affected by someone else's drinking.</p>
+      <p class="t-body-sm" style="margin-bottom:8px;">Body Small — IBM Plex Sans 14px — Meetings are free, confidential, and open to all family members and friends of alcoholics.</p>
+      <p class="t-mono" style="margin-bottom:8px;">Mono link — IBM Plex Mono 500 — Find a meeting near you ↗</p>
+      <p class="t-caption" style="margin-bottom:4px;">Caption — 12px / #888 — Last updated June 2025</p>
+      <p class="t-label">Label — 13px / #555 — Meeting format</p>
+    </div>
+  </section>
+
+  <!-- ─── BUTTONS ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Buttons</p>
+    <div class="showcase-row align-center">
+      <a href="#" class="btn btn-primary">Find a Meeting</a>
+      <a href="#" class="btn btn-coral">Get Help Now</a>
+      <a href="#" class="btn btn-outline">Learn More</a>
+      <a href="#" class="btn btn-ghost">View all meetings →</a>
+      <a href="#" class="btn btn-primary btn-lg">Find a Meeting</a>
+      <a href="#" class="btn btn-primary btn-sm">Quick Start</a>
+      <a href="#" class="btn btn-outline btn-sm">Details</a>
+    </div>
+    <div class="showcase-row align-center" style="margin-top:var(--space-md);background:var(--color-navy-dark);padding:var(--space-md);border-radius:var(--radius-lg);">
+      <a href="#" class="btn btn-hero-primary btn">Find a Meeting</a>
+      <a href="#" class="btn btn-hero-outline btn">I'm New Here</a>
+    </div>
+  </section>
+
+  <!-- ─── BADGES ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Badges</p>
+    <div class="showcase-row align-center">
+      <span class="badge badge-coral">Alateen</span>
+      <span class="badge badge-navy">In-Person</span>
+      <span class="badge badge-linen">English</span>
+      <span class="badge badge-dark">Español</span>
+      <span class="badge badge-sky">Online</span>
+      <span class="badge badge-navy">Open to All</span>
+      <span class="badge badge-coral">New Meeting</span>
+      <span class="badge badge-linen">Speaker Meeting</span>
+    </div>
+  </section>
+
+  <!-- ─── CARDS ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Cards</p>
+    <div class="showcase-row">
+      <div class="showcase-col">
+        <p class="showcase-label">Default (white)</p>
+        <div class="card">
+          <p class="t-eyebrow">For Newcomers</p>
+          <h3 class="t-h3 mt-xs">What is Al-Anon?</h3>
+          <p class="t-body-sm mt-xs">Al-Anon is a mutual support program for people whose lives have been affected by someone else's drinking. No registration. No cost. No judgment.</p>
+          <a href="#" class="btn btn-outline btn-sm" style="margin-top:var(--space-md);">Learn more</a>
+        </div>
+      </div>
+      <div class="showcase-col">
+        <p class="showcase-label">Linen</p>
+        <div class="card-linen">
+          <p class="t-eyebrow">Free Resource</p>
+          <h3 class="t-h3 mt-xs">One Day at a Time</h3>
+          <p class="t-body-sm mt-xs">A daily reader offering reflection and strength for families navigating the effects of another's drinking.</p>
+          <a href="#" class="btn btn-primary btn-sm" style="margin-top:var(--space-md);">Order Now — $14</a>
+        </div>
+      </div>
+      <div class="showcase-col">
+        <p class="showcase-label">Dark (navy)</p>
+        <div class="card-dark">
+          <p class="t-eyebrow" style="color:var(--color-sky);">Upcoming Event</p>
+          <h3 class="t-h3 mt-xs" style="color:var(--color-linen);">District 10 Speaker Meeting</h3>
+          <p class="t-body-sm mt-xs" style="color:rgba(245,239,232,0.8);">Saturday, August 9 · 10:00 AM · Mission Valley Community Center</p>
+          <a href="#" class="btn btn-coral btn-sm" style="margin-top:var(--space-md);">Add to Calendar</a>
+        </div>
+      </div>
+      <div class="showcase-col">
+        <p class="showcase-label">Accented (coral top)</p>
+        <div class="card card-accented">
+          <p class="t-eyebrow">New This Month</p>
+          <h3 class="t-h3 mt-xs">Online Meeting Added</h3>
+          <p class="t-body-sm mt-xs">A new Tuesday evening Zoom meeting has been added for English-speaking members. Open to all.</p>
+          <a href="#" class="btn btn-ghost btn-sm" style="margin-top:var(--space-md);">See Details →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ALERTS ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Alerts &amp; Callouts</p>
+    <div style="display:flex;flex-direction:column;gap:var(--space-sm);max-width:720px;">
+      <div class="alert alert-info" role="alert">
+        <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="#2E7AB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <strong style="font-weight:600;">Office hours have changed.</strong> The AIS office is now open Monday–Thursday, 9am–3pm. <a href="#" style="color:var(--color-navy-mid);">See full hours →</a>
+        </div>
+      </div>
+      <div class="alert alert-warm" role="alert">
+        <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="#D4734A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div>
+          <strong style="font-weight:600;">Holiday schedule in effect.</strong> Some meetings may be cancelled July 4th weekend. Confirm with your group before attending.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── OFFICE STATUS WIDGET ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Office Status Widget</p>
+    <div style="display:flex;flex-direction:column;gap:var(--space-sm);max-width:560px;">
+      <div class="office-widget open" role="status" aria-live="polite">
+        <div class="office-status-dot"></div>
+        <div class="office-widget-body">
+          <p class="office-status-label">Office Open</p>
+          <p class="office-status-detail">Closes today at 3:00 PM · (619) 296-2666</p>
+        </div>
+        <a href="tel:16192962666" class="btn btn-primary btn-sm">Call Now</a>
+      </div>
+      <div class="office-widget closed" role="status" aria-live="polite">
+        <div class="office-status-dot"></div>
+        <div class="office-widget-body">
+          <p class="office-status-label">Office Closed</p>
+          <p class="office-status-detail">Opens Monday at 9:00 AM · Leave a message anytime</p>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm">Leave Message</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MEETING FINDER ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Meeting Finder</p>
+    <div class="meeting-finder">
+      <div class="meeting-finder-header">
+        <div>
+          <p class="t-eyebrow">San Diego County</p>
+          <h2 class="t-h2 mt-xs">Find a Meeting</h2>
+        </div>
+        <div class="d-flex gap-xs align-center">
+          <a href="#" class="t-mono" style="color:var(--color-navy-mid);text-decoration:none;font-size:13px;">Print Directory ↓</a>
+        </div>
+      </div>
+      <!-- Filters -->
+      <div class="finder-filters">
+        <div class="form-group">
+          <label class="form-label" for="filter-day">Day</label>
+          <select class="input input-select" id="filter-day">
+            <option>Any day</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+            <option>Sunday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="filter-format">Format</label>
+          <select class="input input-select" id="filter-format">
+            <option>Any format</option>
+            <option>In-Person</option>
+            <option>Online (Zoom)</option>
+            <option>Hybrid</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="filter-lang">Language</label>
+          <select class="input input-select" id="filter-lang">
+            <option>Any language</option>
+            <option>English</option>
+            <option>Español</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="align-self:flex-end;">Search</button>
+      </div>
+      <!-- Results -->
+      <div class="meeting-list" aria-label="Meeting results">
+        <!-- Row 1 -->
+        <div class="meeting-row" tabindex="0" role="button" aria-label="Monday 7:00 PM – Mission Valley Group">
+          <div class="meeting-row-main">
+            <strong style="font-size:15px;color:var(--color-navy);font-family:var(--font-display);">Mission Valley Group</strong>
+            <div class="meeting-row-meta">
+              <span class="badge badge-navy">In-Person</span>
+              <span class="badge badge-linen">English</span>
+              <span class="t-caption" style="margin-left:4px;">Mission Valley Community Center · Room 12</span>
+            </div>
+          </div>
+          <div class="meeting-row-actions">
+            <div class="meeting-row-time">Mon · 7:00 PM</div>
+            <a href="#" class="btn btn-outline btn-sm">Details</a>
+          </div>
+        </div>
+        <!-- Row 2 -->
+        <div class="meeting-row" tabindex="0" role="button">
+          <div class="meeting-row-main">
+            <strong style="font-size:15px;color:var(--color-navy);font-family:var(--font-display);">La Jolla Serenity Group</strong>
+            <div class="meeting-row-meta">
+              <span class="badge badge-sky">Online</span>
+              <span class="badge badge-linen">English</span>
+              <span class="t-caption" style="margin-left:4px;">Zoom · ID shared after RSVP</span>
+            </div>
+          </div>
+          <div class="meeting-row-actions">
+            <div class="meeting-row-time">Tue · 10:00 AM</div>
+            <a href="#" class="btn btn-outline btn-sm">Details</a>
+          </div>
+        </div>
+        <!-- Row 3 -->
+        <div class="meeting-row" tabindex="0" role="button">
+          <div class="meeting-row-main">
+            <strong style="font-size:15px;color:var(--color-navy);font-family:var(--font-display);">Grupo Esperanza</strong>
+            <div class="meeting-row-meta">
+              <span class="badge badge-navy">In-Person</span>
+              <span class="badge badge-dark">Español</span>
+              <span class="t-caption" style="margin-left:4px;">Chula Vista · Iglesia Bethel</span>
+            </div>
+          </div>
+          <div class="meeting-row-actions">
+            <div class="meeting-row-time">Wed · 6:30 PM</div>
+            <a href="#" class="btn btn-outline btn-sm">Details</a>
+          </div>
+        </div>
+        <!-- Row 4 – Alateen -->
+        <div class="meeting-row" tabindex="0" role="button" style="border-left:3px solid var(--color-coral);">
+          <div class="meeting-row-main">
+            <strong style="font-size:15px;color:var(--color-navy);font-family:var(--font-display);">Alateen — North Park</strong>
+            <div class="meeting-row-meta">
+              <span class="badge badge-coral">Alateen</span>
+              <span class="badge badge-navy">In-Person</span>
+              <span class="t-caption" style="margin-left:4px;">North Park Rec Center · Teen Room</span>
+            </div>
+          </div>
+          <div class="meeting-row-actions">
+            <div class="meeting-row-time">Thu · 5:00 PM</div>
+            <a href="#" class="btn btn-coral btn-sm">Details</a>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:var(--space-md);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-sm);">
+        <p class="t-caption">Showing 4 of 127 meetings in San Diego County</p>
+        <a href="#" class="btn btn-ghost btn-sm">View all meetings →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── EVENTS CALENDAR ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Event Cards</p>
+    <div class="grid-3">
+      <div class="event-card">
+        <div class="event-card-date">
+          <div>
+            <div class="event-date-month">August</div>
+            <div class="event-date-day">9</div>
+          </div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-meta">
+            <span class="badge badge-navy">District 10</span>
+            <span class="badge badge-linen">Speaker</span>
+          </div>
+          <h3 class="t-h3" style="font-size:18px;">District Speaker Meeting</h3>
+          <p class="t-body-sm mt-xs">Mission Valley Community Center · 10:00 AM – 12:00 PM</p>
+          <a href="#" class="btn btn-primary btn-sm" style="margin-top:var(--space-sm);">Add to Calendar</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-date" style="background:var(--color-coral);">
+          <div>
+            <div class="event-date-month" style="color:rgba(245,239,232,0.7);">September</div>
+            <div class="event-date-day">13</div>
+          </div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-meta">
+            <span class="badge badge-coral">Alateen</span>
+            <span class="badge badge-linen">Workshop</span>
+          </div>
+          <h3 class="t-h3" style="font-size:18px;">Alateen Leadership Day</h3>
+          <p class="t-body-sm mt-xs">Balboa Park · 9:00 AM – 3:00 PM · Lunch included</p>
+          <a href="#" class="btn btn-coral btn-sm" style="margin-top:var(--space-sm);">Register Free</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-date" style="background:var(--color-navy-dark);">
+          <div>
+            <div class="event-date-month">October</div>
+            <div class="event-date-day">4</div>
+          </div>
+        </div>
+        <div class="event-card-body">
+          <div class="event-meta">
+            <span class="badge badge-navy">Annual</span>
+            <span class="badge badge-linen">Open to All</span>
+          </div>
+          <h3 class="t-h3" style="font-size:18px;">AIS Area Assembly</h3>
+          <p class="t-body-sm mt-xs">Kearny Mesa · 10:00 AM – 4:00 PM · Free parking</p>
+          <a href="#" class="btn btn-outline btn-sm" style="margin-top:var(--space-sm);">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NEWCOMER WELCOME STRIP ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Newcomer Welcome Strip</p>
+    <div class="welcome-strip">
+      <div class="welcome-strip-text">
+        <h2 class="t-h2">New here? No explanation needed.</h2>
+        <p class="welcome-strip-sub">Al-Anon meetings are free, confidential, and open to anyone affected by a loved one's drinking.</p>
+      </div>
+      <a href="#" class="btn btn-welcome btn">Find Your First Meeting</a>
+    </div>
+  </section>
+
+  <!-- ─── QUOTE CARD ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Quote / Dark Feature Card</p>
+    <div style="max-width:640px;">
+      <div class="quote-card">
+        <div class="quote-circle-bg"></div>
+        <div class="quote-circle-bg-2"></div>
+        <p class="quote-text">"I didn't know where else to turn. My first meeting, someone just said — you are not alone. And I believed them."</p>
+        <p class="quote-attribution">— One member's experience, San Diego</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LITERATURE CARDS ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Literature / eCommerce Cards</p>
+    <div class="grid-4">
+      <div class="lit-card">
+        <div class="lit-card-thumb">
+          <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" opacity="0.35">
+            <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+            <circle cx="55" cy="63" r="20" fill="#EBF4FA"/>
+          </svg>
+        </div>
+        <div class="lit-card-body">
+          <p class="lit-card-title">One Day at a Time in Al-Anon</p>
+          <p class="lit-card-meta">B-6 · Daily reader · Softcover</p>
+          <p class="lit-card-price">$14.00</p>
+        </div>
+        <div class="lit-card-footer">
+          <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">Add to Cart</button>
+        </div>
+      </div>
+      <div class="lit-card">
+        <div class="lit-card-thumb" style="background:var(--color-coral-tint);">
+          <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" opacity="0.45">
+            <polygon points="55,5 105,95 5,95" fill="#D4734A"/>
+            <circle cx="55" cy="63" r="20" fill="#FAD5C8"/>
+          </svg>
+        </div>
+        <div class="lit-card-body">
+          <p class="lit-card-title">Alateen — Hope for Children of Alcoholics</p>
+          <p class="lit-card-meta">P-3 · Pamphlet · Teen resource</p>
+          <p class="lit-card-price">$1.50</p>
+        </div>
+        <div class="lit-card-footer">
+          <button class="btn btn-coral btn-sm" style="width:100%;justify-content:center;">Add to Cart</button>
+        </div>
+      </div>
+      <div class="lit-card">
+        <div class="lit-card-thumb">
+          <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" opacity="0.35">
+            <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+            <circle cx="55" cy="63" r="20" fill="#EBF4FA"/>
+          </svg>
+        </div>
+        <div class="lit-card-body">
+          <p class="lit-card-title">Al-Anon Family Groups (Blue Book)</p>
+          <p class="lit-card-meta">B-1 · Program text · Hardcover</p>
+          <p class="lit-card-price">$18.00</p>
+        </div>
+        <div class="lit-card-footer">
+          <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">Add to Cart</button>
+        </div>
+      </div>
+      <div class="lit-card">
+        <div class="lit-card-thumb" style="background:var(--color-linen-2);">
+          <svg width="56" height="51" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" opacity="0.4">
+            <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+            <circle cx="55" cy="63" r="20" fill="#EDE5D8"/>
+          </svg>
+        </div>
+        <div class="lit-card-body">
+          <p class="lit-card-title">Courage to Change</p>
+          <p class="lit-card-meta">B-16 · Daily reader · Softcover</p>
+          <p class="lit-card-price">$14.00</p>
+        </div>
+        <div class="lit-card-footer">
+          <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INTERCOM ARCHIVE ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Intercom / Newsletter Archive</p>
+    <div style="max-width:720px;display:flex;flex-direction:column;gap:var(--space-xs);">
+      <div class="intercom-row">
+        <span class="intercom-date-chip">Jul 2025</span>
+        <div class="intercom-row-body">
+          <p class="intercom-title">July 2025 Intercom</p>
+          <p class="intercom-sub">District updates · 3 upcoming events · Literature note</p>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm">View PDF</a>
+      </div>
+      <div class="intercom-row">
+        <span class="intercom-date-chip">Jun 2025</span>
+        <div class="intercom-row-body">
+          <p class="intercom-title">June 2025 Intercom</p>
+          <p class="intercom-sub">Service corner · Assembly recap · New online meetings</p>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm">View PDF</a>
+      </div>
+      <div class="intercom-row">
+        <span class="intercom-date-chip">May 2025</span>
+        <div class="intercom-row-body">
+          <p class="intercom-title">May 2025 Intercom</p>
+          <p class="intercom-sub">Alateen spotlight · Office hours update</p>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm">View PDF</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FORMS ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Forms</p>
+    <div class="showcase-row">
+      <!-- Meeting update request -->
+      <div class="showcase-col">
+        <p class="showcase-label">Meeting Update Request</p>
+        <div class="card">
+          <h3 class="t-h3" style="margin-bottom:var(--space-md);">Request a Meeting Update</h3>
+          <form style="display:flex;flex-direction:column;gap:var(--space-md);" onsubmit="return false;">
+            <div class="form-group">
+              <label class="form-label" for="meeting-name">Meeting name</label>
+              <input class="input" id="meeting-name" type="text" placeholder="Your group name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="change-type">Type of change</label>
+              <select class="input input-select" id="change-type">
+                <option>Select one…</option>
+                <option>Time or day change</option>
+                <option>Location change</option>
+                <option>Meeting closed</option>
+                <option>New meeting</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="change-detail">Details</label>
+              <textarea class="input" id="change-detail" rows="3" style="border-radius:var(--radius-lg);resize:vertical;" placeholder="Describe the change…"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-email">Your email (optional)</label>
+              <input class="input" id="contact-email" type="email" placeholder="For follow-up if needed" />
+            </div>
+            <button class="btn btn-primary" type="submit">Submit Request</button>
+          </form>
+        </div>
+      </div>
+      <!-- Intercom subscribe -->
+      <div class="showcase-col">
+        <p class="showcase-label">Intercom Subscribe</p>
+        <div class="card-linen">
+          <h3 class="t-h3" style="margin-bottom:var(--space-xs);">Stay Connected</h3>
+          <p class="t-body-sm" style="margin-bottom:var(--space-md);">Get the monthly Intercom delivered to your inbox — events, meeting updates, and service news.</p>
+          <form style="display:flex;flex-direction:column;gap:var(--space-sm);" onsubmit="return false;">
+            <input class="input" type="text" placeholder="Your first name" />
+            <input class="input" type="email" placeholder="Email address" />
+            <button class="btn btn-primary" type="submit">Subscribe Free</button>
+          </form>
+          <p class="t-caption" style="margin-top:var(--space-sm);">No spam. Unsubscribe any time. Anonymity protected.</p>
+        </div>
+        <div style="margin-top:var(--space-md);">
+          <p class="showcase-label">Volunteer Interest</p>
+          <div class="card">
+            <h3 class="t-h3" style="font-size:18px;margin-bottom:var(--space-xs);">Volunteer with Us</h3>
+            <p class="t-body-sm" style="margin-bottom:var(--space-md);">Interested in service? Share your skills and we'll reach out when the time is right.</p>
+            <form style="display:flex;flex-direction:column;gap:var(--space-sm);" onsubmit="return false;">
+              <input class="input" type="text" placeholder="Your name" />
+              <input class="input" type="email" placeholder="Email address" />
+              <select class="input input-select">
+                <option>Area of interest…</option>
+                <option>Web &amp; Technology</option>
+                <option>Office Support</option>
+                <option>Meeting Liaison</option>
+                <option>Alateen Sponsor</option>
+                <option>Translation (Español)</option>
+              </select>
+              <button class="btn btn-outline" type="submit">Express Interest</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LANGUAGE TOGGLE ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Language Toggle</p>
+    <div class="showcase-row align-center">
+      <div class="lang-toggle" role="group" aria-label="Language selection">
+        <button class="active" aria-pressed="true">EN</button>
+        <button aria-pressed="false">ES</button>
+      </div>
+      <p class="t-body-sm">Seamless toggle between English and Español — no page reload, no duplicate content.</p>
+    </div>
+  </section>
+
+  <!-- ─── SECTION DIVIDER ─── -->
+  <section class="showcase-section">
+    <p class="showcase-label">Component — Section Divider (circle motif)</p>
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-circle"></div>
+      <div class="section-divider-line"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-lockup">
+        <svg width="36" height="33" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <polygon points="55,5 105,95 5,95" fill="#7EB8D8"/>
+          <circle cx="55" cy="63" r="20" fill="#0D2D42"/>
+        </svg>
+        <div class="logo-wordmark">
+          <span class="logo-wordmark-primary" style="color:#7EB8D8;">Al‑Anon &amp; Alateen</span>
+          <span class="logo-wordmark-sub" style="color:rgba(126,184,216,0.7);">Family Groups of San Diego</span>
+        </div>
+      </div>
+      <p style="margin-top:var(--space-md);">Free, confidential support for families and friends of alcoholics — across San Diego, every day of the week.</p>
+      <p style="margin-top:var(--space-sm);">(619) 296-2666 · info@al-anonsd.org</p>
+    </div>
+    <div class="footer-col">
+      <h4>Find Support</h4>
+      <ul>
+        <li><a href="#">Find a Meeting</a></li>
+        <li><a href="#">What is Al-Anon?</a></li>
+        <li><a href="#">Newcomers</a></li>
+        <li><a href="#">What is Alateen?</a></li>
+        <li><a href="#">FAQs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Literature Catalog</a></li>
+        <li><a href="#">Intercom Archive</a></li>
+        <li><a href="#">Events Calendar</a></li>
+        <li><a href="#">Office Hours</a></li>
+        <li><a href="#">Contact AIS</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="#">Update a Meeting</a></li>
+        <li><a href="#">Submit an Event</a></li>
+        <li><a href="#">Volunteer</a></li>
+        <li><a href="#">Board &amp; Committees</a></li>
+        <li><a href="#">Al-Anon WSO ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Al-Anon &amp; Alateen Family Groups of San Diego · AIS Office</p>
+    <p>Al-Anon Family Groups is not affiliated with Alcoholics Anonymous.</p>
+  </div>
+</footer>
+
+<script>
+  /* Language toggle interaction */
+  document.querySelectorAll('.lang-toggle').forEach(function(toggle) {
+    toggle.querySelectorAll('button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        toggle.querySelectorAll('button').forEach(function(b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+      });
+    });
+  });
+</script>
+</body>
+</html>
