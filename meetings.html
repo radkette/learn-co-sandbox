@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find a Meeting — Al-Anon Family Groups of San Diego</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@500&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─── */
+    :root {
+      --color-navy:         #1A4A6B;
+      --color-navy-mid:     #2E7AB0;
+      --color-navy-dark:    #0D2D42;
+      --color-navy-t10:     #EBF4FA;
+      --color-navy-t25:     #C5DCF0;
+      --color-sky:          #7EB8D8;
+      --color-coral:        #D4734A;
+      --color-coral-dark:   #7A2E10;
+      --color-coral-tint:   #FAD5C8;
+      --color-linen:        #F5EFE8;
+      --color-linen-2:      #EDE5D8;
+      --color-near-black:   #2A2A2A;
+      --color-neutral:      #CBD5E0;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono:    'IBM Plex Mono', monospace;
+      --font-ui:      'Space Grotesk', system-ui, sans-serif;
+      --radius-sm:4px; --radius-md:8px; --radius-lg:12px;
+      --radius-xl:16px; --radius-pill:999px;
+      --ease: cubic-bezier(0.4,0,0.2,1);
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-body);font-size:16px;line-height:1.7;color:var(--color-near-black);background:#fff}
+
+    /* ─── NAV ─── */
+    .ec-nav{background:#fff;border-bottom:.5px solid var(--color-neutral);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:66px;position:sticky;top:0;z-index:400}
+    .ec-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .ec-logo-text{display:flex;flex-direction:column;line-height:1.2}
+    .ec-logo-name{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--color-navy)}
+    .ec-logo-sub{font-family:var(--font-ui);font-size:10px;font-weight:400;color:rgba(26,74,107,.55);letter-spacing:.02em}
+    .ec-nav-links{display:flex;gap:32px;list-style:none}
+    .ec-nav-links a{font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--color-navy);text-decoration:none;transition:color 100ms var(--ease)}
+    .ec-nav-links a:hover{color:var(--color-coral)}
+    .ec-nav-links a.active{color:var(--color-coral)}
+    .ec-nav-links a.has-dropdown{display:inline-flex;align-items:center;gap:5px}
+    .ec-nav-links a.has-dropdown::after{content:'';width:10px;height:6px;display:inline-block;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231A4A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;flex-shrink:0;transition:transform 100ms var(--ease)}
+    .ec-nav-links a.has-dropdown:hover::after{background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23D4734A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+    .ec-btn-cta{background:var(--color-coral);color:#fff;border:none;border-radius:var(--radius-pill);padding:9px 20px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:background 100ms var(--ease);white-space:nowrap}
+    .ec-btn-cta:hover{background:var(--color-coral-dark)}
+
+    /* Dropdowns */
+    .nav-has-dd{position:relative;list-style:none}
+    .nav-has-dd::before{content:'';position:absolute;top:100%;left:-24px;right:-24px;height:18px;z-index:499}
+    .nav-dropdown{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(-6px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 180ms var(--ease),transform 180ms var(--ease),visibility 180ms;z-index:500;min-width:460px;white-space:nowrap}
+    .nav-dropdown-card{background:#fff;border-radius:var(--radius-xl);border:.5px solid var(--color-neutral);box-shadow:0 20px 56px rgba(13,45,66,.15),0 2px 8px rgba(0,0,0,.06);padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:0;position:relative}
+    .nav-dropdown-card.dd-single{min-width:0;width:max-content;grid-template-columns:1fr}
+    .nav-dropdown-card::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:12px;height:12px;background:#fff;border-left:.5px solid var(--color-neutral);border-top:.5px solid var(--color-neutral)}
+    .nav-has-dd:hover .nav-dropdown,.nav-has-dd:focus-within .nav-dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}
+    .nav-has-dd.dd-end .nav-dropdown{left:auto;right:0;transform:translateY(-6px)}
+    .nav-has-dd.dd-end:hover .nav-dropdown,.nav-has-dd.dd-end:focus-within .nav-dropdown{transform:translateY(0)}
+    .nav-has-dd.dd-end .nav-dropdown-card::before{left:auto;right:28px}
+    .dd-col{padding:8px 20px 8px 4px}
+    .dd-col+.dd-col{padding-left:20px;border-left:.5px solid var(--color-neutral)}
+    .dd-col-label{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-coral);margin-bottom:12px;display:block}
+    .dd-links{list-style:none;display:flex;flex-direction:column;gap:2px}
+    .dd-links li a{display:block;font-family:var(--font-body);font-size:14px;color:var(--color-near-black);text-decoration:none;padding:5px 8px;border-radius:var(--radius-md);transition:background 100ms var(--ease),color 100ms var(--ease);line-height:1.4}
+    .dd-links li a:hover{background:var(--color-navy-t10);color:var(--color-navy)}
+    .dd-footer{grid-column:1/-1;border-top:.5px solid var(--color-neutral);margin-top:16px;padding-top:16px;display:flex;align-items:center;justify-content:space-between}
+    .dd-footer a{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-navy-mid);text-decoration:none;transition:color 100ms var(--ease)}
+    .dd-footer a:hover{color:var(--color-coral)}
+    .dd-cta{background:var(--color-coral);color:#fff!important;padding:6px 14px;border-radius:var(--radius-pill);font-size:13px!important;font-weight:500!important}
+
+    /* Mobile nav */
+    .nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;margin-left:auto;flex-shrink:0;flex-direction:column;justify-content:center}
+    .nav-hamburger span{display:block;width:22px;height:2px;background:var(--color-navy);border-radius:2px;transition:all 180ms var(--ease)}
+    .nav-hamburger span+span{margin-top:5px}
+    .nav-drawer-overlay{display:none;position:fixed;inset:0;background:rgba(13,45,66,.35);z-index:800;opacity:0;transition:opacity 240ms var(--ease)}
+    .nav-drawer{position:fixed;top:0;right:0;bottom:0;width:min(360px,100vw);background:#fff;z-index:900;transform:translateX(100%);transition:transform 280ms var(--ease);display:flex;flex-direction:column;overflow-y:auto}
+    .nav-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:.5px solid var(--color-neutral)}
+    .nav-drawer-close{background:none;border:none;cursor:pointer;color:var(--color-navy);padding:4px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center}
+    .nav-drawer-links{list-style:none;padding:8px 0;flex:1}
+    .nav-drawer-links>li{border-bottom:.5px solid var(--color-neutral)}
+    .nav-drawer-links>li>a,.nav-drawer-links>li>button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:16px 24px;font-family:var(--font-body);font-size:16px;font-weight:500;color:var(--color-navy);text-decoration:none;background:none;border:none;cursor:pointer;text-align:left}
+    .nav-drawer-links>li>a:hover,.nav-drawer-links>li>button:hover{color:var(--color-coral)}
+    .nav-drawer-chevron{width:18px;height:18px;flex-shrink:0;transition:transform 180ms var(--ease);color:rgba(26,74,107,.4)}
+    .nav-drawer-sub{list-style:none;background:var(--color-linen);display:none;padding:8px 0}
+    .nav-drawer-sub li a{display:block;padding:10px 24px 10px 32px;font-family:var(--font-body);font-size:14px;color:var(--color-navy);text-decoration:none;transition:color 100ms var(--ease)}
+    .nav-drawer-sub li a:hover{color:var(--color-coral)}
+    .nav-drawer-sub-label{display:block;padding:10px 24px 4px 32px;font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-coral)}
+    .nav-drawer-footer{padding:24px;border-top:.5px solid var(--color-neutral)}
+    .nav-drawer-cta{display:block;width:100%;text-align:center;background:var(--color-coral);color:#fff;border:none;border-radius:var(--radius-pill);padding:14px 24px;font-family:var(--font-body);font-size:15px;font-weight:500;cursor:pointer;text-decoration:none}
+    .nav-drawer-open .nav-drawer-overlay{display:block;opacity:1}
+    .nav-drawer-open .nav-drawer{transform:translateX(0)}
+    .nav-drawer-item-open .nav-drawer-chevron{transform:rotate(90deg)}
+    .nav-drawer-item-open .nav-drawer-sub{display:block}
+
+    /* ─── HERO ─── */
+    .meetings-hero{background:var(--color-linen);padding:56px 40px 48px;position:relative;overflow:hidden}
+    .meetings-hero-ring{position:absolute;border-radius:50%;border:1px solid rgba(26,74,107,.05);pointer-events:none}
+    .meetings-hero-inner{max-width:720px}
+    .meetings-hero-eyebrow{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-coral);margin-bottom:14px}
+    .meetings-hero h1{font-family:var(--font-display);font-size:52px;font-weight:700;line-height:1.1;letter-spacing:-.025em;color:var(--color-navy);margin-bottom:16px}
+    .meetings-hero p{font-size:17px;line-height:1.65;color:#555;max-width:560px}
+    .meetings-hero-note{margin-top:20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+    .meetings-hero-note a{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-navy-mid);text-decoration:none;border-bottom:1px solid var(--color-navy-t25);transition:color 100ms var(--ease),border-color 100ms var(--ease)}
+    .meetings-hero-note a:hover{color:var(--color-coral);border-color:var(--color-coral-tint)}
+    .meetings-hero-note-divider{width:1px;height:14px;background:var(--color-neutral)}
+
+    /* ─── FILTER BAR ─── */
+    .meetings-filter{background:#fff;border-bottom:.5px solid var(--color-neutral);padding:20px 40px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:66px;z-index:300}
+    .mf-pills{display:flex;flex-wrap:wrap;gap:8px}
+    .mf-pill{font-family:var(--font-body);font-size:13px;font-weight:500;padding:6px 14px;border-radius:var(--radius-pill);border:1.5px solid var(--color-neutral);background:#fff;color:var(--color-near-black);cursor:pointer;transition:all 100ms var(--ease);white-space:nowrap}
+    .mf-pill:hover{border-color:var(--color-navy);color:var(--color-navy)}
+    .mf-pill.active{background:var(--color-navy);color:var(--color-linen);border-color:var(--color-navy)}
+    .filter-divider{width:1px;height:28px;background:var(--color-neutral);flex-shrink:0}
+    .filter-select{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--color-navy);background:#fff;border:1.5px solid var(--color-neutral);border-radius:var(--radius-pill);padding:6px 32px 6px 14px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231A4A6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;transition:border-color 100ms var(--ease)}
+    .filter-select:hover{border-color:var(--color-navy)}
+    .filter-input{font-family:var(--font-body);font-size:13px;color:var(--color-near-black);border:1.5px solid var(--color-neutral);border-radius:var(--radius-pill);padding:6px 16px;background:#fff;transition:border-color 100ms var(--ease);min-width:200px}
+    .filter-input:focus{outline:none;border-color:var(--color-navy)}
+    .filter-input::placeholder{color:#aaa}
+    .filter-view-toggle{display:flex;border:1.5px solid var(--color-neutral);border-radius:var(--radius-pill);overflow:hidden;margin-left:auto;flex-shrink:0}
+    .filter-view-btn{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 16px;border:none;background:none;cursor:pointer;color:#aaa;transition:all 100ms var(--ease)}
+    .filter-view-btn.active{background:var(--color-navy);color:#fff}
+
+    /* ─── MEETINGS BODY ─── */
+    .meetings-body{max-width:1200px;margin:0 auto;padding:40px 40px 80px}
+
+    /* Results bar */
+    .meetings-results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .meetings-results-count{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#aaa}
+    .meetings-results-count strong{color:var(--color-navy)}
+    .meetings-print-link{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-navy-mid);text-decoration:none;transition:color 100ms var(--ease)}
+    .meetings-print-link:hover{color:var(--color-coral)}
+
+    /* Day group header */
+    .meetings-day-group{margin-bottom:32px}
+    .meetings-day-label{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--color-navy);padding-bottom:10px;border-bottom:2px solid var(--color-linen-2);margin-bottom:4px}
+
+    /* Meeting row */
+    .meeting-row{display:grid;grid-template-columns:100px 1fr 200px 200px 110px;align-items:start;gap:0;border-bottom:.5px solid var(--color-linen-2);padding:12px 0;transition:background 80ms var(--ease)}
+    .meeting-row:hover{background:var(--color-linen)}
+    .meeting-row:hover{margin:0 -16px;padding:12px 16px;border-radius:var(--radius-md);border-bottom-color:transparent}
+    .meeting-time{font-family:var(--font-body);font-size:13px;color:#777;padding-top:2px;white-space:nowrap}
+    .meeting-name a{font-family:var(--font-body);font-size:15px;font-weight:500;color:var(--color-navy);text-decoration:none;transition:color 100ms var(--ease)}
+    .meeting-name a:hover{color:var(--color-coral)}
+    .meeting-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+    .meeting-location{font-size:13px;color:#555;padding-top:2px}
+    .meeting-address{font-size:13px;color:#777;padding-top:2px}
+    .meeting-region{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#aaa;padding-top:4px}
+
+    /* Badges */
+    .badge{display:inline-block;font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:var(--radius-pill)}
+    .badge-inperson{background:var(--color-navy-t10);color:var(--color-navy)}
+    .badge-online{background:#E8F5E9;color:#2E7D32}
+    .badge-hybrid{background:#FFF3E0;color:#E65100}
+    .badge-alateen{background:var(--color-coral-tint);color:var(--color-coral-dark)}
+    .badge-mens{background:var(--color-linen-2);color:#555}
+    .badge-womens{background:var(--color-linen-2);color:#555}
+    .badge-spanish{background:var(--color-linen-2);color:#555}
+
+    /* ─── FOOTER ─── */
+    .ec-footer{background:var(--color-navy-dark);color:var(--color-linen);padding:56px 40px 32px}
+    .ec-footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:48px}
+    .ec-footer-grid-row2{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:48px}
+    .ec-footer-brand p{color:rgba(245,239,232,.6);font-size:14px;margin-top:12px;line-height:1.6}
+    .ec-footer-helpline{display:inline-flex;align-items:center;gap:8px;background:var(--color-coral);color:#fff;border:none;border-radius:var(--radius-pill);padding:10px 20px;font-family:var(--font-body);font-size:14px;font-weight:500;margin-top:16px;text-decoration:none;cursor:pointer}
+    .ec-footer-col h4{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-sky);margin-bottom:14px}
+    .ec-footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .ec-footer-col a{color:rgba(245,239,232,.65);font-size:14px;text-decoration:none;transition:color 100ms var(--ease)}
+    .ec-footer-col a:hover{color:var(--color-linen)}
+    .ec-footer-divider{border:none;border-top:.5px solid rgba(245,239,232,.1);margin:0 0 40px}
+    .ec-footer-contact-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:rgba(0,0,0,.15);margin:-56px -40px 0;padding:20px 40px}
+    .ec-footer-contact-bar a,.ec-footer-contact-bar p{font-size:13px;color:rgba(245,239,232,.5);text-decoration:none;transition:color 100ms var(--ease)}
+    .ec-footer-contact-bar a:hover{color:var(--color-linen)}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:960px){
+      .ec-nav-links,.ec-btn-cta{display:none}
+      .nav-hamburger{display:flex}
+      .meetings-filter{top:66px;gap:8px}
+      .filter-input{min-width:140px}
+      .meeting-row{grid-template-columns:80px 1fr 1fr;gap:0}
+      .meeting-address,.meeting-region{display:none}
+    }
+    @media(max-width:640px){
+      .meetings-hero{padding:40px 24px 36px}
+      .meetings-hero h1{font-size:36px}
+      .meetings-filter{padding:16px 20px}
+      .meetings-body{padding:24px 20px 60px}
+      .meeting-row{grid-template-columns:72px 1fr}
+      .meeting-location{display:none}
+      .ec-footer-grid,.ec-footer-grid-row2{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="ec-nav">
+  <a href="index.html" class="ec-logo">
+    <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+      <circle cx="55" cy="63" r="20" fill="#ffffff"/>
+    </svg>
+    <div class="ec-logo-text">
+      <span class="ec-logo-name">Al-Anon</span>
+      <span class="ec-logo-sub">Family Groups of San Diego</span>
+    </div>
+  </a>
+
+  <ul class="ec-nav-links">
+    <!-- District & GRs -->
+    <li class="nav-has-dd">
+      <a href="#" class="has-dropdown">District &amp; GRs</a>
+      <div class="nav-dropdown" role="region" aria-label="District & GRs menu">
+        <div class="nav-dropdown-card">
+          <div class="dd-col">
+            <span class="dd-col-label">District</span>
+            <ul class="dd-links">
+              <li><a href="#">District Overview</a></li>
+              <li><a href="#">GR Information</a></li>
+            </ul>
+          </div>
+          <div class="dd-col">
+            <span class="dd-col-label">Districts</span>
+            <ul class="dd-links">
+              <li><a href="#">District 69</a></li>
+              <li><a href="#">District 72</a></li>
+              <li><a href="#">District 75</a></li>
+              <li><a href="#">District 78</a></li>
+              <li><a href="#">Overlay District (Español)</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- San Diego Area & ISRs -->
+    <li class="nav-has-dd">
+      <a href="#" class="has-dropdown">San Diego Area &amp; ISRs</a>
+      <div class="nav-dropdown" role="region" aria-label="San Diego Area & ISRs menu">
+        <div class="nav-dropdown-card">
+          <div class="dd-col">
+            <span class="dd-col-label">Area</span>
+            <ul class="dd-links">
+              <li><a href="#">Area Overview</a></li>
+              <li><a href="#">Board Information</a></li>
+              <li><a href="#">Office &amp; Bookstore</a></li>
+              <li><a href="#">Contributions</a></li>
+            </ul>
+          </div>
+          <div class="dd-col">
+            <span class="dd-col-label">Service</span>
+            <ul class="dd-links">
+              <li><a href="#">Open Positions</a></li>
+              <li><a href="#">ISR Information</a></li>
+              <li><a href="#">AISL Information</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- Intercom & Events -->
+    <li class="nav-has-dd">
+      <a href="#" class="has-dropdown">Intercom &amp; Events</a>
+      <div class="nav-dropdown" role="region" aria-label="Intercom & Events menu">
+        <div class="nav-dropdown-card">
+          <div class="dd-col">
+            <span class="dd-col-label">Intercom</span>
+            <ul class="dd-links">
+              <li><a href="#">Print Current</a></li>
+              <li><a href="#">Archives</a></li>
+              <li><a href="#">Subscribe</a></li>
+            </ul>
+          </div>
+          <div class="dd-col">
+            <span class="dd-col-label">Events</span>
+            <ul class="dd-links">
+              <li><a href="#">Calendar</a></li>
+              <li><a href="#">Submit an Event</a></li>
+            </ul>
+          </div>
+          <div class="dd-footer">
+            <a href="#">Events calendar &#8599;</a>
+            <a href="#" class="dd-cta">Submit an event</a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- Outreach -->
+    <li class="nav-has-dd">
+      <a href="#" class="has-dropdown">Outreach</a>
+      <div class="nav-dropdown" role="region" aria-label="Outreach menu">
+        <div class="nav-dropdown-card dd-single">
+          <div class="dd-col" style="padding-right:0">
+            <span class="dd-col-label">Outreach</span>
+            <ul class="dd-links">
+              <li><a href="#">Outreach Community</a></li>
+              <li><a href="#">For Educators</a></li>
+              <li><a href="#">For Parents</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- Meetings -->
+    <li class="nav-has-dd dd-end">
+      <a href="meetings.html" class="has-dropdown active">Meetings</a>
+      <div class="nav-dropdown" role="region" aria-label="Meetings menu">
+        <div class="nav-dropdown-card dd-single">
+          <div class="dd-col" style="padding-right:0">
+            <span class="dd-col-label">Meetings</span>
+            <ul class="dd-links">
+              <li><a href="meetings.html">Find a Meeting</a></li>
+              <li><a href="#">Report a Change</a></li>
+            </ul>
+          </div>
+          <div class="dd-footer">
+            <a href="#">Meeting Calendar &#8599;</a>
+            <a href="meetings.html" class="dd-cta">Find a meeting today</a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li><a href="#">Bookstore</a></li>
+  </ul>
+
+  <button class="ec-btn-cta">Get help now</button>
+
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="nav-drawer-overlay" id="nav-drawer-overlay"></div>
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="nav-drawer-head">
+    <div class="ec-logo">
+      <svg width="28" height="25" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#1A4A6B"/>
+        <circle cx="55" cy="63" r="20" fill="#ffffff"/>
+      </svg>
+      <div class="ec-logo-text">
+        <span class="ec-logo-name">Al-Anon</span>
+        <span class="ec-logo-sub">Family Groups of San Diego</span>
+      </div>
+    </div>
+    <button class="nav-drawer-close" id="nav-drawer-close" aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5L15 15M15 5L5 15" stroke="#1A4A6B" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <ul class="nav-drawer-links">
+    <li class="nav-drawer-has-sub">
+      <button>District &amp; GRs <svg class="nav-drawer-chevron" viewBox="0 0 20 20" fill="none"><path d="M7 10L10 13L13 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      <ul class="nav-drawer-sub">
+        <span class="nav-drawer-sub-label">District</span>
+        <li><a href="#">District Overview</a></li>
+        <li><a href="#">GR Information</a></li>
+        <span class="nav-drawer-sub-label">Districts</span>
+        <li><a href="#">District 69</a></li><li><a href="#">District 72</a></li><li><a href="#">District 75</a></li><li><a href="#">District 78</a></li><li><a href="#">Overlay District (Español)</a></li>
+      </ul>
+    </li>
+    <li class="nav-drawer-has-sub">
+      <button>San Diego Area &amp; ISRs <svg class="nav-drawer-chevron" viewBox="0 0 20 20" fill="none"><path d="M7 10L10 13L13 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      <ul class="nav-drawer-sub">
+        <span class="nav-drawer-sub-label">Area</span>
+        <li><a href="#">Area Overview</a></li><li><a href="#">Board Information</a></li><li><a href="#">Office &amp; Bookstore</a></li><li><a href="#">Contributions</a></li>
+        <span class="nav-drawer-sub-label">Service</span>
+        <li><a href="#">Open Positions</a></li><li><a href="#">ISR Information</a></li><li><a href="#">AISL Information</a></li>
+      </ul>
+    </li>
+    <li class="nav-drawer-has-sub">
+      <button>Intercom &amp; Events <svg class="nav-drawer-chevron" viewBox="0 0 20 20" fill="none"><path d="M7 10L10 13L13 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      <ul class="nav-drawer-sub">
+        <span class="nav-drawer-sub-label">Intercom</span>
+        <li><a href="#">Print Current</a></li><li><a href="#">Archives</a></li><li><a href="#">Subscribe</a></li>
+        <span class="nav-drawer-sub-label">Events</span>
+        <li><a href="#">Calendar</a></li><li><a href="#">Submit an Event</a></li>
+      </ul>
+    </li>
+    <li class="nav-drawer-has-sub">
+      <button>Outreach <svg class="nav-drawer-chevron" viewBox="0 0 20 20" fill="none"><path d="M7 10L10 13L13 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      <ul class="nav-drawer-sub">
+        <li><a href="#">Outreach Community</a></li><li><a href="#">For Educators</a></li><li><a href="#">For Parents</a></li>
+      </ul>
+    </li>
+    <li class="nav-drawer-has-sub">
+      <button>Meetings <svg class="nav-drawer-chevron" viewBox="0 0 20 20" fill="none"><path d="M7 10L10 13L13 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      <ul class="nav-drawer-sub">
+        <li><a href="meetings.html">Find a Meeting</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Bookstore</a></li>
+  </ul>
+  <div class="nav-drawer-footer">
+    <a href="#" class="nav-drawer-cta">Get help now</a>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="meetings-hero">
+  <div class="meetings-hero-ring" style="width:600px;height:600px;right:-120px;top:-200px;"></div>
+  <div class="meetings-hero-ring" style="width:340px;height:340px;right:80px;top:-40px;"></div>
+  <div class="meetings-hero-inner">
+    <p class="meetings-hero-eyebrow">Al-Anon &amp; Alateen · San Diego</p>
+    <h1>Find a Meeting Near You</h1>
+    <p>120+ weekly meetings across San Diego County — in person, online, and hybrid. There's a seat for you.</p>
+    <div class="meetings-hero-note">
+      <a href="#">Add / Change Meeting Info</a>
+      <div class="meetings-hero-note-divider"></div>
+      <a href="#">Alateen electronic meetings on the Al-Anon app ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FILTER BAR ═══ -->
+<div class="meetings-filter" id="filter-bar">
+  <div class="mf-pills" role="group" aria-label="Filter by day">
+    <button class="mf-pill active" data-day="all">Any Day</button>
+    <button class="mf-pill" data-day="mon">Mon</button>
+    <button class="mf-pill" data-day="tue">Tue</button>
+    <button class="mf-pill" data-day="wed">Wed</button>
+    <button class="mf-pill" data-day="thu">Thu</button>
+    <button class="mf-pill" data-day="fri">Fri</button>
+    <button class="mf-pill" data-day="sat">Sat</button>
+    <button class="mf-pill" data-day="sun">Sun</button>
+  </div>
+  <div class="filter-divider"></div>
+  <select class="filter-select" aria-label="Format" id="filter-format">
+    <option value="">Any Format</option>
+    <option value="inperson">In Person</option>
+    <option value="online">Online</option>
+    <option value="hybrid">Hybrid</option>
+  </select>
+  <select class="filter-select" aria-label="Region" id="filter-region">
+    <option value="">Any Region</option>
+    <option>San Diego</option>
+    <option>Carlsbad</option>
+    <option>Escondido</option>
+    <option>El Cajon</option>
+    <option>La Mesa</option>
+    <option>Santee</option>
+    <option>Solana Beach</option>
+    <option>Oceanside</option>
+    <option>Encinitas</option>
+    <option>National City</option>
+    <option>Lemon Grove</option>
+    <option>Chula Vista</option>
+    <option>Ramona</option>
+    <option>Bonita</option>
+  </select>
+  <input class="filter-input" type="text" placeholder="Search meetings…" aria-label="Search" id="filter-search" />
+  <div class="filter-view-toggle" role="group" aria-label="View mode">
+    <button class="filter-view-btn active">List</button>
+    <button class="filter-view-btn">Map</button>
+  </div>
+</div>
+
+<!-- ═══ MEETINGS LIST ═══ -->
+<main class="meetings-body">
+  <div class="meetings-results-bar">
+    <p class="meetings-results-count"><strong id="results-count">52</strong> meetings this week</p>
+    <a href="#" class="meetings-print-link">Printable meeting list ↗</a>
+  </div>
+
+  <!-- Wednesday -->
+  <div class="meetings-day-group" data-group="wed">
+    <h2 class="meetings-day-label">Wednesday</h2>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="Carlsbad">
+      <div class="meeting-time">8:15 am</div>
+      <div class="meeting-name"><a href="#">La Costa Live And Let Live AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Christ Presbyterian Church</div>
+      <div class="meeting-address">7807 Centella St Bldg B</div>
+      <div class="meeting-region">Carlsbad</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">9:00 am</div>
+      <div class="meeting-name"><a href="#">Mind Your Own Business AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">St Dunstans Episcopal Church</div>
+      <div class="meeting-address">6556 Park Ridge Blvd</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="Escondido">
+      <div class="meeting-time">10:00 am</div>
+      <div class="meeting-name"><a href="#">From Survival To Recovery AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Trinity Church Parish Hall</div>
+      <div class="meeting-address">845 Chestnut St</div>
+      <div class="meeting-region">Escondido</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="Santee">
+      <div class="meeting-time">11:00 am</div>
+      <div class="meeting-name"><a href="#">Happy Joyous And Free AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Pathways Community Church</div>
+      <div class="meeting-address">9626 Carlton Hills Blvd</div>
+      <div class="meeting-region">Santee</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">1:00 pm</div>
+      <div class="meeting-name"><a href="#">Clairemont Day Time AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">St David's Episcopal Church</div>
+      <div class="meeting-address">5050 Milton St</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="El Cajon">
+      <div class="meeting-time">1:30 pm</div>
+      <div class="meeting-name"><a href="#">Serenity Afternoon AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">First Lutheran Church</div>
+      <div class="meeting-address">867 S Lincoln Ave</div>
+      <div class="meeting-region">El Cajon</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">4:00 pm</div>
+      <div class="meeting-name"><a href="#">Grupo Espiritualidad De GFA</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span><span class="badge badge-spanish">Español</span></div></div>
+      <div class="meeting-location">Our Lady of Mt Carmel Catholic Church</div>
+      <div class="meeting-address">2020 Alaquinas Dr</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="Escondido">
+      <div class="meeting-time">5:00 pm</div>
+      <div class="meeting-name"><a href="#">Renacer GFA (Escondido)</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span><span class="badge badge-spanish">Español</span></div></div>
+      <div class="meeting-location">Grupo Paz En El Llano De Alcoholicos Anonimos</div>
+      <div class="meeting-address">330 W 3rd Ave</div>
+      <div class="meeting-region">Escondido</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">6:00 pm</div>
+      <div class="meeting-name"><a href="#">Miramar Mens Group AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span><span class="badge badge-mens">Men</span></div></div>
+      <div class="meeting-location">Good Samaritan Episcopal Church</div>
+      <div class="meeting-address">4321 Eastgate Mall</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">6:00 pm</div>
+      <div class="meeting-name"><a href="#">Wednesday Night Alateen</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span><span class="badge badge-alateen">Alateen</span></div></div>
+      <div class="meeting-location">Good Samaritan Episcopal Church</div>
+      <div class="meeting-address">4321 Eastgate Mall</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="hybrid" data-region="La Mesa">
+      <div class="meeting-time">6:30 pm</div>
+      <div class="meeting-name"><a href="#">Wednesday Night AFG For Parents</a><div class="meeting-badges"><span class="badge badge-hybrid">Hybrid</span></div></div>
+      <div class="meeting-location">OM Center for Spiritual Living</div>
+      <div class="meeting-address">7951 University Ave</div>
+      <div class="meeting-region">La Mesa</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">New Beginnings AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Seven Oaks Community Center</div>
+      <div class="meeting-address">16789 Bernardo Oaks Dr</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="Lemon Grove">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Wednesday Night Recovering Adult Children AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">St John Of The Cross</div>
+      <div class="meeting-address">8086 Broadway</div>
+      <div class="meeting-region">Lemon Grove</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="Encinitas">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Wednesday Night Step Study AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">San Dieguito United Methodist Church</div>
+      <div class="meeting-address">170 Calle Magdalena</div>
+      <div class="meeting-region">Encinitas</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Willingness To Change AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">All Souls Episcopal Church</div>
+      <div class="meeting-address">1475 Catalina Blvd</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="wed" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">8:00 pm</div>
+      <div class="meeting-name"><a href="#">Tierrasanta Path To Serenity AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Tierrasanta Lutheran Church</div>
+      <div class="meeting-address">11240 Clairemont Mesa Blvd</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+  </div>
+
+  <!-- Thursday -->
+  <div class="meetings-day-group" data-group="thu">
+    <h2 class="meetings-day-label">Thursday</h2>
+    <div class="meeting-row" data-day="thu" data-format="online" data-region="Solana Beach">
+      <div class="meeting-time">8:00 am</div>
+      <div class="meeting-name"><a href="#">Del Mar Sunnyside Up Virtual AFG</a><div class="meeting-badges"><span class="badge badge-online">Online</span></div></div>
+      <div class="meeting-location">Zoom</div>
+      <div class="meeting-address">—</div>
+      <div class="meeting-region">Solana Beach</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="inperson" data-region="Solana Beach">
+      <div class="meeting-time">10:00 am</div>
+      <div class="meeting-name"><a href="#">Parents AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">St. James Catholic Church</div>
+      <div class="meeting-address">625 S Nardo Ave</div>
+      <div class="meeting-region">Solana Beach</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="inperson" data-region="Bonita">
+      <div class="meeting-time">10:30 am</div>
+      <div class="meeting-name"><a href="#">Bonita Pta AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Church Of The Good Shephard</div>
+      <div class="meeting-address">3990 Bonita Rd</div>
+      <div class="meeting-region">Bonita</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="inperson" data-region="Oceanside">
+      <div class="meeting-time">11:30 am</div>
+      <div class="meeting-name"><a href="#">Book Study AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">North Coast United Methodist Church</div>
+      <div class="meeting-address">1501 Kelly St</div>
+      <div class="meeting-region">Oceanside</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="inperson" data-region="El Centro">
+      <div class="meeting-time">12:00 pm</div>
+      <div class="meeting-name"><a href="#">Fe Y Esperanza GFA</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span><span class="badge badge-spanish">Español</span></div></div>
+      <div class="meeting-location">Alano Club</div>
+      <div class="meeting-address">564 Broadway</div>
+      <div class="meeting-region">El Centro</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">6:00 pm</div>
+      <div class="meeting-name"><a href="#">Thursday Night Courage AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">First United Methodist Church</div>
+      <div class="meeting-address">2111 Camino Del Rio S</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="hybrid" data-region="San Diego">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Living In The Solution AFG</a><div class="meeting-badges"><span class="badge badge-hybrid">Hybrid</span></div></div>
+      <div class="meeting-location">St Paul's Episcopal Cathedral</div>
+      <div class="meeting-address">2728 6th Ave</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="inperson" data-region="Chula Vista">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">South Bay Serenity AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Chula Vista United Methodist Church</div>
+      <div class="meeting-address">838 Normal St</div>
+      <div class="meeting-region">Chula Vista</div>
+    </div>
+    <div class="meeting-row" data-day="thu" data-format="inperson" data-region="La Mesa">
+      <div class="meeting-time">7:30 pm</div>
+      <div class="meeting-name"><a href="#">Thursday Night La Mesa AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">La Mesa First United Methodist</div>
+      <div class="meeting-address">4690 Palm Ave</div>
+      <div class="meeting-region">La Mesa</div>
+    </div>
+  </div>
+
+  <!-- Friday -->
+  <div class="meetings-day-group" data-group="fri">
+    <h2 class="meetings-day-label">Friday</h2>
+    <div class="meeting-row" data-day="fri" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">10:00 am</div>
+      <div class="meeting-name"><a href="#">Friday Morning Serenity AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Balboa Presbyterian Church</div>
+      <div class="meeting-address">1720 Balboa Ave</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="fri" data-format="online" data-region="San Diego">
+      <div class="meeting-time">12:00 pm</div>
+      <div class="meeting-name"><a href="#">Noon Online Meeting AFG</a><div class="meeting-badges"><span class="badge badge-online">Online</span></div></div>
+      <div class="meeting-location">Zoom</div>
+      <div class="meeting-address">—</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="fri" data-format="inperson" data-region="Escondido">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">North County Step Study AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Trinity United Methodist Church</div>
+      <div class="meeting-address">1561 S Juniper St</div>
+      <div class="meeting-region">Escondido</div>
+    </div>
+    <div class="meeting-row" data-day="fri" data-format="inperson" data-region="National City">
+      <div class="meeting-time">7:30 pm</div>
+      <div class="meeting-name"><a href="#">Friday Night National City AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Sanctuary Family Club</div>
+      <div class="meeting-address">1613 Hoover Ave</div>
+      <div class="meeting-region">National City</div>
+    </div>
+  </div>
+
+  <!-- Saturday -->
+  <div class="meetings-day-group" data-group="sat">
+    <h2 class="meetings-day-label">Saturday</h2>
+    <div class="meeting-row" data-day="sat" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">9:00 am</div>
+      <div class="meeting-name"><a href="#">North Park Hope AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">North Park Presbyterian</div>
+      <div class="meeting-address">4350 Mount Abernathy Ave</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="sat" data-format="inperson" data-region="Oceanside">
+      <div class="meeting-time">10:00 am</div>
+      <div class="meeting-name"><a href="#">Newcomer Welcome Coffee</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Balboa Park — Spreckels Pavilion</div>
+      <div class="meeting-address">1549 El Prado</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="sat" data-format="inperson" data-region="El Cajon">
+      <div class="meeting-time">10:30 am</div>
+      <div class="meeting-name"><a href="#">El Cajon Saturday Morning AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">First Christian Church</div>
+      <div class="meeting-address">195 E Madison Ave</div>
+      <div class="meeting-region">El Cajon</div>
+    </div>
+    <div class="meeting-row" data-day="sat" data-format="hybrid" data-region="San Diego">
+      <div class="meeting-time">10:30 am</div>
+      <div class="meeting-name"><a href="#">Courage To Change AFG</a><div class="meeting-badges"><span class="badge badge-hybrid">Hybrid</span></div></div>
+      <div class="meeting-location">Hillcrest United Methodist</div>
+      <div class="meeting-address">3805 Seventh Ave</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="sat" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">4:00 pm</div>
+      <div class="meeting-name"><a href="#">Alateen — Find Your People</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span><span class="badge badge-alateen">Alateen</span></div></div>
+      <div class="meeting-location">Clairemont Lutheran Church</div>
+      <div class="meeting-address">4271 Asher St</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="sat" data-format="inperson" data-region="La Mesa">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Saturday Night La Mesa AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">La Mesa Community Church</div>
+      <div class="meeting-address">8800 La Mesa Blvd</div>
+      <div class="meeting-region">La Mesa</div>
+    </div>
+  </div>
+
+  <!-- Sunday -->
+  <div class="meetings-day-group" data-group="sun">
+    <h2 class="meetings-day-label">Sunday</h2>
+    <div class="meeting-row" data-day="sun" data-format="online" data-region="San Diego">
+      <div class="meeting-time">9:00 am</div>
+      <div class="meeting-name"><a href="#">Sunday Morning Online AFG</a><div class="meeting-badges"><span class="badge badge-online">Online</span></div></div>
+      <div class="meeting-location">Zoom</div>
+      <div class="meeting-address">—</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="sun" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">10:30 am</div>
+      <div class="meeting-name"><a href="#">Sunday Serenity AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">University Christian Church</div>
+      <div class="meeting-address">2475 Golden Gate Ave</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="sun" data-format="inperson" data-region="Chula Vista">
+      <div class="meeting-time">6:00 pm</div>
+      <div class="meeting-name"><a href="#">One Day At A Time — Chula Vista</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">First United Methodist Chula Vista</div>
+      <div class="meeting-address">915 Fourth Ave</div>
+      <div class="meeting-region">Chula Vista</div>
+    </div>
+  </div>
+
+  <!-- Monday -->
+  <div class="meetings-day-group" data-group="mon">
+    <h2 class="meetings-day-label">Monday</h2>
+    <div class="meeting-row" data-day="mon" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Serenity Seekers AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Pacific Beach Presbyterian</div>
+      <div class="meeting-address">1675 Garnet Ave</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="mon" data-format="inperson" data-region="Escondido">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Monday Night Escondido AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Bethlehem Lutheran Church</div>
+      <div class="meeting-address">629 W 9th Ave</div>
+      <div class="meeting-region">Escondido</div>
+    </div>
+    <div class="meeting-row" data-day="mon" data-format="hybrid" data-region="San Diego">
+      <div class="meeting-time">7:30 pm</div>
+      <div class="meeting-name"><a href="#">Monday Night Step Study AFG</a><div class="meeting-badges"><span class="badge badge-hybrid">Hybrid</span></div></div>
+      <div class="meeting-location">All Souls Episcopal</div>
+      <div class="meeting-address">1475 Catalina Blvd</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+  </div>
+
+  <!-- Tuesday -->
+  <div class="meetings-day-group" data-group="tue">
+    <h2 class="meetings-day-label">Tuesday</h2>
+    <div class="meeting-row" data-day="tue" data-format="online" data-region="San Diego">
+      <div class="meeting-time">12:15 pm</div>
+      <div class="meeting-name"><a href="#">Living Today AFG</a><div class="meeting-badges"><span class="badge badge-online">Online</span></div></div>
+      <div class="meeting-location">Zoom</div>
+      <div class="meeting-address">—</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="tue" data-format="inperson" data-region="San Diego">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">Tuesday Night Hope AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">Church of the Nazarene</div>
+      <div class="meeting-address">3901 Loma Alta Dr</div>
+      <div class="meeting-region">San Diego</div>
+    </div>
+    <div class="meeting-row" data-day="tue" data-format="inperson" data-region="Oceanside">
+      <div class="meeting-time">7:00 pm</div>
+      <div class="meeting-name"><a href="#">North County Tuesday AFG</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">St Thomas More Catholic Church</div>
+      <div class="meeting-address">1450 S Melrose Dr</div>
+      <div class="meeting-region">Oceanside</div>
+    </div>
+    <div class="meeting-row" data-day="tue" data-format="inperson" data-region="La Mesa">
+      <div class="meeting-time">7:30 pm</div>
+      <div class="meeting-name"><a href="#">One Day At A Time — La Mesa</a><div class="meeting-badges"><span class="badge badge-inperson">In Person</span></div></div>
+      <div class="meeting-location">La Mesa First United Methodist</div>
+      <div class="meeting-address">4690 Palm Ave</div>
+      <div class="meeting-region">La Mesa</div>
+    </div>
+  </div>
+
+  <p style="text-align:center;font-family:var(--font-mono);font-size:12px;color:#aaa;margin-top:48px;padding-top:24px;border-top:.5px solid var(--color-linen-2)">Meeting info not current? <a href="#" style="color:var(--color-navy-mid);text-decoration:none;border-bottom:1px solid var(--color-navy-t25)">Submit a correction ↗</a></p>
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="ec-footer">
+  <div style="margin-bottom:40px;">
+    <div class="ec-logo">
+      <svg width="32" height="29" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="55,5 105,95 5,95" fill="#7EB8D8"/>
+        <circle cx="55" cy="63" r="20" fill="#0D2D42"/>
+      </svg>
+      <div class="ec-logo-text">
+        <span class="ec-logo-name" style="color:var(--color-sky);">Al-Anon</span>
+        <span class="ec-logo-sub" style="color:rgba(126,184,216,.6);">&amp; Alateen Family Groups of San Diego</span>
+      </div>
+    </div>
+  </div>
+  <div class="ec-footer-grid">
+    <div class="ec-footer-col">
+      <h4>Meetings</h4>
+      <ul>
+        <li><a href="meetings.html">Find a Meeting</a></li>
+        <li><a href="#">Meeting Calendar</a></li>
+        <li><a href="#">Report a Change</a></li>
+      </ul>
+    </div>
+    <div class="ec-footer-col">
+      <h4>Newcomers</h4>
+      <ul>
+        <li><a href="#">Free Packet</a></li>
+        <li><a href="#">How Al-Anon Works</a></li>
+        <li><a href="#">Is Al-Anon right for you?</a></li>
+      </ul>
+    </div>
+    <div class="ec-footer-col">
+      <h4>Literature</h4>
+      <ul>
+        <li><a href="#">Order Online</a></li>
+        <li><a href="#">English</a></li>
+        <li><a href="#">Spanish</a></li>
+        <li><a href="#">Alateen</a></li>
+      </ul>
+    </div>
+    <div class="ec-footer-col">
+      <h4>Alateen</h4>
+      <ul>
+        <li><a href="#">How Alateen Works</a></li>
+        <li><a href="#">Find a Meeting</a></li>
+        <li><a href="#">For Parents</a></li>
+        <li><a href="#">For Educators</a></li>
+      </ul>
+    </div>
+  </div>
+  <hr class="ec-footer-divider" />
+  <div class="ec-footer-grid-row2">
+    <div class="ec-footer-col">
+      <h4>San Diego Area</h4>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Service</a></li>
+        <li><a href="#">Office &amp; Bookstore</a></li>
+      </ul>
+    </div>
+    <div class="ec-footer-col">
+      <h4>Intercom</h4>
+      <ul>
+        <li><a href="#">Print the Latest</a></li>
+        <li><a href="#">Upcoming Events</a></li>
+        <li><a href="#">Subscribe</a></li>
+        <li><a href="#">Archives</a></li>
+      </ul>
+    </div>
+    <div class="ec-footer-col">
+      <h4>Beyond the Group</h4>
+      <ul>
+        <li><a href="#">Group Rep (GR)</a></li>
+        <li><a href="#">ISR Information</a></li>
+        <li><a href="#">Southern California Area</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ec-footer-contact-bar">
+    <a href="mailto:literature@alanonsandiego.org">literature@alanonsandiego.org</a>
+    <p>2667 Camino del Rio S., Suite 208, San Diego · 619-296-2666</p>
+  </div>
+</footer>
+
+<script>
+  /* Day filter */
+  document.querySelectorAll('[data-day]').forEach(function(pill) {
+    if (!pill.classList.contains('mf-pill')) return;
+    pill.addEventListener('click', function() {
+      document.querySelectorAll('.mf-pill').forEach(function(p){ p.classList.remove('active') });
+      pill.classList.add('active');
+      var day = pill.dataset.day;
+      var count = 0;
+      document.querySelectorAll('.meeting-row').forEach(function(row){
+        var show = day === 'all' || row.dataset.day === day;
+        row.style.display = show ? '' : 'none';
+        if (show) count++;
+      });
+      document.querySelectorAll('.meetings-day-group').forEach(function(group){
+        var visible = group.querySelectorAll('.meeting-row:not([style*="display: none"])').length;
+        group.style.display = visible ? '' : 'none';
+      });
+      document.getElementById('results-count').textContent = count;
+    });
+  });
+
+  /* Format filter */
+  document.getElementById('filter-format').addEventListener('change', applyFilters);
+  document.getElementById('filter-region').addEventListener('change', applyFilters);
+  document.getElementById('filter-search').addEventListener('input', applyFilters);
+
+  function applyFilters() {
+    var format = document.getElementById('filter-format').value;
+    var region = document.getElementById('filter-region').value;
+    var search = document.getElementById('filter-search').value.toLowerCase();
+    var activePill = document.querySelector('.mf-pill.active');
+    var day = activePill ? activePill.dataset.day : 'all';
+    var count = 0;
+    document.querySelectorAll('.meeting-row').forEach(function(row){
+      var matchDay    = day === 'all' || row.dataset.day === day;
+      var matchFormat = !format || row.dataset.format === format;
+      var matchRegion = !region || row.dataset.region === region;
+      var matchSearch = !search || row.textContent.toLowerCase().includes(search);
+      var show = matchDay && matchFormat && matchRegion && matchSearch;
+      row.style.display = show ? '' : 'none';
+      if (show) count++;
+    });
+    document.querySelectorAll('.meetings-day-group').forEach(function(group){
+      var visible = Array.from(group.querySelectorAll('.meeting-row')).filter(function(r){ return r.style.display !== 'none'; }).length;
+      group.style.display = visible ? '' : 'none';
+    });
+    document.getElementById('results-count').textContent = count;
+  }
+
+  /* Mobile nav */
+  (function(){
+    var hamburger = document.getElementById('nav-hamburger');
+    var overlay   = document.getElementById('nav-drawer-overlay');
+    var drawer    = document.getElementById('nav-drawer');
+    var closeBtn  = document.getElementById('nav-drawer-close');
+    if (!hamburger) return;
+    function openDrawer(){ document.body.classList.add('nav-drawer-open'); hamburger.setAttribute('aria-expanded','true'); closeBtn.focus(); }
+    function closeDrawer(){ document.body.classList.remove('nav-drawer-open'); hamburger.setAttribute('aria-expanded','false'); hamburger.focus(); }
+    hamburger.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeDrawer(); });
+    drawer.querySelectorAll('.nav-drawer-has-sub > button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var li = btn.parentElement;
+        var isOpen = li.classList.contains('nav-drawer-item-open');
+        drawer.querySelectorAll('.nav-drawer-has-sub').forEach(function(el){ el.classList.remove('nav-drawer-item-open'); });
+        if (!isOpen) li.classList.add('nav-drawer-item-open');
+      });
+    });
+  })();
+</script>
+</body>
+</html>
